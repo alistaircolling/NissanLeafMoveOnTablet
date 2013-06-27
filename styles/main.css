@@ -19,12 +19,15 @@ textarea {
 }
 
 body {
+    font-family: Helvetica, Arial, sans-serif;
+  	color: #ffffff;
     font-size: 100%;
     line-height: 1.4;
+
 }
 
 a {
-    color: #00e;
+    color: #000000;
 }
 
 a:visited {
@@ -103,7 +106,7 @@ body {
     -webkit-transition: -webkit-transform 1s ease-in-out;
     -webkit-transform: translate3d(0px, 0px, 0px);
     -webkit-backface-visibility: hidden;
-      
+
 }
 
 .Page {
@@ -121,21 +124,21 @@ body {
 }
 
 #page1 {
-      background: yellow;
+      background: #ffffff;
 
 }
 
 #page2 {
-      background: green;
+      background: #757575;
 
 }
 
 #page3 {
-      background: blue;
+      background: #cccccc;
 
 }
 #page4 {
-      background: olive;
+      background: #ff00ff;
 
 }
 

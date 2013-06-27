@@ -1,35 +1,10 @@
 var APPLICATION = APPLICATION || {};
 
-APPLICATION.POINTER_EVENT = (function() {
-    //check if the browser supports touch events
-    var supportsTouch = 'createTouch' in document;
-    //base our event names on the result...
-    var obj = {
-        CLICK: (supportsTouch) ? 'tap' : 'click',
-        START:  (supportsTouch) ? 'touchstart' : 'mousedown',
-        MOVE:   (supportsTouch) ? 'touchmove'  : 'mousemove',
-        END:    (supportsTouch) ? 'touchend'   : 'mouseup',
-        getPointerPosition: function(ev) { return { x: (supportsTouch) ? ev.touches[0].pageX : ev.pageX, y: (supportsTouch) ? ev.touches[0].pageY : ev.pageY } }
-    }
-    return obj;
-})();
-
-APPLICATION.getTouchPosition = function(ev) {
-    if( event.pageX ) {
-        return { x: ev.pageX, y: ev.pageY }
-    } else if( event.touches.length !== 0 ) {
-        return { x: ev.touches[0].pageX, y: ev.touches[0].pageY }
-    } else if( event.changedTouches.length !== 0 ) {
-        return { x: ev.changedTouches[0].pageX, y: ev.changedTouches[0].pageY }
-    } else {
-        return { x: 0, y: 0 }
-    }
-};
-
 
 APPLICATION.main = function() {
+    console.log("APPLICATION LAUNCHED..");
+
     this.currentPage = 0;
-    console.log("hello");
     this.divs = [$('#page1'), $('#page2'), $('#page3'), $('#page4')];
     console.log(window.innerWidth);
     this.appDimensions = {width: window.innerWidth, height: window.innerHeight};
@@ -38,6 +13,7 @@ APPLICATION.main = function() {
 
     var startPoint, endPoint, startTime, endTime,
         that = this;
+
     $('#containerWrapper').bind(APPLICATION.POINTER_EVENT.START, function(event) {
         console.log("swipeActivated: " + that.swipeActivated);
         console.log(event);
@@ -56,7 +32,7 @@ APPLICATION.main = function() {
     console.log('test' + this.currentPage);
 
     var that = this;
-    
+
     $(this.div).addClass('hell'+this.currentPage);
 
 
@@ -67,11 +43,11 @@ APPLICATION.main = function() {
     $('#page2').bind(APPLICATION.POINTER_EVENT.START, function() {
         that.gotoPage(2);
         console.log('test' + this.currentPage);
-    });   
+    });
      $('#page3').bind(APPLICATION.POINTER_EVENT.START, function() {
         that.gotoPage(3);
         console.log('test' + this.currentPage);
-    });   
+    });
         $('#page4').bind(APPLICATION.POINTER_EVENT.START, function() {
         that.gotoPage(0);
         console.log('test' + this.currentPage);
@@ -82,7 +58,7 @@ APPLICATION.main = function() {
 
    // })
 
- 
+
 }
 
 APPLICATION.main.prototype.arrangeDivs = function() {
@@ -105,10 +81,6 @@ APPLICATION.main.prototype.arrangeDivs = function() {
 
 
 
-
-
-
-
 APPLICATION.main.prototype.gotoPage = function(pageNumber) {
     console.log("Go to page " + pageNumber);
     if( pageNumber < 0 || pageNumber >= this.divs.length ) return;
@@ -116,6 +88,38 @@ APPLICATION.main.prototype.gotoPage = function(pageNumber) {
     $('#pageContainer').css('-webkit-transform', 'translate3d('+(-1 * (this.currentPage * this.appDimensions.width))+'px, 0px, 0px)')
 
 }
+
+
+
+// track touch events
+APPLICATION.POINTER_EVENT = (function() {
+    //check if the browser supports touch events
+    var supportsTouch = 'createTouch' in document;
+    //base our event names on the result...
+    var obj = {
+        CLICK: (supportsTouch) ? 'tap' : 'click',
+        START:  (supportsTouch) ? 'touchstart' : 'mousedown',
+        MOVE:   (supportsTouch) ? 'touchmove'  : 'mousemove',
+        END:    (supportsTouch) ? 'touchend'   : 'mouseup',
+        getPointerPosition: function(ev) { return { x: (supportsTouch) ? ev.touches[0].pageX : ev.pageX, y: (supportsTouch) ? ev.touches[0].pageY : ev.pageY } }
+    }
+    return obj;
+})();
+
+
+APPLICATION.getTouchPosition = function(ev) {
+    if( event.pageX ) {
+        return { x: ev.pageX, y: ev.pageY }
+    } else if( event.touches.length !== 0 ) {
+        return { x: ev.touches[0].pageX, y: ev.touches[0].pageY }
+    } else if( event.changedTouches.length !== 0 ) {
+        return { x: ev.changedTouches[0].pageX, y: ev.changedTouches[0].pageY }
+    } else {
+        return { x: 0, y: 0 }
+    }
+};
+
+
 
 
 
