@@ -2,11 +2,12 @@ var canvas = document.createElement('canvas'),
 context = canvas.getContext('2d');
 var canvasWidth = window.innerWidth;
 canvasHeight = window.innerHeight;
-
+var mouseX, mouseY;
+var touchListener;
 
 
 function onPageLoaded(argument) {
-    console.log("loaded");
+    console.log("loadad");
     init();
 }
 
@@ -17,9 +18,9 @@ function init() {
     document.body.appendChild(canvas);
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
-    // drawParticle(canvasWidth * .5, canvasHeight * .5);
 
     drawCanvasBG();
+    initTouch();
 
 }
 
@@ -42,3 +43,5 @@ function drawMarkers(){
     context.stroke();
 
 }
+
+
