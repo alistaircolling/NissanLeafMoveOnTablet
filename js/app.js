@@ -82,8 +82,7 @@ function draw(event){
       y: event.targetTouches[0].pageY
    };
  
-  //context.clearRect(0,0,canvasWidth, canvasHeight);
-  drawCanvasBG();
+   drawCanvasBG();
   //draw a circle
 
   context.beginPath();
