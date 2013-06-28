@@ -91,13 +91,7 @@ function draw(event){
   context.fill();
   context.lineWidth = 5;
   context.strokeStyle = '#000000';
-  context.stroke();
-
-
-
-  context.stroke();
-   // pass the coordinates to the appropriate handler
-//   drawer[event.type](coors);
+  context.stroke();   
 }
 
 
