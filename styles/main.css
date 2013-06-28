@@ -144,6 +144,19 @@ body {
 }
 
 
+#fs {
+  
+  position:absolute;
+  z-index:100;
+  width:100px;
+  height:30px;
+ bottom:10%;
+ left:50%;
+ 
+}
+
+
+
 
 /* ==========================================================================
    Helper classes
