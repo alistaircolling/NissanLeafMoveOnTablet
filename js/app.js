@@ -16,6 +16,8 @@ function init() {
 
     // CANVAS SET UP
     document.body.appendChild(canvas);
+    canvasWidth = window.innerWidth;
+    canvasHeight = window.innerHeight;
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
 
@@ -92,11 +94,14 @@ function draw(event){
   context.lineWidth = 5;
   context.strokeStyle = '#000000';
   context.stroke();   
+  event.preventDefault();
+event.stopPropagation();
 }
 
 
 function touchUp() {
             mouseIsDown = 0;
+            document.body.style.overflow = "auto";
             // no touch to track, so just show state
           //  this.showPos();
 }
@@ -109,6 +114,7 @@ function mouseDown() {
 }
 
 function touchDown() {
+  document.body.style.overflow = "hidden";
             mouseIsDown = 1;
  //           this.touchXY();
 }
