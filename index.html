@@ -12,7 +12,11 @@
     <script src="js/Detector.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
     
+
+
+        <script type="text/javascript" charset="utf-8" src="js/video.js"></script>
 
 
 
@@ -29,32 +33,15 @@
     <title></title>
 </head>
 <body onload="onPageLoaded()">
-    <div id="containerWrapper">
-        <div id="pageContainer">
-            <div id="page1" class="Page">
-                    Page 1
-                    <a href"" id="test">Test</a>
-            </div>
-            <div id="page2" class="Page">
-                Page 2
-                  <a href"" id="test1">Test</a>
-            </div>
-            <div id="page3" class="Page">
-                <div id="thanksText">
-                    <h1>Page 3</h1>
-                      <a href"" id="test2">Test</a>
-                </div>
-            </div>
-
-            <div id="page4" class="Page">
-                <h1>Page 4</h1>
-                  <a href"" id="test3">Test</a>
-
-            </div>
-
 
         </div>
        <div id="canvasHolder" style="position:relative;z-index:2;"></div>
+
+        <video id="myVideo" width="100%" height="100%" controls="false" preload="false">
+        <source src="movie.mp4" type='video/mp4' />
+        </video>
+
+        <input type="button" id="fs"    value="Fullscreen">
     </div>
 <script type="text/javascript" charset="utf-8" src="js/hello3d.js"></script>
 </body>
