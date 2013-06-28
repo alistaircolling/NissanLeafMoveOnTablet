@@ -53,28 +53,26 @@ APPLICATION.main = function() {
     });
 
 
-    console.log('test' + this.currentPage);
+    console.log('dhrubo' + this.currentPage);
 
     var that = this;
-    
-    $(this.div).addClass('hell'+this.currentPage);
-
 
     $('#page1').bind(APPLICATION.POINTER_EVENT.START, function() {
         that.gotoPage(1);
-        console.log('test' + this.currentPage);
+
+       
     });
     $('#page2').bind(APPLICATION.POINTER_EVENT.START, function() {
         that.gotoPage(2);
-        console.log('test' + this.currentPage);
+      
     });   
      $('#page3').bind(APPLICATION.POINTER_EVENT.START, function() {
         that.gotoPage(3);
-        console.log('test' + this.currentPage);
+        
     });   
         $('#page4').bind(APPLICATION.POINTER_EVENT.START, function() {
         that.gotoPage(0);
-        console.log('test' + this.currentPage);
+        
     });
 
    // $('#page1').bind(APPLICATION.POINTER_EVENT.START, function(event) {
@@ -91,6 +89,7 @@ APPLICATION.main.prototype.arrangeDivs = function() {
         'min-height': this.appDimensions.height + 'px'
     });
     for( var i=0; i<this.divs.length; i++ ) {
+        $(this.divs[i]).addClass('test')
         $(this.divs[i]).css({
             'left': (this.appDimensions.width * i) + "px",
             'top': '0px',
@@ -111,9 +110,12 @@ APPLICATION.main.prototype.arrangeDivs = function() {
 
 APPLICATION.main.prototype.gotoPage = function(pageNumber) {
     console.log("Go to page " + pageNumber);
+
     if( pageNumber < 0 || pageNumber >= this.divs.length ) return;
     this.currentPage = pageNumber;
-    $('#pageContainer').css('-webkit-transform', 'translate3d('+(-1 * (this.currentPage * this.appDimensions.width))+'px, 0px, 0px)')
+
+    $('#pageContainer').css('-webkit-transform', 'translate3d('+(-1 * (this.currentPage * this.appDimensions.width))+'px, 0px, 0px)');
+      $(this.pageNumber).addClass('openInfo');
 
 }
 
