@@ -97,6 +97,7 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
     background-color: transparent;
+    position:relative;
 }
 
 #containerWrapper {
@@ -142,17 +143,41 @@ body {
       background: #ff00ff;
 
 }
-
+div {
+  
+  z-index:10;
+float:left;
+background:yellow;
+display:block;
+clear:left;
+}
 
 #fs {
   
-  position:absolute;
-  z-index:100;
-  width:100px;
-  height:30px;
- bottom:10%;
- left:50%;
+
+    width:200px;
+    height:60px;
+    display:block;
+    float:left;
+
+    z-index:999 !important;
+
  
+}
+
+.button-wrapper {
+  
+  background:red; 
+  width:250px; 
+  height:100px;
+  float:left; 
+  display:block; 
+}
+
+canvas {
+  
+z-index:10;
+margin-top:100px;
 }
 
 
