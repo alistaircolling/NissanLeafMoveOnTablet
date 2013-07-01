@@ -146,10 +146,7 @@ body {
 div {
   
   z-index:10;
-float:left;
-background:yellow;
-display:block;
-clear:left;
+
 }
 
 #fs {
@@ -160,24 +157,27 @@ clear:left;
     display:block;
     float:left;
 
-    z-index:999 !important;
+    z-index:9 !important;
 
  
 }
 
 .button-wrapper {
   
-  background:red; 
   width:250px; 
   height:100px;
-  float:left; 
-  display:block; 
+  position:absolute;
 }
 
 canvas {
   
 z-index:10;
-margin-top:100px;
+
+}
+
+video {
+  
+  z-index:10;
 }
 
 
