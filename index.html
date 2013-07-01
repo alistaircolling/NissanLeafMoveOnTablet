@@ -57,7 +57,7 @@
 				container = document.getElementById( 'container' );
 
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.z = 500;
+				camera.position.z = 5000;
 
 				scene = new THREE.Scene();
 
@@ -65,13 +65,15 @@
 				var texture = new THREE.Texture( generateTexture( data, 1024, 1024 ) );
 				texture.needsUpdate = true;
 
-				var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
+        //				var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
+        var material = new THREE.MeshNormalMaterial();
+        material.doubleSided = true;
 
-				var quality = 16, step = 1024 / quality;
+				var quality = 8, step = 1024 / quality;
 
 				var plane = new THREE.PlaneGeometry( 2000, 2000, quality - 1, quality - 1 );
 				plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
-
+        console.log(plane);
 				for ( var i = 0, l = plane.vertices.length; i < l; i ++ ) {
 
 					var x = i % quality, y = ~~ ( i / quality );
@@ -206,9 +208,9 @@
 			}
 
 			function render() {
-
-				camera.position.x += ( mouseX - camera.position.x ) * 0.05;
-				camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
+        mesh.rotation.x +=.01;
+        //		camera.position.x += ( mouseX - camera.position.x ) * 0.05;
+        //		camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
 				camera.lookAt( scene.position );
 
 				renderer.render( scene, camera );
