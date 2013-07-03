@@ -30,12 +30,14 @@
 
 
 <body>
-  <canvas id="surface" width="100%" height="100%" style='z-index : 0; position: absolute;'></canvas>
-  <div id="container" style='z-index : 1; position: absolute;'></div>
+  <canvas id="surface" width="100%" height="100%" style='z-index : 1; position: absolute;'></canvas>
+  <div id="container" style='z-index : 0; position: absolute;'></div>
 
 
 
     <script>
+
+
 
 
       var container, stats;
@@ -55,8 +57,17 @@
       var mouseX = 0;
       var mouseXOnMouseDown = 0;
 
+
+      ////CAR VARS
+      var carrInitX = .2;
+
       var carX = 0;
-      var rightMarginPerc = 20;
+      var currX = 0;
+      var carWidthPerc = .3;
+      var carHeightPerc = .15;
+      var carInitY = .68;
+
+      var rightMarginPerc = .2;
 
 
       var canvas ;//= document.getElementById('surface');
@@ -228,8 +239,8 @@
         y = event.targetTouches[0].pageY;
 
         // console.log("mov:"+x,y);
-        carX = x;
-        drawCircle(x,y, 40, '#ffff00');
+        currX = x;
+        //        drawCircle(x,y, 40, '#ffff00');
 
         camera.position.z = ((y/window.innerHeight)*6000);
         mesh.rotation.z =((x/window.innerWidth)*Math.PI*2);
@@ -374,10 +385,50 @@
 
       }
 
-      function drawCar
+
+      function drawCircle(x, y, radius, color){
+        canvas.width  =canvas.width;
+        context.beginPath();
+        context.fillStyle = color;
+        context.arc(x,y,radius,0,Math.PI*2);
+        context.fill();
+      }
+
+      function drawCar(x, y, width, height, color){
+
+        canvas.width = canvas.width;
+        context.fillStyle = color;
+        context.beginPath();
+        context.fillRect(x,y,width,height);
+        context.fill();
+
+
+      }
+
+      function resetCarPos(){
+
+
+      }
 
 			function render() {
-        drawCar();
+        //calculate new car pos
+        var canvWid = window.innerWidth;
+        var canvHeigh = window.innerHeight;
+        var carW = canvWid*carWidthPerc;
+        var carH = canvHeigh*carHeightPerc;
+        var diff = carX-currX;
+        var targX = currX-((currX-carX)*.5);
+        currX = targX;
+        carX = targX;
+        var carY = canvHeigh*carInitY;
+
+        var currCarPercX = targX/canvWid;
+        //check car is not too far!
+        if (currCarPercX>rightMarginPerc){
+            resetCarPos();
+        }
+
+        drawCar(targX, carY, carW, carH, '#ff00ff');
         updateVertices();
         //   if (!tDown) mesh.rotation.x += 0.01; mesh.rotation.y += 0.01;
         //
