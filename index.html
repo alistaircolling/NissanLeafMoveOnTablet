@@ -30,14 +30,18 @@
 
 
 <body>
-  <canvas id="surface" width="100%" height="100%" style='z-index : 1; position: absolute;'></canvas>
-  <div id="container" style='z-index : 0; position: absolute;'></div>
+  <canvas id="surface" width="100%" height="100%" style='z-index : 0; position: absolute;'></canvas>
+  <div id="container" style='z-index : 1; position: absolute;'></div>
+
+          <div id="red" style="width: 100px; height: 100px; background-color: red;">page 1</div>
+        <div style="width: 100px; height: 100px; background-color: green; display: none;" id="green">page 2</div>
+        <div style="width: 100px; height: 100px; background-color: green; display: none;" id="green">>page 3</div>
+         <div style="width: 100px; height: 100px; background-color: yellow; display: none;" id="yellow">page 3</div>
+
 
 
 
     <script>
-
-
 
 
       var container, stats;
@@ -57,17 +61,8 @@
       var mouseX = 0;
       var mouseXOnMouseDown = 0;
 
-
-      ////CAR VARS
-      var carrInitX = .2;
-
       var carX = 0;
-      var currX = 0;
-      var carWidthPerc = .3;
-      var carHeightPerc = .15;
-      var carInitY = .68;
-
-      var rightMarginPerc = .2;
+      var rightMarginPerc = 20;
 
 
       var canvas ;//= document.getElementById('surface');
@@ -79,7 +74,8 @@
 
       initTouch();
       init3D();
-
+     // showdiv(0);
+ 
        function initTouch(){
 
 
@@ -239,8 +235,8 @@
         y = event.targetTouches[0].pageY;
 
         // console.log("mov:"+x,y);
-        currX = x;
-        //        drawCircle(x,y, 40, '#ffff00');
+        carX = x;
+        drawCircle(x,y, 40, '#ffff00');
 
         camera.position.z = ((y/window.innerHeight)*6000);
         mesh.rotation.z =((x/window.innerWidth)*Math.PI*2);
@@ -370,71 +366,47 @@
         //increment or reset the page number
         if (currentPage<totalPages-1){
           currentPage++;
+          console.log("display  " + currentPage);
         }else{
           currentPage = 0;
         }
 
-        //add code to show correct content here:
-
-
+        
+        showDivs(currentPage);//add code to show correct content here:
 
       }
+
+
 
       function updateVertices(){
 
 
       }
 
-
-      function drawCircle(x, y, radius, color){
-        canvas.width  =canvas.width;
-        context.beginPath();
-        context.fillStyle = color;
-        context.arc(x,y,radius,0,Math.PI*2);
-        context.fill();
-      }
-
-      function drawCar(x, y, width, height, color){
-
-        canvas.width = canvas.width;
-        context.fillStyle = color;
-        context.beginPath();
-        context.fillRect(x,y,width,height);
-        context.fill();
+     function showDivs(id) {
 
 
+        var ids = ["red", "green", "black", "yellow"];
+        console.log(ids);
+        for(var i = 0; i < ids.length; i++) {
+          var newID = ids[i];
+          console.log("id;"+newID);
+          if(newID != id){      
+          
+          var thisD = document.getElementById(newID);
+          console.log("div?:"+thisD);
 
-
-      }
-
-      function resetCarPos(){
-        console.log("reset")
-        currX = 0;
-        showNextPage();
-
-
-      }
-
-			function render() {
-        //calculate new car pos
-        var canvWid = window.innerWidth;
-        var canvHeigh = window.innerHeight;
-        var carW = canvWid*carWidthPerc;
-        var carH = canvHeigh*carHeightPerc;
-        var diff = carX-currX;
-        var targX = currX-((currX-carX)*.5);
-        currX = targX;
-        carX = targX;
-        var carY = canvHeigh*carInitY;
-
-        var currCarPercX = targX/canvWid;
-        //check car is not too far!
-        if (currCarPercX>rightMarginPerc){
-            resetCarPos();
+          thisD.style.display = "none";
+            
+          }
+          document.getElementById(id).style.display = "block";
         }
 
-        drawCar(targX, carY, carW, carH, '#ff00ff');
-        updateVertices();
+      }
+      
+			function render() {
+       // drawCar();
+        //updateVertices();
         //   if (!tDown) mesh.rotation.x += 0.01; mesh.rotation.y += 0.01;
         //
         //		camera.position.x += ( mouseX - camera.position.x ) * 0.05;
@@ -448,6 +420,9 @@
 
 
         </script>
+
+
+
 
 
 </body>
