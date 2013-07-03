@@ -55,9 +55,16 @@
       var mouseX = 0;
       var mouseXOnMouseDown = 0;
 
+      var carX = 0;
+      var rightMarginPerc = 20;
+
 
       var canvas ;//= document.getElementById('surface');
       var context;// = canvas.getContext('2d');
+
+      var currentPage = 0;
+      var totalPages = 3;
+
 
       initTouch();
       init3D();
@@ -134,13 +141,8 @@
         document.addEventListener( 'touchmove', onDocumentTouchMove, false );
         document.addEventListener( 'touchend', onDocumentTouchUp, false );
 
-
-
-
-
         //    addControls();
         animate();
-        //   drawCircle(30,30,10,'#ffff00');
 			}
 
       var cameraZSlider;
@@ -226,7 +228,7 @@
         y = event.targetTouches[0].pageY;
 
         // console.log("mov:"+x,y);
-        currX = x;
+        carX = x;
         drawCircle(x,y, 40, '#ffff00');
 
         camera.position.z = ((y/window.innerHeight)*6000);
@@ -351,14 +353,33 @@
 
 			}
 
+      //THIS FUNCTION WILL BE CALLED WHEN THE CAR HAS REACHED THE RIGHT MARGIN
+
+      function showNextPage(){
+        //increment or reset the page number
+        if (currentPage<totalPages-1){
+          currentPage++;
+        }else{
+          currentPage = 0;
+        }
+
+        //add code to show correct content here:
+
+
+
+      }
+
       function updateVertices(){
 
 
       }
 
+      function drawCar
+
 			function render() {
+        drawCar();
         updateVertices();
-        if (!tDown) mesh.rotation.x += 0.01; mesh.rotation.y += 0.01;
+        //   if (!tDown) mesh.rotation.x += 0.01; mesh.rotation.y += 0.01;
         //
         //		camera.position.x += ( mouseX - camera.position.x ) * 0.05;
         //		camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
