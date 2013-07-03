@@ -7,9 +7,10 @@
     <script type="text/javascript" charset="utf-8" src="js/vendor/zepto.min.js"></script>
 
     <script src="js/ImprovedNoise.js"></script>
-		<script src="js/libs/stats.min.js"></script>
     <script src="js/three.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
+    <script src="js/jquery-1.6.4.min.js"></script>
+    <script src="js/MinimalComps-0.1.min.js"></script>
 
 
     <link type="text/css" rel="stylesheet" href="styles/normalize.css">
@@ -27,17 +28,15 @@
     <title></title>
 </head>
 
+
 <body>
-  <div id="container"></div>
-    <div class="button-wrapper">
-      <input type="button" id="fs"  value="Fullscreen">
-    </div>
-    <video id="myVideo" width="100%" height="100%" controls="false" preload="false">
-      <source src="videos/movie.mp4" type='video/mp4' />
-    </video>
+ <canvas id="surface" width="100%" height="100%" />
+<!--  <div id="container"></div>-->
+
     <script>
 
-     	var container, stats;
+
+      var container, stats;
 
 			var camera, scene, renderer;
 
@@ -55,17 +54,35 @@
       var mouseXOnMouseDown = 0;
 
 
-			init();
-			animate();
+      var canvas ;//= document.getElementById('surface');
+      var context;// = canvas.getContext('2d');
 
-			function init() {
+      initTouch();
+      init3D();
 
+       function initTouch(){
+
+
+        canvas = document.getElementById('surface');
+        context = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+
+        document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+
+
+       }
+
+
+			function init3D() {
 
 
 				container = document.getElementById( 'container' );
 
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.z = 5000;
+				camera.position.z = 1320;
 
 				scene = new THREE.Scene();
 
@@ -79,7 +96,7 @@
 
 				var quality = 8, step = 1024 / quality;
 
-				var plane = new THREE.PlaneGeometry( 2000, 2000, quality - 1, quality - 1 );
+				var plane = new THREE.PlaneGeometry( 768, 1024, quality - 1, quality - 1 );
 				plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
         console.log(plane);
 				for ( var i = 0, l = plane.vertices.length; i < l; i ++ ) {
@@ -106,41 +123,69 @@
 				stats.domElement.style.top = '0px';
 				container.appendChild( stats.domElement );
 
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
-				//
+
+
 
 				window.addEventListener( 'resize', onWindowResize, false );
         mesh.rotation.x = Math.PI*.5;
 
         //mouse touch listeners
-        document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+        // document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+        document.addEventListener( 'mousemove', onDocumentMouseMove, false );
         document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-        //        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+
+
+
+
+
+        addControls();
+        animate();
+        //   drawCircle(30,30,10,'#ffff00');
 			}
+
+      var cameraZSlider;
+
+      function addControls(){
+        container = document.getElementById( 'container' );
+
+        cameraZSlider = new mc.HSlider(container, 10, 80, onCamZSliderChange)
+        .bindLabel(new mc.Label(container, 15, 100).setAlign("center"), 0);
+        cameraZSlider.setMinimum( -6000 );
+    		cameraZSlider.setMaximum( 6000 );
+
+
+      }
+
+      function onCamZSliderChange( e ){
+
+        camera.position.z = cameraZSlider.getValue();
+        console.log("Camera z change:"+camera.position.z);
+    	}
+
+
 
 
       ///////   MOUSE LISTENERS   //////////////
 
       function onDocumentMouseDown(){
-
+        console.log("m down");
         event.preventDefault();
 
-        document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-        document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-        document.addEventListener( 'mouseout', onDocumentMouseOut, false );
+
 
         mouseXOnMouseDown = event.clientX - windowHalfX;
         targetRotationOnMouseDown = targetRotation;
 
       }
 
-      function onDocumentMouseMove( event ) {
-
+      function onDocumentMouseMove( e ) {
+          console.log("mmove");
           mouseX = event.clientX - windowHalfX;
-
           targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
 
+          console.log(targetRotation);
       }
 
       function onDocumentMouseUp( event ) {
@@ -165,10 +210,34 @@
       //////////  TOUCH LISTENERS //////////////////
 
 
-      function onDocumentTouchStart(){
+      function onDocumentTouchStart(event){
+        console.log("t start");
+        event.preventDefault();
+
+      }
 
 
+      var currX = 0;
 
+      function onDocumentTouchMove(event){
+
+        var x = event.targetTouches[0].pageX,
+        y = event.targetTouches[0].pageY;
+
+        console.log("mov:"+x,y);
+        currX = x;
+        drawCircle(x,y, 50, '0xffff00');
+        event.preventDefault();
+      }
+
+      //////////////////////////////////////
+
+      function drawCircle(x, y, radius, color){
+        canvas.width  =canvas.width;
+        context.beginPath();
+        context.fillStyle = color;
+        context.arc(x,y,radius,0,Math.PI*2);
+        context.fill();
       }
 
 
@@ -273,7 +342,13 @@
 
 			}
 
+      function updateVertices(){
+
+
+      }
+
 			function render() {
+        updateVertices();
             mesh.rotation.y = targetRotation;
         //		camera.position.x += ( mouseX - camera.position.x ) * 0.05;
         //		camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
@@ -282,6 +357,7 @@
 				renderer.render( scene, camera );
 
 			}
+
 
 
         </script>

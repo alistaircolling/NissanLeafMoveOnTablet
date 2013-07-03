@@ -23,7 +23,10 @@ html, body {
   width:  100%;
   height: 100%;
   margin: 0px;
+  overflow:hidden;
+  background-color:#b0c4de;
 }
+
 
 
 
@@ -144,13 +147,13 @@ body {
 
 }
 div {
-  
+
   z-index:10;
 
 }
 
 #fs {
-  
+
 
     width:200px;
     height:60px;
@@ -159,24 +162,24 @@ div {
 
     z-index:9 !important;
 
- 
+
 }
 
 .button-wrapper {
-  
-  width:250px; 
+
+  width:250px;
   height:100px;
   position:absolute;
 }
 
 canvas {
-  
+
 z-index:10;
 
 }
 
 video {
-  
+
   z-index:10;
 }
 
