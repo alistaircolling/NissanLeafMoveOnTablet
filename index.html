@@ -132,6 +132,7 @@
         document.addEventListener( 'mousemove', onDocumentMouseMove, false );
         document.addEventListener( 'touchstart', onDocumentTouchStart, false );
         document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+        document.addEventListener( 'touchend', onDocumentTouchUp, false );
 
 
 
@@ -169,19 +170,16 @@
       function onDocumentMouseDown(){
         console.log("m down");
         event.preventDefault();
-
-
-
         mouseXOnMouseDown = event.clientX - windowHalfX;
         targetRotationOnMouseDown = targetRotation;
 
       }
 
+
       function onDocumentMouseMove( e ) {
           console.log("mmove");
           mouseX = event.clientX - windowHalfX;
           targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
-
           console.log(targetRotation);
       }
 
@@ -202,15 +200,21 @@
 
       }
 
-
+    var tDown = false;
 
       //////////  TOUCH LISTENERS //////////////////
 
 
       function onDocumentTouchStart(event){
         console.log("t start");
+        tDown = true;
         event.preventDefault();
+      }
 
+      function onDocumentTouchUp(event){
+        console.log("t up");
+        tDown = false;
+        event.preventDefault();
       }
 
 
@@ -354,7 +358,8 @@
 
 			function render() {
         updateVertices();
-        //      mesh.rotation.y = targetRotation;
+        if (!tDown) mesh.rotation.x += 0.01; mesh.rotation.y += 0.01;
+        //
         //		camera.position.x += ( mouseX - camera.position.x ) * 0.05;
         //		camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
 				camera.lookAt( scene.position );
