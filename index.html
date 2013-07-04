@@ -13,6 +13,35 @@
     <script src="js/MinimalComps-0.1.min.js"></script>
     <script src="js/TweenLite.min.js"></script>
 
+  <!---  PHYSICS LIBRARIES   --->
+
+<!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://cdn.iamwebdeveloper.in/js/stats.js/r11/Stats.js"></script> -->
+    <!-- Core -->
+    <script src="js/compiled/base.js"></script>
+  <script src="js/sketch.min.js"></script>
+    <script src="js/compiled/math/Random.js"></script>
+    <script src="js/compiled/math/Vector.js"></script>
+    <!-- Integratjs/ors -->
+    <script src="js/compiled/engine/integrator/Integrator.js"></script>
+    <script src="js/compiled/engine/integrator/Euler.js"></script>
+    <script src="js/compiled/engine/integrator/ImprovedEuler.js"></script>
+    <script src="js/compiled/engine/integrator/Verlet.js"></script>
+    <!-- Engine -js/-->
+    <script src="js/compiled/engine/Particle.js"></script>
+    <script src="js/compiled/engine/Physics.js"></script>
+    <script src="js/compiled/engine/Spring.js"></script>
+    <!-- Behavioujs/rs -->
+    <script src="js/compiled/behaviour/Behaviour.js"></script>
+    <script src="js/compiled/behaviour/Attraction.js"></script>
+    <script src="js/compiled/behaviour/Collision.js"></script>
+    <script src="js/compiled/behaviour/ConstantForce.js"></script>
+    <script src="js/compiled/behaviour/EdgeBounce.js"></script>
+    <script src="js/compiled/behaviour/EdgeWrap.js"></script>
+    <script src="js/compiled/behaviour/Wander.js"></script>
+
+
+  <!-----  MAY NOT NEED THEM ALL !   ------>
 
     <link type="text/css" rel="stylesheet" href="styles/normalize.css">
     <link type="text/css" rel="stylesheet" href="styles/reset.css" />
@@ -33,11 +62,10 @@
 <body>
   <canvas id="surface" width="100%" height="100%" style='z-index : 0; position: absolute;'></canvas>
   <div id="container" style='z-index : 1; position: absolute;'></div>
-
-          <div id="red" style="width: 100px; height: 100px; background-color: red;">page 1</div>
-        <div style="width: 100px; height: 100px; background-color: green; display: none;" id="green">page 2</div>
-        <div style="width: 100px; height: 100px; background-color: green; display: none;" id="black">>page 3</div>
-         <div style="width: 100px; height: 100px; background-color: yellow; display: none;" id="yellow">page 3</div>
+  <div id="red" style="width: 100px; height: 100px; background-color: red;">page 1</div>
+  <div style="width: 100px; height: 100px; background-color: green; display: none;" id="green">page 2</div>
+  <div style="width: 100px; height: 100px; background-color: green; display: none;" id="black">>page 3</div>
+  <div style="width: 100px; height: 100px; background-color: yellow; display: none;" id="yellow">page 3</div>
 
 
 
@@ -91,9 +119,10 @@
 
 
       initTouch();
-      init3D();
+      initPhysics();
+      //   init3D();
      // showdiv(0);
- 
+
        function initTouch(){
 
 
@@ -107,6 +136,71 @@
 
        }
 
+      //PHYSICS VARS
+      var physics, avoidMouse, pullToCenter, collision, example;
+
+      function initPhysics(){
+
+        physics = new Physics();
+        physics.integrator = new Verlet();
+        avoidMouse = new Attraction();
+        pullToCenter = new Attraction();
+        collision = new Collision();
+        setupExample();
+      }
+
+      function setupExample(){
+
+        ///SETUP
+
+        example = Sketch.create({container:document.body});
+
+        example.setup = function() {
+
+          for ( var i = 0; i < 200; i++ ) {
+
+              // Create a particle
+              var particle = new Particle( Math.random() );
+              var position = new Vector( random( this.width ), random( this.height ) );
+              particle.setRadius( particle.mass * 10 );
+              particle.moveTo( position );
+
+              // Make it collidable
+              collision.pool.push( particle );
+
+              // Apply behaviours
+              particle.behaviours.push( avoidMouse, pullToCenter, collision );
+
+              // Add to the simulation
+              physics.particles.push( particle );
+          }
+        }
+        ////DRAW
+
+
+        example.draw = function(){
+
+          physics.step();
+
+          //render particles
+          for( var i=0, n = physics.particles.length; i<n; i++){
+
+            var particle = physics.particles[i];
+            example.beginPath();
+            example.arc( particle.pos.x, particle.pos.y, particle.radius, 0, Math.PI * 2 );
+            example.fill();
+
+          }
+
+          example.mousemove = function() {
+            avoidMouse.target.x = example.mouse.x;
+            avoidMouse.target.y = example.mouse.y;
+        }
+
+
+        }
+
+      }
 
 			function init3D() {
 
@@ -160,7 +254,7 @@
         mesh.rotation.x = Math.PI*.5;
 
         //mouse touch listeners
-        // document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+        //˚document.addEventListener( 'mousedown', onDocumentMouseDown, false );
         document.addEventListener( 'mousemove', onDocumentMouseMove, false );
         document.addEventListener( 'touchstart', onDocumentTouchStart, false );
         document.addEventListener( 'touchmove', onDocumentTouchMove, false );
@@ -393,7 +487,7 @@
           currentPage = 0;
         }
 
-        
+
         showDivs(currentPage);//add code to show correct content here:
 
       }
@@ -409,9 +503,9 @@
        var ids = ["red", "green", "black", "yellow"];
         console.log(ids);
         for(var i = 0; i < ids.length; i++) {
-          
-          
-          if(i == currentPage){      
+
+
+          if(i == currentPage){
             var lastPage = currentPage-1;
             if (lastPage<0){
               lastPage = totalPages-1;
@@ -421,9 +515,9 @@
             var thisD = document.getElementById(ids[currentPage]);
             console.log("div?:"+thisD);
             thisD.style.display = "block";
-            
+
           }
-          
+
         }
 
       }
@@ -449,11 +543,11 @@
         context.fill();
       }
 
-       
+
       function drawCar(x, y, width, height, color){
         //  console.log("draw"+x+":"+ y);
 
-         
+
         context.fillStyle = color;
         context.beginPath();
         context.fillRect(x,y,width,height);
