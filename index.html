@@ -62,10 +62,10 @@
 <body>
   <canvas id="surface" width="100%" height="100%" style='z-index : 0; position: absolute;'></canvas>
   <div id="container" style='z-index : 1; position: absolute;'></div>
-  <div id="red" style="width: 100px; height: 100px; background-color: red;">page 1</div>
+<!--  <div id="red" style="width: 100px; height: 100px; background-color: red;">page 1</div>
   <div style="width: 100px; height: 100px; background-color: green; display: none;" id="green">page 2</div>
   <div style="width: 100px; height: 100px; background-color: green; display: none;" id="black">>page 3</div>
-  <div style="width: 100px; height: 100px; background-color: yellow; display: none;" id="yellow">page 3</div>
+  <div style="width: 100px; height: 100px; background-color: yellow; display: none;" id="yellow">page 3</div> -->
 
 
 
@@ -125,14 +125,13 @@
 
        function initTouch(){
 
-
         canvas = document.getElementById('surface');
         context = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
         document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+         //   document.addEventListener( 'touchmove', onDocumentTouchMove, false );
 
        }
 
@@ -140,6 +139,8 @@
       var physics, avoidMouse, pullToCenter, collision, example;
 
       function initPhysics(){
+
+        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
 
         physics = new Physics();
         physics.integrator = new Verlet();
@@ -157,12 +158,12 @@
 
         example.setup = function() {
 
-          for ( var i = 0; i < 200; i++ ) {
+          for ( var i = 0; i < 60; i++ ) {
 
               // Create a particle
               var particle = new Particle( Math.random() );
               var position = new Vector( random( this.width ), random( this.height ) );
-              particle.setRadius( particle.mass * 10 );
+              particle.setRadius( particle.mass * 50 );
               particle.moveTo( position );
 
               // Make it collidable
@@ -174,6 +175,14 @@
               // Add to the simulation
               physics.particles.push( particle );
           }
+          pullToCenter.target.x = this.width / 2;
+          pullToCenter.target.y = this.height / 2;
+          pullToCenter.strength = 500;
+
+          avoidMouse.setRadius( 200 );
+          avoidMouse.strength = -3000;
+
+          example.fillStyle = '#ff00ff';
         }
         ////DRAW
 
@@ -192,11 +201,12 @@
 
           }
 
-          example.mousemove = function() {
-            avoidMouse.target.x = example.mouse.x;
-            avoidMouse.target.y = example.mouse.y;
-        }
 
+        }
+        example.mousemove = function() {
+          console.log("mov");
+          avoidMouse.target.x = example.mouse.x;
+          avoidMouse.target.y = example.mouse.y;
 
         }
 
@@ -327,7 +337,11 @@
 
 
       function onDocumentTouchStart(event){
-        console.log("t start");
+        var x = event.targetTouches[0].pageX;
+        var y = event.targetTouches[0].pageY;
+        console.log("t start:"+x+":"+y);
+        avoidMouse.target.x = x;
+        avoidMouse.target.y = y;
         tDown = true;
         event.preventDefault();
       }
@@ -346,18 +360,20 @@
         var x = event.targetTouches[0].pageX,
         y = event.targetTouches[0].pageY;
 
-        // console.log("mov:"+x,y);
+         console.log("mov:"+x,y);
         if (!animTarg){
           currX = x;
         }
 
 
         //        drawCircle(x,y, 40, '#ffff00');
-
+        /*
         camera.position.z = ((y/window.innerHeight)*6000);
         mesh.rotation.z =((x/window.innerWidth)*Math.PI*2);
         console.log(mesh.rotation.y);
-
+*/
+         avoidMouse.target.x = x;
+          avoidMouse.target.y = y;
         event.preventDefault();
 
 
