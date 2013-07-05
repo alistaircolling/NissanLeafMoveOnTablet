@@ -172,11 +172,10 @@
       initTouchListeners();
 
       addStats();
-       animate();
 
+      init3D();
+      animate();
 
-      //   init3D();
-     // showdiv(0);
 
       function addStats(){
         container = document.getElementById( 'container' );
@@ -289,35 +288,11 @@
           avoidMouse.strength = -3000;*/
 
           example.fillStyle = '#ff00ff';
-        }
+          // }
         ////DRAW
 
 
-        example.draw = function(){
 
-//           physics.step();
-
-//           //render particles
-//           for( var i=0, n = physics.particles.length; i<n; i++){
-
-//             var particle = physics.particles[i];
-//             example.beginPath();
-//             example.arc( particle.pos.x, particle.pos.y, particle.radius, 0, Math.PI * 2 );
-//             example.fill();
-//             example.closePath();
-
-//           }
-//           var spring;
-//           //render springs
-//           for (i=0; i<physics.springs.length; i++){
-//             example.strokeStyle = '#ffff00';
-//             spring = physics.springs[i];
-//             example.beginPath();
-//             example.moveTo(spring.p1.pos.x, spring.p1.pos.y);
-//             example.lineTo(spring.p2.pos.x, spring.p2.pos.y);
-//             example.closePath();
-//             example.stroke();
-//           }
         }
 
 
@@ -326,8 +301,7 @@
 
 			function init3D() {
 
-
-				container = document.getElementById( 'container' );
+        //	container = document.getElementById( 'container' );
 
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
 				camera.position.z = 1320;
@@ -344,12 +318,12 @@
 
 				var quality = 8, step = 1024 / quality;
 
-				var plane = new THREE.PlaneGeometry( 768, 1024, quality - 1, quality - 1 );
+				var plane = new THREE.PlaneGeometry( 768, 1024, COLUMNS - 1, ROWS - 1 );
 				plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
         console.log(plane);
 				for ( var i = 0, l = plane.vertices.length; i < l; i ++ ) {
 
-					var x = i % quality, y = ~~ ( i / quality );
+					var x = i % COLUMNS, y = ~~ ( i / COLUMNS );
 					plane.vertices[ i ].y = data[ ( x * step ) + ( y * step ) * 1024 ] * 2 - 128;
 
 				}
@@ -366,24 +340,20 @@
 
 				container.appendChild( renderer.domElement );
 
-				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				container.appendChild( stats.domElement );
 
 
-				window.addEventListener( 'resize', onWindowResize, false );
+        //	window.addEventListener( 'resize', onWindowResize, false );
         mesh.rotation.x = Math.PI*.5;
 
         //mouse touch listeners
         //˚document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-        document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+        /*   document.addEventListener( 'mousemove', onDocumentMouseMove, false );
         document.addEventListener( 'touchstart', onDocumentTouchStart, false );
         document.addEventListener( 'touchmove', onDocumentTouchMove, false );
-        document.addEventListener( 'touchend', onDocumentTouchUp, false );
+        document.addEventListener( 'touchend', onDocumentTouchUp, false );*/
 
         //    addControls();
-        animate();
+        //   animate();
 			}
 
       var cameraZSlider;
@@ -451,7 +421,7 @@
       function onDocumentTouchStart(event){
         var x = event.targetTouches[0].pageX;
         var y = event.targetTouches[0].pageY;
-        console.log("t start:"+x+":"+y);
+
         avoidMouse.target.x = x;
         avoidMouse.target.y = y;
         tDown = true;
@@ -472,20 +442,20 @@
         var x = event.targetTouches[0].pageX,
         y = event.targetTouches[0].pageY;
 
-        console.log("mov:"+x,y);
+
         if (!animTarg){
           currX = x;
         }
 
 
-        //        drawCircle(x,y, 40, '#ffff00');
-        /*
+        drawCircle(x,y, 40, '#ffff00');
+
         camera.position.z = ((y/window.innerHeight)*6000);
         mesh.rotation.z =((x/window.innerWidth)*Math.PI*2);
-        console.log(mesh.rotation.y);
-*/
-         avoidMouse.target.x = x;
-          avoidMouse.target.y = y;
+
+
+        avoidMouse.target.x = x;
+        avoidMouse.target.y = y;
         event.preventDefault();
 
 
@@ -622,10 +592,6 @@
 
 
 
-      function updateVertices(){
-
-
-      }
 
      function showDivs(id) {
        var ids = ["page1", "page2", "page3"];
@@ -774,10 +740,16 @@
       }
 
 
+      function updateVertices(){
+
+
+      }
+
+
 
 			function render() {
         canvas.width = canvas.width;
-
+        updateVertices();
         checkPointsInsideCar();
         drawMargin();
         drawPhysics();
@@ -804,18 +776,18 @@
 
         }
 
-        updateVertices();
-        /*
-        //   if (!tDown) mesh.rotation.x += 0.01; mesh.rotation.y += 0.01;
-        //
-        //		camera.position.x += ( mouseX - camera.position.x ) * 0.05;
+
+
+        //      if (!tDown) mesh.rotation.x += 0.01; mesh.rotation.y += 0.01;
+
+        // 		camera.position.x += ( mouseX - camera.position.x ) * 0.05;
         //		camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
-				camera.lookAt( scene.position );
+			    	camera.lookAt( scene.position );
 
-				renderer.render( scene, camera );
-        //  console.log(carX);
+			  	renderer.render( scene, camera );
 
-        */
+
+
 
 			}
 
