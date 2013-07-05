@@ -92,11 +92,11 @@
          <input type="button" id="fs"  value="Fullscreen">
       </div>
 
-      <!--
-        <video id="myVideo" width="100%" height="100%" controls="false" preload="false" >
+      
+        <video id="video" style="display:none" width="100%" height="100%" controls="false" preload="false" >
         <source src="videos/movie.mp4" type='video/mp4' />
         </video>
-      -->
+
 
 
     <script>
@@ -165,7 +165,6 @@
       var COLUMNS = 10;
       var ROWS = 10;
       var PARTICLE_RADIUS = 5;
-
 
       initTouch();
       initPhysics();
@@ -629,7 +628,7 @@
 
      function showDivs(id) {
        var ids = ["page1", "page2", "page3"];
-        console.log(ids);
+       // console.log(ids);
         for(var i = 0; i < ids.length; i++) {
 
 
@@ -651,6 +650,7 @@
         }
 
       }
+
 
 
       function drawMargin(){
@@ -858,6 +858,59 @@
 
 
         </script>
+
+
+          <script>
+    (function(window, document){
+      var $ = function(selector,context){return(context||document).querySelector(selector)};
+      
+      var video  = $("video"),
+        domPrefixes = 'Webkit Moz O ms Khtml'.split(' ');
+        
+      var fullscreen = function(elem) {
+        var prefix;
+        // Mozilla and webkit intialise fullscreen slightly differently
+        for ( var i = -1, len = domPrefixes.length; ++i < len; ) {
+              prefix = domPrefixes[i].toLowerCase();
+          
+          if ( elem[prefix + 'EnterFullScreen'] ) {
+                // Webkit uses EnterFullScreen for video
+          return prefix + 'EnterFullScreen';
+          break;
+              } else if( elem[prefix + 'RequestFullScreen'] ) {
+          // Mozilla uses RequestFullScreen for all elements and webkit uses it for non video elements
+          return prefix + 'RequestFullScreen';
+          break;
+          }
+            }
+    
+        return false;
+      };
+      
+      // Will return fullscreen method as a string if supported e.g. "mozRequestFullScreen" || false;
+      var fullscreenvideo = fullscreen(document.createElement("video"));
+      
+
+      if(!fullscreen) {
+        alert("Fullscreen won't work, please make sure you're using a browser that supports it and you have enabled the feature");
+        return;
+      }
+      
+      // Should add prefixed events for potential ms/o or unprefixed support too
+      video.addEventListener("webkitfullscreenchange",function(){
+        console.log(document.webkitIsFullScreen);
+      }, false);
+      video.addEventListener("mozfullscreenchange",function(){
+        console.log(document.mozFullScreen);
+      }, false);
+
+      $("#fs").addEventListener("click", function(){
+        // The test returns a string so we can easily call it on a click event
+        video[fullscreenvideo]();
+      }, false);
+
+    })(this, this.document);
+  </script>
 
 
 

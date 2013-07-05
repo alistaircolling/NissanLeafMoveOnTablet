@@ -180,8 +180,8 @@ div {
 #fs {
 
 
-    width:200px;
-    height:60px;
+    width:10em;
+    height:2.5em;
     display:block;
     float:left;
 
@@ -192,10 +192,10 @@ div {
 
 .button-wrapper {
 
-  width:190px;
-  height:50px;
+  width:auto;
+  height:auto;
   position:absolute;
-  bottom:1%;
+  bottom:2%;
   right:2%;
   
 }
