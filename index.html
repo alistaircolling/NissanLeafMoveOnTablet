@@ -62,15 +62,15 @@
   <canvas id="surface" width="100%" height="100%" style='z-index : 0; position: absolute;'></canvas>
   <div id="container" style='z-index : 1; position: absolute;'></div>
 
-          <div id="page1">
+          <div id="page1" class="show">
 
-            <h1>The 100% Electric New Leaf. <br /><span>You'll know it when you feel it</span></h1>
-              <p class="list">Zero emissions*| Connected | Instant torque</p>
-                <p class="Small">While driving</p>
+            <h1>The 100% Electric New Leaf<br /><span>You'll know it when you feel it</span></h1>
+              <p class="list">Zero emissions* | Connected | Instant torque</p>
+                <p class="small">While driving</p>
 
 
           </div>
-        <div style="display: none;" id="page2">
+        <div  id="page2" class="hide">
           <h1> Feel <span> Connected</span></h1>
           <p class="list">Remote access | Voice controls | Charging network</p>
 
@@ -78,7 +78,7 @@
           </p>
 
         </div>
-        <div style="display: none;" id="page3">
+        <div id="page3" class="hide">
           <h1> Feel <span> the torque</span></h1>
           <p class="list">Responsive | Dynamic | Quietly impressive</p>
 
@@ -639,10 +639,12 @@
               lastPage = totalPages-1;
             }
             var currDiv = document.getElementById(ids[lastPage]);
-            currDiv.style.display = "none";
+            currDiv.classList.remove('show');
+            currDiv.classList.add('hide');
             var thisD = document.getElementById(ids[currentPage]);
             console.log("div?:"+thisD);
-            thisD.style.display = "block";
+            thisD.classList.remove('hide');
+            thisD.classList.add('show');
 
           }
 
