@@ -218,10 +218,10 @@
             cell[i] = [];
             for( var j = 0; j<ROWS+1; j++){
 
-              var particle = new Particle( .1 );
+              var particle = new Particle( 10 );
               //fix the top ones
-              if (j==0){
-                particle.fixed = j === 0;
+              if (j==0 || j == ROWS){
+                particle.fixed = true;//j === 0;
               }
               var position = new Vector( spaceX*i, spaceY*j );
               particle.moveTo( position );
@@ -738,7 +738,7 @@
           part = physics.particles[i];
           if (point_in_rectangle(part.pos.x, part.pos.y, carX, carY-(carH*.5), carX+carW, carY+(carH*.5))){
             part.underCar = true;
-            part.x += movementX;
+            part.pos.x += .5*movementX;
           }else{
             part.underCar = false;
           }
