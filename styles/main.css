@@ -103,6 +103,20 @@ body {
     position:relative;
 }
 
+
+#logo {
+  
+  float:right;
+  display:block;
+  margin-right:10%;
+  
+}
+
+
+
+  
+
+}
 #containerWrapper {
     overflow-x: hidden;
 }
@@ -114,38 +128,8 @@ body {
 
 }
 
-#pageContainer #page1, #pageContainer #page2, #pageContainer #page3, #pageContainer #page4 {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    overflow: hidden;
 
-}
 
-#page2, #page3 {
-    padding-top: 50%;
-    /*padding:200px 0 0 10px;*/
-
-}
-
-#page1 {
-      background: #ffffff;
-
-}
-
-#page2 {
-      background: #757575;
-
-}
-
-#page3 {
-      background: #cccccc;
-
-}
-#page4 {
-      background: #ff00ff;
-
-}
 div {
 
   z-index:10;
@@ -309,12 +293,114 @@ textarea[contenteditable] {
    Theses examples override the primary ('mobile first') styles.
    Modify as content requires.
    ========================================================================== */
-
-@media only screen and (min-width: 800px) {
-    /* Style adjustments for viewports that meet the condition */
+/* Smartphones (landscape) ----------- */
+@media only screen 
+and (min-width : 321px) {
+/* Styles */
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-only screen and (min-resolution: 144dpi) {
-    /* Style adjustments for viewports that meet the condition */
+/* Smartphones (portrait) ----------- */
+@media only screen 
+and (max-width : 320px) {
+/* Styles */
 }
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) {
+/* Styles */
+}
+
+/* iPads (landscape) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : landscape) {
+/* Styles */
+
+BODY {
+  
+  background:blue;
+}
+}
+
+/* iPads (portrait) ----------- */
+@media only screen 
+and (min-device-width : 768px) 
+and (max-device-width : 1024px) 
+and (orientation : portrait) {
+/* Styles */
+
+
+BODY {
+  
+  background:pink;
+}
+
+#logo {
+  
+  width:10%;
+  height:auto;
+  margin-right:15%;
+}
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+/* Styles */
+}
+
+/* Large screens ----------- */
+@media only screen 
+and (min-width : 1824px) {
+/* Styles */
+}
+
+/* iPhone 4 ----------- */
+@media
+only screen and (-webkit-min-device-pixel-ratio : 1.5),
+only screen and (min-device-pixel-ratio : 1.5) {
+/* Styles */
+
+
+BODY {
+  
+  background:red;
+}
+}
+
+
+#logo {
+  
+  width:10%;
+  height:auto;
+}
+#page3, #page2, #page1 {
+  
+  width:100%;
+  height:100%;
+  position:absolute;
+  z-index:-999;
+} 
+
+#page1 {
+  
+  background:yellow;
+}
+
+#page2 {
+
+  background:red;
+
+}
+
+#page3 {
+
+
+  background:green;
+  
+}
+
+
