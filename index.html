@@ -95,10 +95,12 @@
       ////CAR VARS
 
 
+
+
       var carX = 0;
       var currX = 0;
-      var carWidthPerc = .2;
-      var carHeightPerc = .1;
+      var carWidthPerc = .3;
+      var carHeightPerc = .2;
       var carInitY = .68;
       var carInitX = -.05;
       var offRightPerc = 1.3;
@@ -108,12 +110,22 @@
       var canvas ;//= document.getElementById('surface');
       var context;// = canvas.getContext('2d');
 
+
+      var canvHeigh = window.innerHeight;
+      var carY = canvHeigh*carInitY;
+      var canvWid = window.innerWidth;
+      var carW = canvWid*carWidthPerc;
+      var carH = canvHeigh*carHeightPerc;
+
       var currentPage = 0;
       var totalPages = 4;
       var animatingToNextPage = false;
 
       var animTarg = false;
       var carVisible = true;
+
+      var lastX = 0; //the last recorded x position of the car (carX is the current)
+      var movementX; //the amount to move
 
       var CAR_ANIM_OFF_DURATION = 1;
       var CAR_ANIM_IN_DURATION = 1;
@@ -132,7 +144,7 @@
       initTouchListeners();
 
       addStats();
-        animate();
+       animate();
 
 
       //   init3D();
@@ -165,6 +177,14 @@
         document.addEventListener( 'touchend', onDocumentTouchUp, false );
        }
 
+      function updateCarSize(){
+        canvHeigh = window.innerHeight;
+        carY = canvHeigh*carInitY;
+        canvWid = window.innerWidth;
+        carW = canvWid*carWidthPerc;
+        carH = canvHeigh*carHeightPerc;
+
+      }
 
 
       function initPhysics(){
@@ -606,7 +626,7 @@
       function drawMargin(){
 
         context.beginPath();
-        context.fillStyle = '#505050';
+        context.fillStyle = "rgba(104, 255, 109, 0.5)";
         context.fillRect(window.innerWidth*rightMarginPerc, 0, window.innerWidth*(1-rightMarginPerc), window.innerHeight);
         context.fill();
 
@@ -678,12 +698,17 @@
       function drawPhysics(){
 
           physics.step();
-
+          var fillStyle = '#00ff00';
           //render particles
           for( var i=0, n = physics.particles.length; i<n; i++){
 
             var particle = physics.particles[i];
             example.beginPath();
+            if (particle.underCar){
+             example.fillStyle = fillStyle;
+            }else{
+              example.fillStyle = 'ff00ff';
+            }
             example.arc( particle.pos.x, particle.pos.y, particle.radius, 0, Math.PI * 2 );
             example.fill();
             example.closePath();
@@ -703,20 +728,38 @@
 
       }
 
+
+
+
+
+      function checkPointsInsideCar(){
+        var part,i;
+        for( i= 0; i<physics.particles.length; i++){
+          part = physics.particles[i];
+          if (point_in_rectangle(part.pos.x, part.pos.y, carX, carY-(carH*.5), carX+carW, carY+(carH*.5))){
+            part.underCar = true;
+            part.x += movementX;
+          }else{
+            part.underCar = false;
+          }
+        }
+      }
+
+
+
 			function render() {
         canvas.width = canvas.width;
+
+        checkPointsInsideCar();
         drawMargin();
         drawPhysics();
-        var canvHeigh = window.innerHeight;
-        var carY = canvHeigh*carInitY;
-        var canvWid = window.innerWidth;
-        var carW = canvWid*carWidthPerc;
-        var carH = canvHeigh*carHeightPerc;
+        updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
 
         if (!animatingToNextPage){
           //calculate new car pos
 
           var targX = currX-((currX-carX)*.5);
+          movementX = currX - targX;
           currX = targX;
           carX = targX;
 
@@ -725,11 +768,11 @@
             resetCarPos();
           }
 
-            drawCar(targX, carY, carW, carH, '#ff00ff');
+            drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }else{
 
-           drawCar(carX, carY, carW, carH, '#ff00ff');
+           drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }
 
@@ -747,6 +790,40 @@
         */
 
 			}
+
+
+      //////////////// UTILITY FUNCTIONS
+
+      function between(min, p, max){
+        result = false;
+
+        if ( min < max ){
+          if ( p > min && p < max ){
+            result = true;
+          }
+        }
+
+        if ( min > max ){
+          if ( p > max && p < min){
+            result = true
+          }
+        }
+
+        if ( p == min || p == max ){
+          result = true;
+        }
+
+        return result;
+      }
+
+      function point_in_rectangle( x, y, left, top, right, bottom){
+        result = false;
+
+        if ( between(left,x,right) && between(top,y,bottom ) ){
+          result = true;
+        }
+        return result;
+      }
 
 
 
