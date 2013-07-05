@@ -106,7 +106,7 @@
 
 			var camera, scene, renderer;
 
-			var mesh;
+			var mesh, plane;
 
 			var mouseX = 0, mouseY = 0;
 
@@ -318,17 +318,26 @@
 
 				var quality = 8, step = 1024 / quality;
 
-				var plane = new THREE.PlaneGeometry( 768, 1024, COLUMNS - 1, ROWS - 1 );
-				plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+				plane = new THREE.PlaneGeometry( 768, 1024, COLUMNS , ROWS  );
+        //			plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
         console.log(plane);
 				for ( var i = 0, l = plane.vertices.length; i < l; i ++ ) {
 
 					var x = i % COLUMNS, y = ~~ ( i / COLUMNS );
-					plane.vertices[ i ].y = data[ ( x * step ) + ( y * step ) * 1024 ] * 2 - 128;
+          plane.vertices[ i ].y = y* (window.innerHeight/ROWS);
+          plane.vertices[ i ].x = x* (window.innerWidth/COLUMNS);
+          plane.vertices[ i ].z = 0;
+
 
 				}
 
-				plane.computeCentroids();
+
+				plane.computeVertexNormals();
+        plane.computeFaceNormals();
+
+        //        plane.computeCentroids();
+        plane.__dirtyNormals = true;
+
 
 				mesh = new THREE.Mesh( plane, material );
 				scene.add( mesh );
@@ -343,7 +352,7 @@
 
 
         //	window.addEventListener( 'resize', onWindowResize, false );
-        mesh.rotation.x = Math.PI*.5;
+           mesh.rotation.x = Math.PI*.5;
 
         //mouse touch listeners
         //˚document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -360,7 +369,6 @@
 
       function addControls(){
         container = document.getElementById( 'container' );
-
         cameraZSlider = new mc.HSlider(container, 10, 80, onCamZSliderChange)
         .bindLabel(new mc.Label(container, 15, 100).setAlign("center"), 0);
         cameraZSlider.setMinimum( -6000 );
@@ -449,16 +457,12 @@
 
 
         drawCircle(x,y, 40, '#ffff00');
-
-        camera.position.z = ((y/window.innerHeight)*6000);
-        mesh.rotation.z =((x/window.innerWidth)*Math.PI*2);
-
+        // camera.position.z = ((y/window.innerHeight)*6000);
+        //     mesh.rotation.z =((x/window.innerWidth)*Math.PI*2);
 
         avoidMouse.target.x = x;
         avoidMouse.target.y = y;
         event.preventDefault();
-
-
 
       }
 
@@ -659,14 +663,11 @@
 
       }
 
+
       function animateCarOffRight(){
         var targOff = window.innerWidth*offRightPerc;
         console.log("anim offright:"+targOff);
-
         TweenLite.to(this, CAR_ANIM_OFF_DURATION, {carX:targOff, onComplete:carAtRight});
-
-
-
       }
 
       function carAtRight(){
@@ -741,6 +742,28 @@
 
 
       function updateVertices(){
+        // console.log("u");
+        var i, particle, vertex, pos, theX, theY;
+        for(i = 0; i<physics.particles.length; i++){
+          vertex = mesh.geometry.vertices[i];
+          particle = physics.particles[i];
+          pos = particle.pos;
+          theX = pos.x;
+          theY = pos.y;
+          vertex.x = theX;
+          vertex.y = theY;
+          //          part = physics.particles[i];
+          //console.log(physics.particles[i]);
+        //  vertex.x = physics.particles[i].pos.x;
+          //          plane.vertices[i] = vertex;
+        }
+        plane.computeVertexNormals();
+        plane.computeFaceNormals();
+        //        plane.computeCentroids();
+        plane.__dirtyNormals = true;
+
+
+
 
 
       }
@@ -748,8 +771,9 @@
 
 
 			function render() {
+
         canvas.width = canvas.width;
-        updateVertices();
+               updateVertices();
         checkPointsInsideCar();
         drawMargin();
         drawPhysics();
@@ -782,7 +806,7 @@
 
         // 		camera.position.x += ( mouseX - camera.position.x ) * 0.05;
         //		camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
-			    	camera.lookAt( scene.position );
+			   camera.lookAt( scene.position );
 
 			  	renderer.render( scene, camera );
 
