@@ -89,7 +89,7 @@
 
         </div>
       <div class="button-wrapper">
-         <input type="button" id="fs"  value="Fullscreen">
+         <input type="button" id="fs"  value="Make the switch">
       </div>
 
       
@@ -860,11 +860,11 @@
         </script>
 
 
-          <script>
+   <script>
     (function(window, document){
-      var $ = function(selector,context){return(context||document).querySelector(selector)};
+      var videoElement = function(selector,context){return(context||document).querySelector(selector)};
       
-      var video  = $("video"),
+      var video  = videoElement("video"),
         domPrefixes = 'Webkit Moz O ms Khtml'.split(' ');
         
       var fullscreen = function(elem) {
@@ -887,7 +887,7 @@
         return false;
       };
       
-      // Will return fullscreen method as a string if supported e.g. "mozRequestFullScreen" || false;
+      // Will return fullscreen method
       var fullscreenvideo = fullscreen(document.createElement("video"));
       
 
@@ -896,15 +896,11 @@
         return;
       }
       
-      // Should add prefixed events for potential ms/o or unprefixed support too
       video.addEventListener("webkitfullscreenchange",function(){
         console.log(document.webkitIsFullScreen);
       }, false);
-      video.addEventListener("mozfullscreenchange",function(){
-        console.log(document.mozFullScreen);
-      }, false);
 
-      $("#fs").addEventListener("click", function(){
+      videoElement("#fs").addEventListener("touchstart", function(){
         // The test returns a string so we can easily call it on a click event
         video[fullscreenvideo]();
       }, false);

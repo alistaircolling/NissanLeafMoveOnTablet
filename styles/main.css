@@ -180,12 +180,19 @@ div {
 #fs {
 
 
-    width:10em;
+    width:11em;
     height:2.5em;
     display:block;
     float:left;
 
     z-index:9 !important;
+        font-family: 'nissanagboldregular';
+        
+    background:#C71744;
+    border:0; 
+    padding:0;
+    text-transform:uppercase;
+    color:white;
 
 
 }
