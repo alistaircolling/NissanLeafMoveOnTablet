@@ -168,8 +168,8 @@
 
       var physics, avoidMouse, pullToCenter, collision, example, cell;
       //TODO- use a quality variable that sets the number of squares so the number of rows and columns are calculated for the orientation
-      var COLUMNS = 10;
-      var ROWS = 10;
+      var COLUMNS = 12;
+      var ROWS = 12;
       var PARTICLE_RADIUS = 5;
 
 
@@ -244,7 +244,7 @@
           var spaceX = Math.floor(window.innerWidth/COLUMNS);
           var spaceY = Math.floor(window.innerHeight/ROWS);
           var s, stiffness, size;
-          size = 80;
+          size = 60;
           stiffness = 1;
           cell = [];
           for ( var i = 0; i < COLUMNS+1; i++ ) {
