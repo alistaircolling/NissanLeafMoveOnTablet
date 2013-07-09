@@ -64,7 +64,7 @@
 
 <body>
   <header><img src="images/nissan_logo.png" id="logo"></header>
-  <canvas id="surface" width="100%" height="100%" style='z-index : 3; position: absolute;'></canvas>
+  <canvas id="surface" width="100%" height="100%" style='z-index : -1; position: absolute;'></canvas>
   <div id="container" style='z-index : 1; position: absolute;'></div>
 
           <div id="page1" class="show">
@@ -97,7 +97,7 @@
          <input type="button" id="fs"  value="Make the switch">
       </div>
 
-      
+
         <video id="video" style="display:none" width="100%" height="100%" controls="false" preload="false" >
         <source src="videos/video.mp4" type='video/mp4' />
         </video>
@@ -817,16 +817,16 @@
    <script>
     (function(window, document){
       var videoElement = function(selector,context){return(context||document).querySelector(selector)};
-      
+
       var video  = videoElement("video"),
         domPrefixes = 'Webkit Moz O ms Khtml'.split(' ');
-        
+
       var fullscreen = function(elem) {
         var prefix;
         // Mozilla and webkit intialise fullscreen slightly differently
         for ( var i = -1, len = domPrefixes.length; ++i < len; ) {
               prefix = domPrefixes[i].toLowerCase();
-          
+
           if ( elem[prefix + 'EnterFullScreen'] ) {
                 // Webkit uses EnterFullScreen for video
           return prefix + 'EnterFullScreen';
@@ -837,19 +837,19 @@
           break;
           }
             }
-    
+
         return false;
       };
-      
+
       // Will return fullscreen method
       var fullscreenvideo = fullscreen(document.createElement("video"));
-      
+
 
       if(!fullscreen) {
         alert("Fullscreen won't work, please make sure you're using a browser that supports it and you have enabled the feature");
         return;
       }
-      
+
       video.addEventListener("webkitfullscreenchange",function(){
         console.log(document.webkitIsFullScreen);
       }, false);
