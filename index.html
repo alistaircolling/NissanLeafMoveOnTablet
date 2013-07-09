@@ -163,6 +163,8 @@
       var CAR_ANIM_OFF_DURATION = 1;
       var CAR_ANIM_IN_DURATION = 1;
 
+
+
       ////PHYSICS
 
       var physics, avoidMouse, pullToCenter, collision, example, cell;
@@ -170,6 +172,7 @@
       var COLUMNS = 12;
       var ROWS = 12;
       var PARTICLE_RADIUS = 5;
+      var heldParticles;
 
       initTouch();
       initPhysics();
@@ -228,6 +231,7 @@
         avoidMouse = new Attraction();
         pullToCenter = new Attraction();
         collision = new Collision();
+        heldParticles = [];
         setupExample();
       }
 
@@ -312,11 +316,6 @@
 
 				scene = new THREE.Scene();
         var material = new THREE.MeshBasicMaterial({ color: 0xffffff, doubleSided: true});
-
-
-        var lavaTexture = THREE.ImageUtils.loadTexture( 'images/grad.jpg' );
-      	var lavaMaterial = new THREE.MeshBasicMaterial( { map: lavaTexture } );
-
 
         material.doubleSided = true;
         material.side = THREE.DoubleSide;
@@ -457,6 +456,10 @@
       function onDocumentTouchStart(event){
         var x = event.targetTouches[0].pageX;
         var y = event.targetTouches[0].pageY;
+
+        //capture which points are inside the car
+
+        //        heldParticles =
 
         avoidMouse.target.x = x;
         avoidMouse.target.y = y;
@@ -689,16 +692,18 @@
 
 
       function checkPointsInsideCar(){
-        var part,i;
+        var part,i, retA = [];
         for( i= 0; i<physics.particles.length; i++){
           part = physics.particles[i];
           if (point_in_rectangle(part.pos.x, part.pos.y, carX, carY-(carH*.5), carX+carW, carY+(carH*.5))){
+            retA.push(part);
             part.underCar = true;
             part.pos.x += .5*movementX;
           }else{
             part.underCar = false;
           }
         }
+        return retA;
       }
 
 
@@ -745,7 +750,7 @@
                updateVertices();
         checkPointsInsideCar();
         //       drawMargin();
-        //  drawPhysics();
+        //     drawPhysics();
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
 
         if (!animatingToNextPage){
@@ -761,7 +766,7 @@
             resetCarPos();
           }
 
-            drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
+           drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }else{
 
