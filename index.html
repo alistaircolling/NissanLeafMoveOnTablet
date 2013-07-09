@@ -10,6 +10,8 @@
     <script src="js/libs/stats.min.js"></script>
     <script src="js/MinimalComps-0.1.min.js"></script>
     <script src="js/TweenLite.min.js"></script>
+    <script src="js/jquery-1.6.4.min.js"></script>
+
 
 
   <!---  PHYSICS LIBRARIES   --->
@@ -59,7 +61,8 @@
 
 
 <body>
-  <header><img src="images/nissan_logo.png" id="logo"></header>
+  <header><!--<img src="images/nissan_logo.png" id="logo">--></header>
+  <div id="containerControls" style='z-index : 5; position: absolute;'></div>
   <canvas id="surface" width="100%" height="100%" style='z-index : 0; position: absolute;'></canvas>
   <div id="container" style='z-index : 1; position: absolute;'></div>
 
@@ -176,6 +179,7 @@
 
       init3D();
       animate();
+      //   addControls();
 
 
       function addStats(){
@@ -303,32 +307,16 @@
 			function init3D() {
 
 
-
-        //	container = document.getElementById( 'container' );
-
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.z = 1320;
+				camera.position.z = -1320;
 
 				scene = new THREE.Scene();
-
-
-
-				var data = generateHeight( 1024, 1024 );
-
-
-        //				var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
-        var material = new THREE.MeshBasicMaterial({ color: 0xffffff});
-
-
-        //     var material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
+        var material = new THREE.MeshBasicMaterial({ color: 0xffffff, doubleSided: true});
         material.doubleSided = true;
-
+        material.side = THREE.DoubleSide;
 				var quality = 8, step = 1024 / quality;
-
-        // material.doubleSided = true;
-
 				plane = new THREE.PlaneGeometry( 768, 1024, COLUMNS , ROWS  );
-        //			plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+        plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
         console.log(plane);
 				for ( var i = 0, l = plane.vertices.length; i < l; i ++ ) {
 
@@ -339,68 +327,84 @@
 
 
 				}
-
-
 				plane.computeVertexNormals();
-
+        plane.doubleSided = true;
         plane.computeFaceNormals();
-
         //        plane.computeCentroids();
         plane.__dirtyNormals = true;
 
 
 				mesh = new THREE.Mesh( plane, material );
+        mesh.doubleSided = true;
 				scene.add( mesh );
 
-        mesh.rotationY = Math.Pi*.5;
-
 				renderer = new THREE.CanvasRenderer();
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-        //	container.innerHTML = "";
-
+        renderer.setSize( window.innerWidth, window.innerHeight );//TODO - reset size of renderer on rotate?
 				container.appendChild( renderer.domElement );
+        container.setAttribute('style', 'z-index: -10; position:absolute');
 
-        container.setAttribute('style', 'z-index: 1;');
-
-
-        // mesh.rotationY = Math.PI;
+                mesh.rotation.y = Math.PI;//  *.5;
 
 
-        //	window.addEventListener( 'resize', onWindowResize, false );
-        //      mesh.rotation.y = Math.PI*.5;
 
-        //mouse touch listeners
-        //˚document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-        /*   document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-        document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
-        document.addEventListener( 'touchend', onDocumentTouchUp, false );*/
-
-        //    addControls();
-        //   animate();
-        //        camera.position.z = -1500;
-        //     camera.position.x = 700;
-        //   camera.position.y = 700;
 			}
 
-      var cameraZSlider;
+      var cameraXSlider;
+      var meshYRotSlider;
+      var meshXRotSlider;
+      var meshZRotSlider;
+
+      var containerControls;
 
       function addControls(){
-        container = document.getElementById( 'container' );
-        cameraZSlider = new mc.HSlider(container, 10, 80, onCamZSliderChange)
-        .bindLabel(new mc.Label(container, 15, 100).setAlign("center"), 0);
+        containerControls = document.getElementById( 'containerControls' );
+        cameraZSlider = new mc.HSlider(containerControls, 10, 80, onCamZSliderChange)
+        .bindLabel(new mc.Label(containerControls, 15, 100).setAlign("center"), 0);
         cameraZSlider.setMinimum( -6000 );
     		cameraZSlider.setMaximum( 6000 );
+
+        meshYRotSlider = new mc.HSlider(containerControls, 10, 100, onMeshRotYChange)
+        .bindLabel(new mc.Label(containerControls, 15, 140).setAlign("center"), 0);
+        meshYRotSlider.setMinimum( -Math.PI*2 );
+    		meshYRotSlider.setMaximum(Math.PI*2);
+
+        meshXRotSlider = new mc.HSlider(containerControls, 10, 140, onMeshRotXChange)
+        .bindLabel(new mc.Label(containerControls, 15, 140).setAlign("center"), 0);
+        meshXRotSlider.setMinimum( -Math.PI*2 );
+    		meshXRotSlider.setMaximum(Math.PI*2);
+
+        meshZRotSlider = new mc.HSlider(containerControls, 10, 180, onMeshRotZChange)
+        .bindLabel(new mc.Label(containerControls, 15, 140).setAlign("center"), 0);
+        meshZRotSlider.setMinimum( -Math.PI*2 );
+    		meshZRotSlider.setMaximum(Math.PI*2);
 
 
       }
 
       function onCamZSliderChange( e ){
 
-        //camera.position.z = cameraZSlider.getValue();
+        camera.position.z = cameraZSlider.getValue();
         console.log("Camera z change:"+camera.position.z);
     	}
+
+      function onMeshRotYChange( e ){
+
+        mesh.rotation.y = meshYRotSlider.getValue();
+        console.log("mesh rot Y:"+ mesh.rotation.y);
+    	}
+
+       function onMeshRotXChange( e ){
+
+        mesh.rotation.x = meshXRotSlider.getValue();
+        console.log("mesh rot x:"+ mesh.rotation.x);
+    	}
+
+       function onMeshRotZChange( e ){
+
+        mesh.rotation.z = meshZRotSlider.getValue();
+        console.log("mesh rot z:"+ mesh.rotation.z);
+    	}
+
 
 
 
@@ -476,7 +480,7 @@
 
 
         drawCircle(x,y, 40, '#ffff00');
-        //  camera.position.z = ((y/window.innerHeight)*6000);
+        //        camera.position.x = -300;//((y/window.innerHeight)*6000);
 
         //     mesh.rotation.z =((x/window.innerWidth)*Math.PI*2);
 
@@ -509,76 +513,6 @@
 
 			}
 
-			function generateHeight( width, height ) {
-
-				var data = Float32Array ? new Float32Array( width * height ) : [], perlin = new ImprovedNoise(),
-				size = width * height, quality = 2, z = Math.random() * 100;
-
-				for ( var i = 0; i < size; i ++ ) {
-
-					data[ i ] = 0
-
-				}
-
-				for ( var j = 0; j < 4; j ++ ) {
-
-					quality *= 4;
-
-					for ( var i = 0; i < size; i ++ ) {
-
-						var x = i % width, y = ~~ ( i / width );
-						data[ i ] += Math.floor( Math.abs( perlin.noise( x / quality, y / quality, z ) * 0.5 ) * quality + 10 );
-
-
-					}
-
-				}
-
-				return data;
-
-			}
-
-			function generateTexture( data, width, height ) {
-
-				var canvas, context, image, imageData,
-				level, diff, vector3, sun, shade;
-
-				vector3 = new THREE.Vector3( 0, 0, 0 );
-
-				sun = new THREE.Vector3( 1, 1, 1 );
-				sun.normalize();
-
-				canvas = document.createElement( 'canvas' );
-				canvas.width = width;
-				canvas.height = height;
-
-				context = canvas.getContext( '2d' );
-				context.fillStyle = '#000';
-				context.fillRect( 0, 0, width, height );
-
-				image = context.getImageData( 0, 0, width, height );
-				imageData = image.data;
-
-				for ( var i = 0, j = 0, l = imageData.length; i < l; i += 4, j ++  ) {
-
-					vector3.x = data[ j - 1 ] - data[ j + 1 ];
-					vector3.y = 2;
-					vector3.z = data[ j - width ] - data[ j + width ];
-					vector3.normalize();
-
-					shade = vector3.dot( sun );
-
-					imageData[ i ] = ( 96 + shade * 128 ) * ( data[ j ] * 0.007 );
-					imageData[ i + 1 ] = ( 32 + shade * 96 ) * ( data[ j ] * 0.007 );
-					imageData[ i + 2 ] = ( shade * 96 ) * ( data[ j ] * 0.007 );
-
-				}
-
-				context.putImageData( image, 0, 0 );
-
-				return canvas;
-
-			}
 
 			function onDocumentMouseMove(event) {
 
@@ -763,16 +697,27 @@
 
       function updateVertices(){
         // console.log("u");
-        var i, particle, vertex, pos, theX, theY;
+        var i, particle, vertex, pos, theX, theY,
+            ratioX = 2,
+            ratioY = 2.5;
+
         for(i = 0; i<physics.particles.length; i++){
           vertex = mesh.geometry.vertices[i];
           particle = physics.particles[i];
           pos = particle.pos;
           //TODO figure out how to make the offsets dynamic
-          theX = (pos.x*2)-650;
-          theY = (pos.y*2)-768;
-          vertex.x = theX;
-          vertex.y = theY;
+          theX = pos.x;//-650;
+          theY = pos.y-768;
+
+          theX *= ratioX;
+          theY *= ratioY;
+
+
+          //   theX = pos.x;
+          // theY = pos.y;
+          vertex.x = theX-1300;
+          vertex.y = theY+1000;
+
           //          part = physics.particles[i];
           //console.log(physics.particles[i]);
         //  vertex.x = physics.particles[i].pos.x;
@@ -821,20 +766,10 @@
 
         }
 
-        //        mesh.rotation.x += 0.06;
-
-
-        //      if (!tDown) mesh.rotation.x += 0.01; mesh.rotation.y += 0.01;
-
-        // 		camera.position.x += ( mouseX - camera.position.x ) * 0.05;
-        //		camera.position.y += ( - mouseY - camera.position.y ) * 0.05;
-			   camera.lookAt( scene.position );
-
-			  	renderer.render( scene, camera );
-
-
-
-
+        // mesh.rotation.y += 0.06;
+        //  console.log("x:"+mesh.rotation.x);
+			 camera.lookAt( scene.position );
+			 renderer.render( scene, camera );
 			}
 
 
