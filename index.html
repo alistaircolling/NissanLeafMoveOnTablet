@@ -41,6 +41,8 @@
     <script src="js/compiled/behaviour/EdgeWrap.js"></script>
     <script src="js/compiled/behaviour/Wander.js"></script>
 
+  <script src="js/renderers/SVGRenderer.js"></script>
+
 
   <!-----  MAY NOT NEED THEM ALL !   ------>
 
@@ -312,11 +314,17 @@
 
 				scene = new THREE.Scene();
         var material = new THREE.MeshBasicMaterial({ color: 0xffffff, doubleSided: true});
+
+
+        var lavaTexture = THREE.ImageUtils.loadTexture( 'images/grad.jpg' );
+      	var lavaMaterial = new THREE.MeshBasicMaterial( { map: lavaTexture } );
+
+
         material.doubleSided = true;
         material.side = THREE.DoubleSide;
 				var quality = 8, step = 1024 / quality;
 				plane = new THREE.PlaneGeometry( 768, 1024, COLUMNS , ROWS  );
-        plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+        //  plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
         console.log(plane);
 				for ( var i = 0, l = plane.vertices.length; i < l; i ++ ) {
 
@@ -338,15 +346,14 @@
         mesh.doubleSided = true;
 				scene.add( mesh );
 
-				renderer = new THREE.CanvasRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );//TODO - reset size of renderer on rotate?
+        //				renderer = new THREE.CanvasRenderer();
+        renderer = new THREE.SVGRenderer();
+          renderer.setSize( window.innerWidth, window.innerHeight );//TODO - reset size of renderer on rotate?
 				container.appendChild( renderer.domElement );
         container.setAttribute('style', 'z-index: -10; position:absolute');
 
-                mesh.rotation.y = Math.PI;//  *.5;
 
-
-
+        mesh.rotation.y = Math.PI;//  *.5;
 			}
 
       var cameraXSlider;
@@ -598,7 +605,6 @@
 
       function drawCar(x, y, width, height, color){
         //  console.log("draw"+x+":"+ y);
-
 
         context.fillStyle = color;
         context.beginPath();
