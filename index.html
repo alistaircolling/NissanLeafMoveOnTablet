@@ -63,20 +63,19 @@
 
 
 <body>
-  <header><!--<img src="images/nissan_logo.png" id="logo">--></header>
-  <div id="containerControls" style='z-index : 5; position: absolute;'></div>
-  <canvas id="surface" width="100%" height="100%" style='z-index : 0; position: absolute;'></canvas>
+  <header><img src="images/nissan_logo.png" id="logo"></header>
+  <canvas id="surface" width="100%" height="100%" style='z-index : 3; position: absolute;'></canvas>
   <div id="container" style='z-index : 1; position: absolute;'></div>
 
-          <div id="page1">
+          <div id="page1" class="show">
 
-            <h1>The 100% Electric New Leaf. <br /><span>You'll know it when you feel it</span></h1>
-              <p class="list">Zero emissions*| Connected | Instant torque</p>
-                <p class="Small">While driving</p>
+            <h1>The 100% Electric New Leaf<br /><span>You'll know it when you feel it</span></h1>
+              <p class="list">Zero emissions* | Connected | Instant torque</p>
+                <p class="small">While driving</p>
 
 
           </div>
-        <div style="display: none;" id="page2">
+        <div  id="page2" class="hide">
           <h1> Feel <span> Connected</span></h1>
           <p class="list">Remote access | Voice controls | Charging network</p>
 
@@ -84,7 +83,7 @@
           </p>
 
         </div>
-        <div style="display: none;" id="page3">
+        <div id="page3" class="hide">
           <h1> Feel <span> the torque</span></h1>
           <p class="list">Responsive | Dynamic | Quietly impressive</p>
 
@@ -95,14 +94,14 @@
 
         </div>
       <div class="button-wrapper">
-         <input type="button" id="fs"  value="Fullscreen">
+         <input type="button" id="fs"  value="Make the switch">
       </div>
 
-      <!--
-        <video id="myVideo" width="100%" height="100%" controls="false" preload="false" >
-        <source src="videos/movie.mp4" type='video/mp4' />
+      
+        <video id="video" style="display:none" width="100%" height="100%" controls="false" preload="false" >
+        <source src="videos/video.mp4" type='video/mp4' />
         </video>
-      -->
+
 
 
     <script>
@@ -171,7 +170,6 @@
       var COLUMNS = 12;
       var ROWS = 12;
       var PARTICLE_RADIUS = 5;
-
 
       initTouch();
       initPhysics();
@@ -560,7 +558,7 @@
 
      function showDivs(id) {
        var ids = ["page1", "page2", "page3"];
-        console.log(ids);
+       // console.log(ids);
         for(var i = 0; i < ids.length; i++) {
 
 
@@ -570,16 +568,19 @@
               lastPage = totalPages-1;
             }
             var currDiv = document.getElementById(ids[lastPage]);
-            currDiv.style.display = "none";
+            currDiv.classList.remove('show');
+            currDiv.classList.add('hide');
             var thisD = document.getElementById(ids[currentPage]);
             console.log("div?:"+thisD);
-            thisD.style.display = "block";
+            thisD.classList.remove('hide');
+            thisD.classList.add('show');
 
           }
 
         }
 
       }
+
 
 
       function drawMargin(){
@@ -811,6 +812,55 @@
 
 
         </script>
+
+
+   <script>
+    (function(window, document){
+      var videoElement = function(selector,context){return(context||document).querySelector(selector)};
+      
+      var video  = videoElement("video"),
+        domPrefixes = 'Webkit Moz O ms Khtml'.split(' ');
+        
+      var fullscreen = function(elem) {
+        var prefix;
+        // Mozilla and webkit intialise fullscreen slightly differently
+        for ( var i = -1, len = domPrefixes.length; ++i < len; ) {
+              prefix = domPrefixes[i].toLowerCase();
+          
+          if ( elem[prefix + 'EnterFullScreen'] ) {
+                // Webkit uses EnterFullScreen for video
+          return prefix + 'EnterFullScreen';
+          break;
+              } else if( elem[prefix + 'RequestFullScreen'] ) {
+          // Mozilla uses RequestFullScreen for all elements and webkit uses it for non video elements
+          return prefix + 'RequestFullScreen';
+          break;
+          }
+            }
+    
+        return false;
+      };
+      
+      // Will return fullscreen method
+      var fullscreenvideo = fullscreen(document.createElement("video"));
+      
+
+      if(!fullscreen) {
+        alert("Fullscreen won't work, please make sure you're using a browser that supports it and you have enabled the feature");
+        return;
+      }
+      
+      video.addEventListener("webkitfullscreenchange",function(){
+        console.log(document.webkitIsFullScreen);
+      }, false);
+
+      videoElement("#fs").addEventListener("touchstart", function(){
+        // The test returns a string so we can easily call it on a click event
+        video[fullscreenvideo]();
+      }, false);
+
+    })(this, this.document);
+  </script>
 
 
 
