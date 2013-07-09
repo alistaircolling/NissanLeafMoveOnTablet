@@ -11,6 +11,7 @@
     <script src="js/MinimalComps-0.1.min.js"></script>
     <script src="js/TweenLite.min.js"></script>
 
+
   <!---  PHYSICS LIBRARIES   --->
 
 <!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -301,6 +302,8 @@
 
 			function init3D() {
 
+
+
         //	container = document.getElementById( 'container' );
 
 				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
@@ -308,15 +311,21 @@
 
 				scene = new THREE.Scene();
 
+
+
 				var data = generateHeight( 1024, 1024 );
-				var texture = new THREE.Texture( generateTexture( data, 1024, 1024 ) );
-				texture.needsUpdate = true;
+
 
         //				var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: true } );
-        var material = new THREE.MeshNormalMaterial();
+        var material = new THREE.MeshBasicMaterial({ color: 0xffffff});
+
+
+        //     var material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
         material.doubleSided = true;
 
 				var quality = 8, step = 1024 / quality;
+
+        // material.doubleSided = true;
 
 				plane = new THREE.PlaneGeometry( 768, 1024, COLUMNS , ROWS  );
         //			plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
@@ -333,6 +342,7 @@
 
 
 				plane.computeVertexNormals();
+
         plane.computeFaceNormals();
 
         //        plane.computeCentroids();
@@ -342,6 +352,8 @@
 				mesh = new THREE.Mesh( plane, material );
 				scene.add( mesh );
 
+        mesh.rotationY = Math.Pi*.5;
+
 				renderer = new THREE.CanvasRenderer();
 				renderer.setSize( window.innerWidth, window.innerHeight );
 
@@ -349,10 +361,14 @@
 
 				container.appendChild( renderer.domElement );
 
+        container.setAttribute('style', 'z-index: 1;');
+
+
+        // mesh.rotationY = Math.PI;
 
 
         //	window.addEventListener( 'resize', onWindowResize, false );
-           mesh.rotation.x = Math.PI*.5;
+        //      mesh.rotation.y = Math.PI*.5;
 
         //mouse touch listeners
         //˚document.addEventListener( 'mousedown', onDocumentMouseDown, false );
@@ -363,6 +379,9 @@
 
         //    addControls();
         //   animate();
+        //        camera.position.z = -1500;
+        //     camera.position.x = 700;
+        //   camera.position.y = 700;
 			}
 
       var cameraZSlider;
@@ -379,7 +398,7 @@
 
       function onCamZSliderChange( e ){
 
-        camera.position.z = cameraZSlider.getValue();
+        //camera.position.z = cameraZSlider.getValue();
         console.log("Camera z change:"+camera.position.z);
     	}
 
@@ -457,7 +476,8 @@
 
 
         drawCircle(x,y, 40, '#ffff00');
-        // camera.position.z = ((y/window.innerHeight)*6000);
+        //  camera.position.z = ((y/window.innerHeight)*6000);
+
         //     mesh.rotation.z =((x/window.innerWidth)*Math.PI*2);
 
         avoidMouse.target.x = x;
@@ -748,8 +768,9 @@
           vertex = mesh.geometry.vertices[i];
           particle = physics.particles[i];
           pos = particle.pos;
-          theX = pos.x;
-          theY = pos.y;
+          //TODO figure out how to make the offsets dynamic
+          theX = (pos.x*2)-650;
+          theY = (pos.y*2)-768;
           vertex.x = theX;
           vertex.y = theY;
           //          part = physics.particles[i];
@@ -800,6 +821,7 @@
 
         }
 
+        //        mesh.rotation.x += 0.06;
 
 
         //      if (!tDown) mesh.rotation.x += 0.01; mesh.rotation.y += 0.01;
