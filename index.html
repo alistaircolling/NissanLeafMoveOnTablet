@@ -243,7 +243,7 @@
           var spaceY = Math.floor(window.innerHeight/ROWS);
           var s, stiffness, size;
           size = 80;
-          stiffness = 0.5;
+          stiffness = 1;
           cell = [];
           for ( var i = 0; i < COLUMNS+1; i++ ) {
             //create a new array at each index
@@ -646,7 +646,7 @@
 
       function drawPhysics(){
 
-          physics.step();
+        //          physics.step();
           var fillStyle = '#00ff00';
           //render particles
           for( var i=0, n = physics.particles.length; i<n; i++){
@@ -698,8 +698,8 @@
       function updateVertices(){
         // console.log("u");
         var i, particle, vertex, pos, theX, theY,
-            ratioX = 2,
-            ratioY = 2.5;
+            ratioX = 1.8,
+            ratioY = 1.8;
 
         for(i = 0; i<physics.particles.length; i++){
           vertex = mesh.geometry.vertices[i];
@@ -715,8 +715,8 @@
 
           //   theX = pos.x;
           // theY = pos.y;
-          vertex.x = theX-1300;
-          vertex.y = theY+1000;
+          vertex.x = theX-700;
+          vertex.y = theY+500;
 
           //          part = physics.particles[i];
           //console.log(physics.particles[i]);
@@ -728,21 +728,17 @@
         //        plane.computeCentroids();
         plane.__dirtyNormals = true;
 
-
-
-
-
       }
 
 
 
 			function render() {
-
+        physics.step();
         canvas.width = canvas.width;
                updateVertices();
         checkPointsInsideCar();
-        drawMargin();
-        drawPhysics();
+        //       drawMargin();
+        //  drawPhysics();
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
 
         if (!animatingToNextPage){
