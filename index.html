@@ -250,8 +250,8 @@
           var spaceX = Math.floor(window.innerWidth/COLUMNS);
           var spaceY = Math.floor(window.innerHeight/ROWS);
           var s, stiffness, size;
-          size = 60;
-          stiffness = .1;
+          size = 1000;
+          stiffness = .3;
           cell = [];
           for ( var i = 0; i < COLUMNS+1; i++ ) {
             //create a new array at each index
@@ -260,7 +260,7 @@
 
               var particle = new Particle( 10 );
               //fix the top ones
-              if (j==0 || j == ROWS){
+              if (j==0 || j == ROWS || i == COLUMNS){
                 particle.pinned = true;
                 particle.fixed = true;//j === 0;
               }
@@ -507,10 +507,22 @@
           lastX = x;
         }
         //move particles
-        var i, particle, top = heldParticles.length;
+//         var i, particle, top = heldParticles.length;
+//         for(var i=0; i<top; i++){
+//           particle  = heldParticles[i];
+//           particle.pos.x += movedX;
+
+//         }
+        var i, part, top = physics.particles.length;
         for(var i=0; i<top; i++){
-          particle  = heldParticles[i];
-          particle.pos.x += movedX;
+          part = physics.particles[i];
+          if (part.underCar){
+              part.pos.x += movedX;
+          }else{
+             if (!part.pinned){
+                 part.fixed = false;
+             }
+          }
 
         }
 
@@ -660,6 +672,7 @@
 
         //          physics.step();
           var fillStyle = '#00ff00';
+          var particles
           //render particles
           for( var i=0, n = physics.particles.length; i<n; i++){
 
@@ -697,8 +710,8 @@
         var part,i, retA = [];
         for( i= 0; i<physics.particles.length; i++){
           part = physics.particles[i];
-          //only add iff the mouse is down
-          if (point_in_rectangle(part.pos.x, part.pos.y-(carH*.5), carX, carY-(carH*.5), carX+carW, carY+(carH*.5))){
+          //only add if the mouse is down and particle isn't pinned
+          if (point_in_rectangle(part.pos.x, part.pos.y-(carH*.5), carX, carY-(carH*.5), carX+carW, carY+(carH*.5)) && !part.pinned){
             if (tDown){
               part.underCar = true;
               part.fixed = true;
@@ -706,9 +719,6 @@
             }
           }else{
             part.underCar = false;
-            if (!part.pinned){
-              // part.fixed = false;
-            }
           }
         }
         return retA;
