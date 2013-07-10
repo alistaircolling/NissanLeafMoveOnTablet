@@ -129,8 +129,8 @@
       ////CAR VARS
 
 
-
-
+      var WHEEL_SCALE = 1.2; //hack used to get the wheels to be the correct size
+            var counter = 0;
       var carX = 0;
       var currX = 0;
       var carWidthPerc = .7;
@@ -164,11 +164,19 @@
       var CAR_ANIM_OFF_DURATION = 1;
       var CAR_ANIM_IN_DURATION = 1;
 
+      //wheel positoins at full res of car image used
+      var R_WHEEL_X = 132;
+      var R_WHEEL_Y = 137;
+
+      var L_WHEEL_X = -235;
+      var L_WHEEL_Y = 137;
+
+
       var SNAP_BACK_DURATION = .2;
 
       var show3D = false;
 
-
+      var lWheel, rWheel;
 
       ////PHYSICS
 
@@ -196,6 +204,10 @@
       function initGraphics(){
         car = new Image();
         car.src = "images/LEAF.gif";
+        lWheel = new Image();
+        lWheel.src = "images/wheel.png";
+        rWheel = new Image();
+        lWheel.src = "images/wheel.png";
       }
 
       function addStats(){
@@ -633,9 +645,10 @@
       //width dictates height
       function drawCar(x, y, width, height, color){
         //  console.log("draw"+x+":"+ y);
-        var targH, wHRatio;
-        car = new Image();
+        var targH, wHRatio, scaledRatio;
+         car = new Image();
         car.src = "images/LEAF.gif";
+        scaledRatio = width/car.width;
         wHRatio = car.width/car.height;
         targH = width/wHRatio;
         example.shadowColor = "rgba( 0, 0, 0, 0.3 )";
@@ -645,11 +658,42 @@
         example.drawImage( car, x-(width*.5), y, width, targH);
         example.shadowBlur = 0;
 
+        drawWheels(x,y, scaledRatio);
+
         /*
         example.fillStyle = color;
         example.beginPath();
         example.fillRect(x,y,width,height);
         example.fill();*/
+      }
+
+
+      function drawWheels(x,y,scale){
+        //console.log("dw:"+counter);
+        var wheelTargetSize;
+
+        lWheel = new Image();
+        lWheel.src = 'images/wheel.png';
+        wheelTargetSize = lWheel.width*scale*WHEEL_SCALE;
+        counter += .1;
+        example.save();
+        example.translate((x+L_WHEEL_X)+(.5*wheelTargetSize), y+L_WHEEL_Y+(.5*wheelTargetSize));
+        example.rotate(counter);
+        example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
+        example.drawImage(lWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
+        example.restore();
+
+        rWheel = new Image();
+        rWheel.src = 'images/wheel.png';
+        wheelTargetSize = rWheel.width*scale*WHEEL_SCALE;
+        counter += .1;
+        example.save();
+        example.translate((x+R_WHEEL_X)+(.5*wheelTargetSize), y+R_WHEEL_Y+(.5*wheelTargetSize));
+        example.rotate(counter);
+        example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
+        example.drawImage(rWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
+        example.restore();
+
       }
 
       function resetCarPos(){
@@ -697,7 +741,7 @@
         example.beginPath();
         example.moveTo(0,0);
         for(i=0; i<ROWS-1; i++){
-          part = physics.particles[i];
+          //    part = physics.particles[i];
           //      example.lineTo(part.pos.x, part.pos.y);
           var xc = (physics.particles[i].pos.x + physics.particles[i + 1].pos.x) / 2;
           var yc = (physics.particles[i].pos.y + physics.particles[i + 1].pos.y) / 2;
