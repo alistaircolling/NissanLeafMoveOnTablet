@@ -163,7 +163,7 @@
       var CAR_ANIM_OFF_DURATION = 1;
       var CAR_ANIM_IN_DURATION = 1;
 
-      var SNAP_BACK_DURATION = .1;
+      var SNAP_BACK_DURATION = .2;
 
       var show3D = false;
 
@@ -297,15 +297,9 @@
 
           }
 
-          /*    pullToCenter.target.x = this.width / 2;
-          pullToCenter.target.y = this.height / 2;
-          pullToCenter.strength = 500;
-          avoidMouse.setRadius( 200 );
-          avoidMouse.strength = -3000;*/
 
           example.fillStyle = '#ff00ff';
           // }
-        ////DRAW
 
 
 
@@ -469,11 +463,11 @@
         console.log("t up");
         tDown = false;
          var i, particle, top = heldParticles.length;
-        for(var i=0; i<top; i++){
+        /*        for(var i=0; i<top; i++){
           particle  = heldParticles[i];
           particle.fixed = false;
 
-        }
+        }*/
         //clean up any particles that may have been missed
         var topPart = physics.particles.length;
         for(i=0; i<topPart; i++){
@@ -632,10 +626,10 @@
       function drawCar(x, y, width, height, color){
         //  console.log("draw"+x+":"+ y);
 
-        context.fillStyle = color;
-        context.beginPath();
-        context.fillRect(x,y,width,height);
-        context.fill();
+        example.fillStyle = color;
+        example.beginPath();
+        example.fillRect(x,y,width,height);
+        example.fill();
       }
 
       function resetCarPos(){
@@ -668,11 +662,39 @@
         animatingToNextPage = false;
       }
 
+      function drawCurtain(){
+        var i, part;
+
+        example.strokeStyle = '#000000';
+        example.fillStyle = '#00ff00';
+        example.lineWidth = 10;
+        example.beginPath();
+        example.moveTo(0,0);
+        for(i=0; i<ROWS-1; i++){
+          part = physics.particles[i];
+          //      example.lineTo(part.pos.x, part.pos.y);
+          var xc = (physics.particles[i].pos.x + physics.particles[i + 1].pos.x) / 2;
+          var yc = (physics.particles[i].pos.y + physics.particles[i + 1].pos.y) / 2;
+          example.quadraticCurveTo(physics.particles[i].pos.x, physics.particles[i].pos.y, xc, yc);
+        }
+         example.quadraticCurveTo(physics.particles[i].pos.x, physics.particles[i].pos.y, physics.particles[i+1].pos.x,physics.particles[i+1].pos.y);
+        example.lineTo(window.innerWidth, window.innerHeight);
+        example.lineTo(window.innerWidth, 0);
+
+        example.lineTo(0, 0);//window.innerHeight);
+        example.fill();
+        example.stroke();
+
+
+
+      }
+
+
       function drawPhysics(){
 
         //          physics.step();
           var fillStyle = '#00ff00';
-          var particles
+          var particles, n;
           //render particles
           for( var i=0, n = physics.particles.length; i<n; i++){
 
@@ -765,8 +787,9 @@
 
 
 			function render() {
-        physics.step();
+        //clear canvas
         canvas.width = canvas.width;
+        physics.step();
         if (show3D) {
           updateVertices();
         }
@@ -774,7 +797,8 @@
         heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
-            drawPhysics();
+          //.drawPhysics();
+          drawCurtain();
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
 
