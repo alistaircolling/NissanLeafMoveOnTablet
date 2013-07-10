@@ -163,6 +163,8 @@
       var CAR_ANIM_OFF_DURATION = 1;
       var CAR_ANIM_IN_DURATION = 1;
 
+      var SNAP_BACK_DURATION = .1;
+
       var show3D = false;
 
 
@@ -173,7 +175,7 @@
       //TODO- use a quality variable that sets the number of squares so the number of rows and columns are calculated for the orientation
       var COLUMNS = 6;
       var ROWS = 8;
-      var PARTICLE_RADIUS = 5;
+      var PARTICLE_RADIUS = 20;
       var heldParticles;
 
       initTouch();
@@ -460,7 +462,6 @@
 
       function onDocumentTouchStart(event){
         tDown = true;
-        snapBack();
         event.preventDefault();
       }
 
@@ -480,6 +481,7 @@
             physics.particles[i].fixed = false;
           }
         }
+        snapBack();
         event.preventDefault();
       }
 
@@ -523,10 +525,13 @@
 
       function snapBack(){
         //go through the particles at the left hand side and animate back to their pos...
-        var i, part;
+        var i, part, targPosY;
         for(i=0; i<ROWS; i++){
             part = physics.particles[i];
             part.snapper = true;
+            targPosY = (window.innerHeight/ROWS)*i;
+            part.fixed = true;
+            TweenLite.to(part.pos, SNAP_BACK_DURATION, {x:0, y:targPosY});
         }
 
       }
