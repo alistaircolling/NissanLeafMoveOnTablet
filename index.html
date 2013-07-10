@@ -62,37 +62,9 @@
 </head>
 
 
-<body>
+<body class="page1">
   <header><img src="images/nissan_logo.png" id="logo"></header>
-  <canvas id="surface" width="100%" height="100%" style='z-index : -1; position: absolute;'></canvas>
-  <div id="container" style='z-index : 1; position: absolute;'></div>
 
-          <div id="page1" class="show">
-
-            <h1>The 100% Electric New Leaf<br /><span>You'll know it when you feel it</span></h1>
-              <p class="list">Zero emissions* | Connected | Instant torque</p>
-                <p class="small">While driving</p>
-
-
-          </div>
-        <div  id="page2" class="hide">
-          <h1> Feel <span> Connected</span></h1>
-          <p class="list">Remote access | Voice controls | Charging network</p>
-
-          <p class="desc">Be in sync with your car. You can check and control the Nissan LEAF's charge and adjust the air con remotely via the Carwings app. Tell LEAF to guide you home  with voice-controlled navigation. And change on the go through a network of the rapid charge points - located for you by LEAF.
-          </p>
-
-        </div>
-        <div id="page3" class="hide">
-          <h1> Feel <span> the torque</span></h1>
-          <p class="list">Responsive | Dynamic | Quietly impressive</p>
-
-          <p class="desc">Everyone who experiences the unique feeling of accelerating in the 100% electric Nissan LEAF  wants  to talk about it. To share the sensation of instant torque, smoothly delivered from the moment the foot touches the pedal.</p>
-
-          <p class="desc">With LEAF, you get incredible performance with zero noise and zero emissions when you drive.</p>
-
-
-        </div>
       <div class="button-wrapper">
          <input type="button" id="fs"  value="Make the switch">
       </div>
@@ -101,6 +73,44 @@
         <video id="video" style="display:none" width="100%" height="100%" controls="false" preload="false" >
         <source src="videos/video.mp4" type='video/mp4' />
         </video>
+  
+  <canvas id="surface" width="100%" height="100%" style='z-index : -1; position: absolute;'></canvas>
+  <div id="container" style='z-index : 1; position: absolute;'></div>
+
+          <div id="page1" class="show">
+
+
+            <div class="text">
+            <h1>The 100% Electric New Leaf<br /><span>You'll know it when you feel it</span></h1>
+              <p class="list">Zero emissions* | Connected | Instant torque</p>
+                <p class="small">While driving</p>
+
+            </div>
+          </div>
+        <div  id="page2" class="hide">
+
+          <div class="text">
+          <h1> Feel <span> Connected</span></h1>
+          <p class="list">Remote access | Voice controls | Charging network</p>
+
+          <p class="desc">Be in sync with your car. You can check and control the Nissan LEAF's charge and adjust the air con remotely via the Carwings app. Tell LEAF to guide you home  with voice-controlled navigation. And change on the go through a network of the rapid charge points - located for you by LEAF.
+          </p>
+        </div>
+        </div>
+        <div id="page3" class="hide">
+
+          <div class="text">
+          <h1> Feel <span> the torque</span></h1>
+          <p class="list">Responsive | Dynamic | Quietly impressive</p>
+
+          <p class="desc">Everyone who experiences the unique feeling of accelerating in the 100% electric Nissan LEAF  wants  to talk about it. To share the sensation of instant torque, smoothly delivered from the moment the foot touches the pedal.</p>
+
+          <p class="desc">With LEAF, you get incredible performance with zero noise and zero emissions when you drive.</p>
+        </div>
+
+        </div>
+
+
 
 
 
@@ -599,12 +609,14 @@
 
         showDivs(currentPage);//add code to show correct content here:
 
+
+
       }
 
 
 
 
-     function showDivs(id) {
+     function showDivs() {
        var ids = ["page1", "page2", "page3"];
        // console.log(ids);
         for(var i = 0; i < ids.length; i++) {
@@ -617,6 +629,8 @@
             }
             var currDiv = document.getElementById(ids[lastPage]);
             currDiv.classList.remove('show');
+            document.body.classList.remove(ids[lastPage]);
+            document.body.classList.add(ids[currentPage]);
             currDiv.classList.add('hide');
             var thisD = document.getElementById(ids[currentPage]);
             console.log("div?:"+thisD);
@@ -628,7 +642,6 @@
         }
 
       }
-
 
 
       function drawMargin(){
@@ -983,6 +996,7 @@
       videoElement("#fs").addEventListener("touchstart", function(){
         // The test returns a string so we can easily call it on a click event
         video[fullscreenvideo]();
+        console.log(11);
       }, false);
 
     })(this, this.document);
