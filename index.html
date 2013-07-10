@@ -459,17 +459,8 @@
 
 
       function onDocumentTouchStart(event){
-                tDown = true;
-        var x = event.targetTouches[0].pageX;
-        var y = event.targetTouches[0].pageY;
-
-        //capture which points are inside the car
-
-        //   heldParticles = checkPointsInsideCar();
-
-        avoidMouse.target.x = x;
-        avoidMouse.target.y = y;
-
+        tDown = true;
+        snapBack();
         event.preventDefault();
       }
 
@@ -530,6 +521,16 @@
 
       }
 
+      function snapBack(){
+        //go through the particles at the left hand side and animate back to their pos...
+        var i, part;
+        for(i=0; i<ROWS; i++){
+            part = physics.particles[i];
+            part.snapper = true;
+        }
+
+      }
+
       //////////////////////////////////////
 
       function drawCircle(x, y, radius, color){
@@ -554,12 +555,6 @@
 			}
 
 
-			function onDocumentMouseMove(event) {
-
-				mouseX = event.clientX - windowHalfX;
-				mouseY = event.clientY - windowHalfY;
-
-			}
 
 			//
 
@@ -680,6 +675,8 @@
             example.beginPath();
             if (particle.underCar){
              example.fillStyle = fillStyle;
+            }else if (particle.snapper){
+             example.fillStyle = '00f7ff';
             }else{
               example.fillStyle = 'ff00ff';
             }
