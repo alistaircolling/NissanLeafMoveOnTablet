@@ -46,7 +46,6 @@
 
   <!-----  MAY NOT NEED THEM ALL !   ------>
 
-    <link type="text/css" rel="stylesheet" href="styles/normalize.css">
     <link type="text/css" rel="stylesheet" href="styles/reset.css" />
     <link type="text/css" rel="stylesheet" href="styles/main.css" />
 
@@ -62,11 +61,11 @@
 </head>
 
 
-<body class="page1">
+<body >
   <header><img src="images/nissan_logo.png" id="logo"></header>
 
       <div class="button-wrapper">
-         <input type="button" id="fs"  value="Make the switch">
+         <a href="http://www.nissan.co.uk/GB/en/vehicle/electric-vehicles/leaf.html" id="fs">Make the switch</a>
       </div>
 
 
@@ -197,19 +196,29 @@
       var PARTICLE_RADIUS = 20;
       var heldParticles;
 
-      initTouch();
-      initPhysics();
-      initTouchListeners();
 
-      addStats();
+      window.onload = function() {
+        initCanvas();
+        document.body.className = 'page1';
+      };
 
-      if (show3D){
-         init3D();
+
+      function initCanvas(){
+
+
+        initTouch();
+        initPhysics();
+        initTouchListeners();
+
+        addStats();
+
+        if (show3D){
+           init3D();
+        }
+        animate();
+        initGraphics();
+        //   addControls();
       }
-      animate();
-      initGraphics();
-      //   addControls();
-
 
       function initGraphics(){
         car = new Image();
@@ -629,10 +638,11 @@
             }
             var currDiv = document.getElementById(ids[lastPage]);
             currDiv.classList.remove('show');
+            currDiv.classList.add('hide');
             document.body.classList.remove(ids[lastPage]);
             document.body.classList.add(ids[currentPage]);
-            currDiv.classList.add('hide');
             var thisD = document.getElementById(ids[currentPage]);
+         
             console.log("div?:"+thisD);
             thisD.classList.remove('hide');
             thisD.classList.add('show');
@@ -951,56 +961,6 @@
 
 
         </script>
-
-
-   <script>
-    (function(window, document){
-      var videoElement = function(selector,context){return(context||document).querySelector(selector)};
-
-      var video  = videoElement("video"),
-        domPrefixes = 'Webkit Moz O ms Khtml'.split(' ');
-
-      var fullscreen = function(elem) {
-        var prefix;
-        // Mozilla and webkit intialise fullscreen slightly differently
-        for ( var i = -1, len = domPrefixes.length; ++i < len; ) {
-              prefix = domPrefixes[i].toLowerCase();
-
-          if ( elem[prefix + 'EnterFullScreen'] ) {
-                // Webkit uses EnterFullScreen for video
-          return prefix + 'EnterFullScreen';
-          break;
-              } else if( elem[prefix + 'RequestFullScreen'] ) {
-          // Mozilla uses RequestFullScreen for all elements and webkit uses it for non video elements
-          return prefix + 'RequestFullScreen';
-          break;
-          }
-            }
-
-        return false;
-      };
-
-      // Will return fullscreen method
-      var fullscreenvideo = fullscreen(document.createElement("video"));
-
-
-      if(!fullscreen) {
-        alert("Fullscreen won't work, please make sure you're using a browser that supports it and you have enabled the feature");
-        return;
-      }
-
-      video.addEventListener("webkitfullscreenchange",function(){
-        console.log(document.webkitIsFullScreen);
-      }, false);
-
-      videoElement("#fs").addEventListener("touchstart", function(){
-        // The test returns a string so we can easily call it on a click event
-        video[fullscreenvideo]();
-        console.log(11);
-      }, false);
-
-    })(this, this.document);
-  </script>
 
 
 

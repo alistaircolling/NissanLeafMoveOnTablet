@@ -175,21 +175,21 @@ body {
 
 #fs {
 
-
-    width:11em;
-    height:3em;
-    
-    font-family: 'nissanagboldregular';
+    width:9.4em;
+    text-decoration:none;
+    padding:.5em .9em;
+    font-family: 'nissanagregular';
 
     background:#C71744;
     border:0;
-    padding:0;
+
     text-transform:uppercase;
     color:white;
     position:absolute;
     right:15%;
     bottom:10%;
     z-index:9999;
+
 
 
 }
@@ -214,7 +214,7 @@ z-index:10;
 
 video {
 
-  z-index:10;
+  z-index:100000;
 }
 
 
@@ -369,11 +369,31 @@ right:0;
    overflow: hidden;
    visibility:visible;
   opacity: 1;
-  transition: opacity 2s linear;
+  transition: opacity 4s linear;
 
 }
 
+@-webkit-keyframes animatebg {
 
+ 0% {
+    background-image: none;
+  }
+
+ 20% {
+    background-image: none;
+  }
+  40% {
+    background-image: none;
+  }
+  60% {
+    background-image: none;
+  }80% {
+    background-image: none;
+  }
+  100% {
+    background-image: none;
+  }
+}
 
 
 .page1, .page2, .page3 {
@@ -389,9 +409,16 @@ right:0;
   background-size: cover;
   z-index:0;
   position:relative;
+  
+   -webkit-animation-name: animatebg;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: 1;
+
+  -webkit-animation-timing-function: ease-in;
 
   
 }
+
 
 
 .page1 {
