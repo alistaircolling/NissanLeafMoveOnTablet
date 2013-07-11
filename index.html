@@ -20,7 +20,7 @@
     <script src="http://cdn.iamwebdeveloper.in/js/stats.js/r11/Stats.js"></script> -->
     <!-- Core -->
     <script src="js/compiled/base.js"></script>
-  <script src="js/sketch.min.js"></script>
+    <script src="js/sketch.min.js"></script>
     <script src="js/compiled/math/Random.js"></script>
     <script src="js/compiled/math/Vector.js"></script>
     <!-- Integratjs/ors -->
@@ -73,7 +73,7 @@
         <video id="video" style="display:none" width="100%" height="100%" controls="false" preload="false" >
         <source src="videos/video.mp4" type='video/mp4' />
         </video>
-  
+
   <canvas id="surface" width="100%" height="100%" style='z-index : -1; position: absolute;'></canvas>
   <div id="container" style='z-index : 1; position: absolute;'></div>
 
@@ -115,7 +115,7 @@
 
 
     <script>
-
+      var totRads = 0;
 
       var container, stats;
 
@@ -175,11 +175,11 @@
       var CAR_ANIM_IN_DURATION = 1;
 
       //wheel positoins at full res of car image used
-      var R_WHEEL_X = 132;
-      var R_WHEEL_Y = 137;
+      var R_WHEEL_X = 185;
+      var WHEEL_Y = 188;
 
-      var L_WHEEL_X = -235;
-      var L_WHEEL_Y = 137;
+      var L_WHEEL_X = -328;
+
 
 
       var SNAP_BACK_DURATION = .2;
@@ -505,6 +505,7 @@
           }
         }
         snapBack();
+        movedX = 0;
         event.preventDefault();
       }
 
@@ -514,8 +515,8 @@
 
       function onDocumentTouchMove(event){
 
-        var x = event.targetTouches[0].pageX,
-        y = event.targetTouches[0].pageY;
+        var x = event.targetTouches[0].pageX ,
+        y = event.targetTouches[0].pageY+100;
 
         if (!animTarg){
           currX = x;
@@ -659,6 +660,7 @@
       function drawCar(x, y, width, height, color){
         //  console.log("draw"+x+":"+ y);
         var targH, wHRatio, scaledRatio;
+
          car = new Image();
         car.src = "images/LEAF.gif";
         scaledRatio = width/car.width;
@@ -683,15 +685,36 @@
 
       function drawWheels(x,y,scale){
         //console.log("dw:"+counter);
-        var wheelTargetSize;
+        //rotation in radiams
+        var wheelTargetSize, rotRads, wheelDiam, wheelCirc;
+
 
         lWheel = new Image();
         lWheel.src = 'images/wheel.png';
         wheelTargetSize = lWheel.width*scale*WHEEL_SCALE;
-        counter += .1;
+        if (movedX>-1&& movedX<1){
+            movedX = 0;
+        }
+
+        wheelDiam = wheelTargetSize;
+        wheelCirc = Math.PI*wheelDiam*.5;
+        rotRads = movedX/wheelCirc;
+        console.log("last:"+lastX);
+        console.log("currx:"+currX);
+        console.log("movedX:"+movedX);
+        if (!isNaN(rotRads)){
+          totRads += rotRads;
+          console.log(totRads);
+        }else{
+
+          // rotRads = 0;
+          //totRads = 0;
+        }
+
+
         example.save();
-        example.translate((x+L_WHEEL_X)+(.5*wheelTargetSize), y+L_WHEEL_Y+(.5*wheelTargetSize));
-        example.rotate(counter);
+        example.translate(x+(L_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
+        example.rotate(totRads);
         example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
         example.drawImage(lWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
         example.restore();
@@ -701,8 +724,8 @@
         wheelTargetSize = rWheel.width*scale*WHEEL_SCALE;
         counter += .1;
         example.save();
-        example.translate((x+R_WHEEL_X)+(.5*wheelTargetSize), y+R_WHEEL_Y+(.5*wheelTargetSize));
-        example.rotate(counter);
+        example.translate(x+(R_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
+        example.rotate(totRads);
         example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
         example.drawImage(rWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
         example.restore();
@@ -821,7 +844,7 @@
           if (point_in_rectangle(part.pos.x, part.pos.y-(carH*.5), carX, carY-(carH*.5), carX+carW, carY+(carH*.5)) && !part.pinned){
             if (tDown){
               part.underCar = true;
-              part.fixed = true;
+
               retA.push(part);
             }
           }else{
