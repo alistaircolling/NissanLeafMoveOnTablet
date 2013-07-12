@@ -494,6 +494,8 @@
 
       function onDocumentTouchStart(event){
         tDown = true;
+        lastX = currX;
+
         event.preventDefault();
       }
 
@@ -643,7 +645,7 @@
             document.body.classList.remove(ids[lastPage]);
             document.body.classList.add(ids[currentPage]);
             var thisD = document.getElementById(ids[currentPage]);
-         
+
             console.log("div?:"+thisD);
             thisD.classList.remove('hide');
             thisD.classList.add('show');
@@ -680,7 +682,8 @@
         example.shadowOffsetX = 6;
         example.shadowOffsetY = 6;
         example.shadowBlur = 3;
-        example.drawImage( car, x-(width*.5), y, width, targH);
+                example.drawImage( car, x-(width*.5), y, width, targH);
+        //example.drawImage( car, x, y, width, targH);
         example.shadowBlur = 0;
 
         drawWheels(x,y, scaledRatio);
@@ -702,19 +705,19 @@
         lWheel = new Image();
         lWheel.src = 'images/wheel.png';
         wheelTargetSize = lWheel.width*scale*WHEEL_SCALE;
-        if (movedX>-1&& movedX<1){
+        if (movedX>-2&& movedX<2){
             movedX = 0;
         }
 
         wheelDiam = wheelTargetSize;
         wheelCirc = Math.PI*wheelDiam*.5;
         rotRads = movedX/wheelCirc;
-        console.log("last:"+lastX);
+        /*    console.log("last:"+lastX);
         console.log("currx:"+currX);
-        console.log("movedX:"+movedX);
+        console.log("movedX:"+movedX);*/
         if (!isNaN(rotRads)){
           totRads += rotRads;
-          console.log(totRads);
+          //  console.log(totRads);
         }else{
 
           // rotRads = 0;
@@ -850,8 +853,10 @@
         var part,i, retA = [];
         for( i= 0; i<physics.particles.length; i++){
           part = physics.particles[i];
+          //I HAVE SUBTRACED HALF CAR WIDTH AS THE CAR IS DRAWN HALF WDITH TO THE RIGHT
           //only add if the mouse is down and particle isn't pinned
-          if (point_in_rectangle(part.pos.x, part.pos.y-(carH*.5), carX, carY-(carH*.5), carX+carW, carY+(carH*.5)) && !part.pinned){
+          if (point_in_rectangle(part.pos.x, part.pos.y-(carH*.5), carX-carW, carY-(carH*.5), carX, carY+(carH*.5)) && !part.pinned){
+            //          if (point_in_rectangle(part.pos.x, part.pos.y-(carH*.5), carX, carY-(carH*.5), carX+carW, carY+(carH*.5)) && !part.pinned){
             if (tDown){
               part.underCar = true;
 
@@ -913,8 +918,8 @@
         heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
-          //.drawPhysics();
-          drawCurtain();
+          drawPhysics();
+          // drawCurtain();
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
 
