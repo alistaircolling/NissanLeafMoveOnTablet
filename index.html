@@ -61,7 +61,7 @@
 </head>
 
 
-<body >
+<body onLoad="initialize()">
   <header><img src="images/nissan_logo.png" id="logo"></header>
 
       <div class="button-wrapper">
@@ -196,11 +196,16 @@
       var PARTICLE_RADIUS = 20;
       var heldParticles;
 
+         document.body.className += " page1";
+     function initialize(){
+         console.log("ON LOAD");
+       //         document.body.classList.add = 'page1';
 
-      window.onload = function() {
-        initCanvas();
-        document.body.className = 'page1';
-      };
+         initCanvas();
+      }
+
+
+
 
 
       function initCanvas(){
@@ -217,6 +222,7 @@
         }
         animate();
         initGraphics();
+
         //   addControls();
       }
 
@@ -568,7 +574,7 @@
             part.snapper = true;
             targPosY = (window.innerHeight/ROWS)*i;
             part.fixed = true;
-            TweenLite.to(part.pos, SNAP_BACK_DURATION, {x:0, y:targPosY});
+          TweenLite.to(part.pos, SNAP_BACK_DURATION, {x:0, y:targPosY});
         }
 
       }
@@ -621,7 +627,7 @@
         }
 
 
-        showDivs(currentPage);//add code to show correct content here:
+        //     showDivs(currentPage);//add code to show correct content here:
 
 
 
@@ -771,13 +777,14 @@
       function carIsHere(){
         console.log("car is here");
         currX = carX;
+             showDivs(currentPage);
         animatingToNextPage = false;
       }
 
       function drawCurtain(){
         var i, part;
 
-          example.shadowColor = "rgba( 0, 0, 0, 0)";
+        example.shadowColor = "rgba( 0, 0, 0, 0)";
         example.shadowOffsetX = 0;
         example.shadowOffsetY = 0;
         example.shadowBlur = 0;
@@ -795,7 +802,9 @@
           var yc = (physics.particles[i].pos.y + physics.particles[i + 1].pos.y) / 2;
           example.quadraticCurveTo(physics.particles[i].pos.x, physics.particles[i].pos.y, xc, yc);
         }
-         example.quadraticCurveTo(physics.particles[i].pos.x, physics.particles[i].pos.y, physics.particles[i+1].pos.x,physics.particles[i+1].pos.y);
+
+
+        example.quadraticCurveTo(physics.particles[i].pos.x, physics.particles[i].pos.y, physics.particles[i+1].pos.x,physics.particles[i+1].pos.y);
         example.lineTo(window.innerWidth, window.innerHeight);
         example.lineTo(window.innerWidth, 0);
 
@@ -918,7 +927,7 @@
         //       drawMargin();
         if (!show3D){
             drawPhysics();
-          // drawCurtain();
+           drawCurtain();
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
 
