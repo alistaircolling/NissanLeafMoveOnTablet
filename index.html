@@ -144,9 +144,10 @@
       var currX = 0;
       var carWidthPerc = .7;
       var carHeightPerc = .5;
-      var carInitY = .6;
+      var carInitY = .5;
       var carInitX = -.04;
-      var offRightPerc = 1.3;
+      var offRightPerc = 1.6;
+      var wheelTargetSize;
       var rightMarginPerc = .9;
 
 
@@ -195,8 +196,9 @@
       var ROWS = 8;
       var PARTICLE_RADIUS = 20;
       var heldParticles;
+      var scaledRatio = 1;
 
-         document.body.className += " page1";
+      document.body.className += " page1";
      function initialize(){
          console.log("ON LOAD");
        //         document.body.classList.add = 'page1';
@@ -679,7 +681,7 @@
       //width dictates height
       function drawCar(x, y, width, height, color){
         //  console.log("draw"+x+":"+ y);
-        var targH, wHRatio, scaledRatio;
+        var targH, wHRatio;
 
          car = new Image();
         car.src = "images/LEAF.gif";
@@ -701,10 +703,12 @@
       }
 
 
+
+
       function drawWheels(x,y,scale){
         //console.log("dw:"+counter);
         //rotation in radiams
-        var wheelTargetSize, rotRads, wheelDiam, wheelCirc;
+        var  rotRads, wheelDiam, wheelCirc;
 
 
         lWheel = new Image();
@@ -740,7 +744,7 @@
         rWheel = new Image();
         rWheel.src = 'images/wheel.png';
         wheelTargetSize = rWheel.width*scale*WHEEL_SCALE;
-        counter += .1;
+
         example.save();
         example.translate(x+(R_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
         example.rotate(totRads);
@@ -761,7 +765,35 @@
       function animateCarOffRight(){
         var targOff = window.innerWidth*offRightPerc;
         console.log("anim offright:"+targOff);
-        TweenLite.to(this, CAR_ANIM_OFF_DURATION, {carX:targOff, onComplete:carAtRight});
+        TweenLite.to(this, CAR_ANIM_OFF_DURATION, {carX:targOff, onComplete:carAtRight, onUpdate:forceWheels});
+
+      }
+
+      function forceWheels(){
+        var x = carX;
+        var y = carY;
+        var scale = scaledRatio;
+        totRads += .05;
+
+        example.save();
+        example.translate(x+(L_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
+        example.rotate(totRads);
+        example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
+        example.drawImage(lWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
+        example.restore();
+
+        rWheel = new Image();
+        rWheel.src = 'images/wheel.png';
+        wheelTargetSize = rWheel.width*scale*WHEEL_SCALE;
+
+        example.save();
+        example.translate(x+(R_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
+        example.rotate(totRads);
+        example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
+        example.drawImage(rWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
+        example.restore();
+
+
       }
 
       function carAtRight(){
@@ -771,7 +803,7 @@
       }
 
       function animateCarIn(){
-        TweenLite.to(this, CAR_ANIM_IN_DURATION, {carX:window.innerWidth*carInitX, onComplete:carIsHere});
+        TweenLite.to(this, CAR_ANIM_IN_DURATION, {carX:window.innerWidth*carInitX, onComplete:carIsHere, onUpdate:forceWheels});
       }
 
       function carIsHere(){
@@ -926,7 +958,7 @@
         heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
-            drawPhysics();
+          //   drawPhysics();
            drawCurtain();
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
@@ -993,8 +1025,6 @@
         }
         return result;
       }
-
-
 
         </script>
 
