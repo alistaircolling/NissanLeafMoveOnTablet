@@ -82,7 +82,7 @@
           <h1> FUEL COSTS<span> FROM 2p A MILE**</span></h1>
           <p class="list">Rapid charging*** | Charging network | Home charging</p>
 
-          <p class="desc">The lithium ion battery, it's what makes the Nissan LEAF go. When it comes to charging it, you've got options. Top up at a network of charge points, plug into a growing number of rapid charge points** that will take LEAF from empty to around 80% full in 30 minutes, or charge at home, at night, when tariffs are low - and get from A to B for coppers. 
+          <p class="desc">The lithium ion battery, it's what makes the Nissan LEAF go. When it comes to charging it, you've got options. Top up at a network of charge points, plug into a growing number of rapid charge points** that will take LEAF from empty to around 80% full in 30 minutes, or charge at home, at night, when tariffs are low - and get from A to B for coppers.
           </p>
         </div>
         </div>
@@ -201,7 +201,7 @@
 
       document.body.className += " page1";
      function initialize(){
-         console.log("ON LOAD");
+       //      console.log("ON LOAD");
        //         document.body.classList.add = 'page1';
 
          initCanvas();
@@ -218,13 +218,14 @@
         initPhysics();
         initTouchListeners();
 
-        addStats();
+        //    addStats();
 
         if (show3D){
            init3D();
         }
-        animate();
+
         initGraphics();
+          animate();
 
         //   addControls();
       }
@@ -370,7 +371,7 @@
 				var quality = 8, step = 1024 / quality;
 				plane = new THREE.PlaneGeometry( 768, 1024, COLUMNS , ROWS  );
         //  plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
-        console.log(plane);
+        //   console.log(plane);
 				for ( var i = 0, l = plane.vertices.length; i < l; i ++ ) {
 
 					var x = i % COLUMNS, y = ~~ ( i / COLUMNS );
@@ -436,25 +437,25 @@
       function onCamZSliderChange( e ){
 
         camera.position.z = cameraZSlider.getValue();
-        console.log("Camera z change:"+camera.position.z);
+        //       console.log("Camera z change:"+camera.position.z);
     	}
 
       function onMeshRotYChange( e ){
 
         mesh.rotation.y = meshYRotSlider.getValue();
-        console.log("mesh rot Y:"+ mesh.rotation.y);
+        //    console.log("mesh rot Y:"+ mesh.rotation.y);
     	}
 
        function onMeshRotXChange( e ){
 
         mesh.rotation.x = meshXRotSlider.getValue();
-        console.log("mesh rot x:"+ mesh.rotation.x);
+         //   console.log("mesh rot x:"+ mesh.rotation.x);
     	}
 
        function onMeshRotZChange( e ){
 
         mesh.rotation.z = meshZRotSlider.getValue();
-        console.log("mesh rot z:"+ mesh.rotation.z);
+         //        console.log("mesh rot z:"+ mesh.rotation.z);
     	}
 
 
@@ -464,7 +465,7 @@
       ///////   MOUSE LISTENERS   //////////////
 
       function onDocumentMouseDown(){
-        console.log("m down");
+        //      console.log("m down");
         event.preventDefault();
         mouseXOnMouseDown = event.clientX - windowHalfX;
         targetRotationOnMouseDown = targetRotation;
@@ -473,10 +474,10 @@
 
 
       function onDocumentMouseMove( e ) {
-          console.log("mmove");
+        //          console.log("mmove");
           mouseX = event.clientX - windowHalfX;
           targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
-          console.log(targetRotation);
+        //   console.log(targetRotation);
       }
 
       function onDocumentMouseUp( event ) {
@@ -614,7 +615,7 @@
 				requestAnimationFrame( animate );
 
 				render();
-				stats.update();
+        //		stats.update();
 
 			}
 
@@ -624,7 +625,7 @@
         //increment or reset the page number
         if (currentPage<totalPages-1){
           currentPage++;
-          console.log("display  " + currentPage);
+          //        console.log("display  " + currentPage);
         }else{
           currentPage = 0;
         }
@@ -657,7 +658,7 @@
             document.body.classList.add(ids[currentPage]);
             var thisD = document.getElementById(ids[currentPage]);
 
-            console.log("div?:"+thisD);
+            //         console.log("div?:"+thisD);
             thisD.classList.remove('hide');
             thisD.classList.add('show');
 
@@ -756,7 +757,7 @@
       }
 
       function resetCarPos(){
-        console.log("reset");
+        //        console.log("reset");
         animatingToNextPage = true;
         animateCarOffRight();
         showNextPage(); // TODO move to when car is off the pagew
@@ -765,7 +766,7 @@
 
       function animateCarOffRight(){
         var targOff = window.innerWidth*offRightPerc;
-        console.log("anim offright:"+targOff);
+        //       console.log("anim offright:"+targOff);
         TweenLite.to(this, CAR_ANIM_OFF_DURATION, {carX:targOff, onComplete:carAtRight, onUpdate:forceWheels});
 
       }
@@ -798,7 +799,7 @@
       }
 
       function carAtRight(){
-        console.log("carAtRight");
+        //       console.log("carAtRight");
         carX = 0-(window.innerWidth*carWidthPerc);
         animateCarIn();
       }
@@ -808,7 +809,7 @@
       }
 
       function carIsHere(){
-        console.log("car is here");
+        //     console.log("car is here");
         currX = carX;
              showDivs(currentPage);
         animatingToNextPage = false;
