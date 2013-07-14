@@ -10,6 +10,7 @@
     <script src="js/libs/stats.min.js"></script>
     <script src="js/MinimalComps-0.1.min.js"></script> -->
     <script src="js/TweenLite.min.js"></script>
+   <script src="js/libs/stats.min.js"></script>
 <!--    <script src="js/jquery-1.6.4.min.js"></script> -->
 
 
@@ -48,9 +49,7 @@
 
     <link type="text/css" rel="stylesheet" href="styles/reset.css" />
     <link type="text/css" rel="stylesheet" href="styles/main.css" />
-
-
-  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <meta http-equiv="cleartype" content="on">
     <title></title>
 </head>
@@ -62,8 +61,6 @@
   <div id="container" style='z-index : 1; position: absolute;'></div>
 
           <div id="page1" class="show">
-
-
             <div class="text">
             <h1>THE 100% ELECTRIC NEW NISSAN LEAF <br /><span>YOU'LL KNOW IT WHEN YOU FEEL IT</span></h1>
               <p class="list">Zero emissions* | Fuel costs from 2p** | Unique driving experience </p>
@@ -94,7 +91,7 @@
         </div>
         <div class="footer">
 
-        <div class="dots"><ul><li class="dot1">page 1</li><li class="dot2">page 2</li><li class="dot3">page 3</li></ul></li></div>
+        <div class="dots"><ul><li class="dot1">page 1</li><li class="dot2">page 2</li><li class="dot3">page 3</li></ul></div>
         <div class="button-wrapper">
         <a href="http://www.nissan.co.uk/GB/en/vehicle/electric-vehicles/leaf.html" id="fs">Make the switch</a>
         </div>
@@ -107,6 +104,7 @@
 
     <script>
       var totRads = 0;
+      var curvePoints = [];//used to store the positions for mask curve
 
       var container, stats;
 
@@ -124,14 +122,17 @@
 
       var mouseX = 0;
       var mouseXOnMouseDown = 0;
-            var car;
+      var car;
+      var isPortrait;
 
 
       ////CAR VARS
 
 
-      var WHEEL_SCALE = 1.2; //hack used to get the wheels to be the correct size
-            var counter = 0;
+      var WHEEL_SCALE = 1; //hack used to get the wheels to be the correct size
+      var WHEEL_WIDTH = 169;
+      var CAR_WIDTH = 1454;
+      var shadow;
       var carX = 0;
       var currX = 0;
       var carWidthPerc = .7;
@@ -141,6 +142,9 @@
       var offRightPerc = 1.6;
       var wheelTargetSize;
       var rightMarginPerc = .9;
+
+
+
 
 
       var canvas ;//= document.getElementById('surface');
@@ -167,10 +171,10 @@
       var CAR_ANIM_IN_DURATION = 1;
 
       //wheel positoins at full res of car image used
-      var R_WHEEL_X = 185;
-      var WHEEL_Y = 188;
+      var R_WHEEL_X = 410;
+      var WHEEL_Y = 143;
 
-      var L_WHEEL_X = -328;
+      var L_WHEEL_X = -153;
 
 
 
@@ -190,34 +194,69 @@
       var heldParticles;
       var scaledRatio = 1;
 
-      document.body.className += " page1";
+     document.body.className += " page1";
      function initialize(){
        //      console.log("ON LOAD");
        //         document.body.classList.add = 'page1';
-
+         setOrientation();
          initCanvas();
+      }
+
+      function setOrientation(){
+        isPortrait = (window.innerHeight>window.innerWidth)?true:false;
+        if (isPortrait){
+          carX = 0;
+          currX = 0;
+          carWidthPerc = 1;
+          carHeightPerc = .5;
+          carInitY = .5;
+          carInitX = -.04;
+          offRightPerc = 1.6;
+          wheelTargetSize;
+          rightMarginPerc = .9;
+
+        }else{
+
+          carX = 0;
+          currX = 0;
+          carWidthPerc = .7;
+          carHeightPerc = .5;
+          carInitY = .45;
+          carInitX = -.04;
+          offRightPerc = 1.6;
+          wheelTargetSize;
+          rightMarginPerc = .9;
+
+
+
+        }
+
+        canvHeigh = window.innerHeight;
+        carY = canvHeigh*carInitY;
+        canvWid = window.innerWidth;
+        carW = canvWid*carWidthPerc;
+        carH = canvHeigh*carHeightPerc;
+
       }
 
 
 
 
 
-
-
       function initCanvas(){
+        initGraphics();
 
-
-        initTouch();
+        //  initTouch();
         initPhysics();
         initTouchListeners();
 
-        //    addStats();
+            addStats();
 
         if (show3D){
            init3D();
         }
 
-        initGraphics();
+
           animate();
 
         //   addControls();
@@ -225,11 +264,15 @@
 
       function initGraphics(){
         car = new Image();
-        car.src = "images/LEAF.gif";
+        car.src = "images/car.png";
+
+        shadow = new Image();
+        shadow.src = "images/shadow.png";
+
         lWheel = new Image();
-        lWheel.src = "images/wheel.png";
+        lWheel.src = "images/wheelz.png";
         rWheel = new Image();
-        lWheel.src = "images/wheel.png";
+        rWheel.src = "images/wheelz.png";
       }
 
       function addStats(){
@@ -608,7 +651,7 @@
 				requestAnimationFrame( animate );
 
 				render();
-        //		stats.update();
+        stats.update();
 
 			}
 
@@ -669,20 +712,49 @@
         context.fillRect(window.innerWidth*rightMarginPerc, 0, window.innerWidth*(1-rightMarginPerc), window.innerHeight);
         context.fill();
 
+      }
+
+      function drawShadow(x, y, ratio){
+        var i, part, top, part1, part2;
+        //clone the array
+        var myA = this.curvePoints.slice(0);
+        top = myA.length;
 
 
+        /*        example.strokeStyle = '#ff00ff';
+        example.fillStyle = '#0000ff';
+        example.lineWidth = 5;*/
+        example.save();
+        example.beginPath();
+        example.moveTo(0,0);
+
+        for(i = 0; i < top-1; i ++){
+
+          example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].y, curvePoints[i].xc, curvePoints[i].yc);
+        }
+
+        //  example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].x, curvePoints[i].part2x, curvePoints[i].part2y);
+        example.lineTo(0 , window.innerHeight);
+        example.lineTo(window.innerWidth, window.innerHeight);
+        example.lineTo(window.innerWidth, 0);
+        example.lineTo(0, 0);//window.innerHeight);
+        example.clip();
+        example.drawImage(shadow, x, y, ratio*shadow.width, ratio*shadow.height);
+        example.restore();
       }
 
       //width dictates height
-      function drawCar(x, y, width, height, color){
-        //  console.log("draw"+x+":"+ y);
-        var targH, wHRatio;
+      function drawCar(x, y, width, height){
 
-        car = new Image();
-        car.src = "images/LEAF.gif";
-        scaledRatio = width/car.width;
-        wHRatio = car.width/car.height;
+
+        var targH, wHRatio, setX = x-(width*.5);
+
+        scaledRatio = width/CAR_WIDTH;
+        wHRatio = CAR_WIDTH/car.height;
         targH = width/wHRatio;
+
+        //draw shadow before car
+         drawShadow(setX, y, scaledRatio);
 
         example.drawImage( car, x-(width*.5), y, width, targH);
         drawWheels(x,y, scaledRatio);
@@ -702,10 +774,10 @@
         //rotation in radiams
         var  rotRads, wheelDiam, wheelCirc;
 
+        //this is a hack as wheels are not scaling correctly for some reason
+        wheelTargetSize = WHEEL_WIDTH*scale;
+        //   console.log("scale:"+scale+" targ size:"+wheelTargetSize);
 
-        lWheel = new Image();
-        lWheel.src = 'images/wheel.png';
-        wheelTargetSize = lWheel.width*scale*WHEEL_SCALE;
         if (movedX>-2&& movedX<2){
             movedX = 0;
         }
@@ -713,9 +785,7 @@
         wheelDiam = wheelTargetSize;
         wheelCirc = Math.PI*wheelDiam*.5;
         rotRads = movedX/wheelCirc;
-        /*    console.log("last:"+lastX);
-        console.log("currx:"+currX);
-        console.log("movedX:"+movedX);*/
+
         if (!isNaN(rotRads)){
           totRads += rotRads;
           //  console.log(totRads);
@@ -726,22 +796,24 @@
         }
 
 
+
         example.save();
-        example.translate(x+(L_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
-        example.rotate(totRads);
-        example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
+        example.translate(x+(wheelTargetSize*.5)+L_WHEEL_X,y+(wheelTargetSize*.5)+WHEEL_Y);
+        //        example.translate((x+(L_WHEEL_X))*scale)+wheelTargetSize, y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
+         example.rotate(totRads);
+         example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
         example.drawImage(lWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
         example.restore();
 
-        rWheel = new Image();
-        rWheel.src = 'images/wheel.png';
-        wheelTargetSize = rWheel.width*scale*WHEEL_SCALE;
+
+
+
 
         example.save();
         example.translate(x+(R_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
         example.rotate(totRads);
         example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
-        example.drawImage(rWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
+        example.drawImage(rWheel,0,0);//, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
         example.restore();
 
       }
@@ -806,37 +878,34 @@
       }
 
       function drawCurtain(){
-        var i, part;
+        var i, part, top = ROWS-1,
+          part1, part2, xc, xy,
 
-        example.shadowColor = "rgba( 0, 0, 0, 0)";
-        example.shadowOffsetX = 0;
-        example.shadowOffsetY = 0;
-        example.shadowBlur = 0;
-
+        curvePoints = [];
 
         example.strokeStyle = '#ffffff';
         example.fillStyle = '#ffffff';
-        example.lineWidth = 10;
+        example.lineWidth = 5;
         example.beginPath();
         example.moveTo(0,0);
-        for(i=0; i<ROWS-1; i++){
-          //    part = physics.particles[i];
+
+        for(i = 0; i < top; i ++){
+          part1 = physics.particles[i];
+          part2 = physics.particles[i+1];
           //      example.lineTo(part.pos.x, part.pos.y);
-          var xc = (physics.particles[i].pos.x + physics.particles[i + 1].pos.x) / 2;
-          var yc = (physics.particles[i].pos.y + physics.particles[i + 1].pos.y) / 2;
-          example.quadraticCurveTo(physics.particles[i].pos.x, physics.particles[i].pos.y, xc, yc);
+          xc = (part1.pos.x + part2.pos.x) / 2;
+          yc = (part1.pos.y + part2.pos.y) / 2;
+          example.quadraticCurveTo(part1.pos.x, part1.pos.y, xc, yc);
+          /// curvePoints.push({x:part1.pos.x, y:part1.pos.y, xc:xc, yc:yc, part2x:part2.pos.x, part2y:part2.pos.y});
         }
 
-
-        example.quadraticCurveTo(physics.particles[i].pos.x, physics.particles[i].pos.y, physics.particles[i+1].pos.x,physics.particles[i+1].pos.y);
+        example.quadraticCurveTo(part1.pos.x, part1.pos.y, part2.pos.x, part2.pos.y);
+        example.lineTo(0 , window.innerHeight);
         example.lineTo(window.innerWidth, window.innerHeight);
         example.lineTo(window.innerWidth, 0);
-
         example.lineTo(0, 0);//window.innerHeight);
         example.fill();
         example.stroke();
-
-
 
       }
 
@@ -844,8 +913,7 @@
       function drawPhysics(){
 
         //          physics.step();
-          var fillStyle = '#00ff00';
-          var particles, n;
+          var fillStyle = '#00ff00', particles, n;
           //render particles
           for( var i=0, n = physics.particles.length; i<n; i++){
 
@@ -941,7 +1009,7 @@
 
 			function render() {
         //clear canvas
-        canvas.width = canvas.width;
+        //    canvas.width = canvas.width;
         physics.step();
         if (show3D) {
           updateVertices();
@@ -951,7 +1019,9 @@
         //       drawMargin();
         if (!show3D){
           //   drawPhysics();
-           drawCurtain();
+           if (physics.particles.length>0){
+             drawCurtain();
+           }
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
 
@@ -968,11 +1038,11 @@
             resetCarPos();
           }
 
-           drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
+              drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }else{
 
-           drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
+             drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }
 
