@@ -105,7 +105,7 @@
     <script>
       var totRads = 0;
       var curvePoints = [];//used to store the positions for mask curve
-
+      var halfCarWidth = 0;
       var container, stats;
 
 			var camera, scene, renderer;
@@ -171,10 +171,10 @@
       var CAR_ANIM_IN_DURATION = 1;
 
       //wheel positoins at full res of car image used
-      var R_WHEEL_X = 410;
-      var WHEEL_Y = 143;
+      var R_WHEEL_X = 1237;
+      var WHEEL_Y = 360;
 
-      var L_WHEEL_X = -153;
+      var L_WHEEL_X = 517;
 
 
 
@@ -721,9 +721,9 @@
         top = myA.length;
 
 
-        /*        example.strokeStyle = '#ff00ff';
-        example.fillStyle = '#0000ff';
-        example.lineWidth = 5;*/
+        //example.strokeStyle = '#ff00ff';
+        //example.fillStyle = '#0000ff';
+        //example.lineWidth = 5;
         example.save();
         example.beginPath();
         example.moveTo(0,0);
@@ -734,11 +734,17 @@
         }
 
         //  example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].x, curvePoints[i].part2x, curvePoints[i].part2y);
+
+       example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].y, curvePoints[i].part2x, curvePoints[i].part2y);
+
+
         example.lineTo(0 , window.innerHeight);
         example.lineTo(window.innerWidth, window.innerHeight);
         example.lineTo(window.innerWidth, 0);
         example.lineTo(0, 0);//window.innerHeight);
-        example.clip();
+        //    example.closePath();
+        //example.stroke();
+         example.clip();
         example.drawImage(shadow, x, y, ratio*shadow.width, ratio*shadow.height);
         example.restore();
       }
@@ -757,7 +763,9 @@
          drawShadow(setX, y, scaledRatio);
 
         example.drawImage( car, x-(width*.5), y, width, targH);
-        drawWheels(x,y, scaledRatio);
+        drawWheels(x-(width*.5),y, scaledRatio);
+        //used when drawing wheels when aniamating
+        halfCarWidth = width*.5;
 
         /*
         example.fillStyle = color;
@@ -798,22 +806,18 @@
 
 
         example.save();
-        example.translate(x+(wheelTargetSize*.5)+L_WHEEL_X,y+(wheelTargetSize*.5)+WHEEL_Y);
-        //        example.translate((x+(L_WHEEL_X))*scale)+wheelTargetSize, y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
-         example.rotate(totRads);
-         example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
-        example.drawImage(lWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
+        example.translate(x+(L_WHEEL_X*scale),y+(WHEEL_Y*scale));
+        example.rotate(totRads);
+        example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
+        example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
         example.restore();
 
 
-
-
-
         example.save();
-        example.translate(x+(R_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
+        example.translate(x+(R_WHEEL_X*scale),y+(WHEEL_Y*scale));
         example.rotate(totRads);
-        example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
-        example.drawImage(rWheel,0,0);//, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
+        example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
+        example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
         example.restore();
 
       }
@@ -834,27 +838,25 @@
       }
 
       function forceWheels(){
-        var x = carX;
+        var x = carX-halfCarWidth;
         var y = carY;
         var scale = scaledRatio;
         totRads += .05;
 
+
         example.save();
-        example.translate(x+(L_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
+        example.translate(x+(L_WHEEL_X*scale),y+(WHEEL_Y*scale));
         example.rotate(totRads);
-        example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
-        example.drawImage(lWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
+        example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
+        example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
         example.restore();
 
-        rWheel = new Image();
-        rWheel.src = 'images/wheel.png';
-        wheelTargetSize = rWheel.width*scale*WHEEL_SCALE;
 
         example.save();
-        example.translate(x+(R_WHEEL_X*scale)+(.5*wheelTargetSize), y+(WHEEL_Y*scale)+(.5*wheelTargetSize));
+        example.translate(x+(R_WHEEL_X*scale),y+(WHEEL_Y*scale));
         example.rotate(totRads);
-        example.translate(0-(.5*wheelTargetSize), 0-(.5*wheelTargetSize));
-        example.drawImage(rWheel,0,0, wheelTargetSize, wheelTargetSize);//, (x+L_WHEEL_X)*scale, (y+L_WHEEL_Y)*scale, wheelTargetSize, wheelTargetSize );
+        example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
+        example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
         example.restore();
 
 
@@ -879,7 +881,7 @@
 
       function drawCurtain(){
         var i, part, top = ROWS-1,
-          part1, part2, xc, xy,
+          part1, part2, xc, xy, pointsObj;
 
         curvePoints = [];
 
@@ -896,10 +898,15 @@
           xc = (part1.pos.x + part2.pos.x) / 2;
           yc = (part1.pos.y + part2.pos.y) / 2;
           example.quadraticCurveTo(part1.pos.x, part1.pos.y, xc, yc);
-          /// curvePoints.push({x:part1.pos.x, y:part1.pos.y, xc:xc, yc:yc, part2x:part2.pos.x, part2y:part2.pos.y});
+          pointsObj = {x:part1.pos.x, y:part1.pos.y, xc:xc, yc:yc, part2x:part2.pos.x, part2y:part2.pos.y};
+          curvePoints.push(pointsObj);
         }
 
         example.quadraticCurveTo(part1.pos.x, part1.pos.y, part2.pos.x, part2.pos.y);
+        //add the final one
+        pointsObj = {x:part1.pos.x, y:part1.pos.y, xc:xc, yc:yc, part2x:part2.pos.x, part2y:part2.pos.y};
+        curvePoints.push(pointsObj);
+
         example.lineTo(0 , window.innerHeight);
         example.lineTo(window.innerWidth, window.innerHeight);
         example.lineTo(window.innerWidth, 0);
