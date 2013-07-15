@@ -735,7 +735,12 @@
 
         //  example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].x, curvePoints[i].part2x, curvePoints[i].part2y);
 
-       example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].y, curvePoints[i].part2x, curvePoints[i].part2y);
+        //       example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].y, curvePoints[i].part2x, curvePoints[i].part2y);
+
+        if (top>0){
+          var obj = curvePoints[i];
+          example.quadraticCurveTo(obj.x, obj.y, obj.part2x, obj.part2y);
+        }
 
 
         example.lineTo(0 , window.innerHeight);
