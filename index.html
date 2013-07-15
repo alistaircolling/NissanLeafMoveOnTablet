@@ -57,15 +57,19 @@
 
 
 <body onLoad="initialize()">
-  <header><img src="images/nissan_logo.png" id="logo"></header>
 
-  <embed id="portraitInstructions" class="opacityZero" src="images/instructions.svg" type="image/svg+xml" style='z-index : 2;'/>
-  <embed id="landscapeInstructions" class="opacityZero" src="images/instructionsL.svg" type="image/svg+xml" style='z-index : 3;'/>
+
+  <embed id="portraitInstructions" class="opacityZero" src="images/instructions.svg" type="image/svg+xml" style='z-index : 5;'/>
+  <embed id="landscapeInstructions" class="opacityZero" src="images/instructionsL2.svg" type="image/svg+xml" style='z-index : 6;'/>
 
   <canvas id="surface" width="100%" height="100%" style='z-index : -1; position: absolute;'></canvas>
-
+  <div id="canvasHolder" style="position: absolute;
+z-index: -1;
+width: 100%;
+height: 100%;
+top: 0;"></div>
   <div id="container" class="opacityZero">
-
+<img src="images/nissan_logo.png" id="logo">
           <div id="page1" class="show">
             <div class="text">
             <h1>THE 100% ELECTRIC NEW NISSAN LEAF <br /><span>YOU'LL KNOW IT WHEN YOU FEEL IT</span></h1>
@@ -227,8 +231,6 @@
           instructions = document.getElementById('portraitInstructions');
 
 
-
-
         }else{
 
           carX = 0;
@@ -243,11 +245,11 @@
           instructions = document.getElementById('landscapeInstructions');
 
 
-
         }
+
         instructions.className = 'opacityOne';
 
-        TweenLite.to(instructions, 1, {opacity:0, delay:1});
+        //  TweenLite.to(instructions, 1, {opacity:0, delay:1});
         TweenLite.to(mainContainer, 1, {opacity:1, delay:2});
 
         canvHeigh = window.innerHeight;
@@ -348,7 +350,7 @@
 
         ///SETUP
 
-        example = Sketch.create({container:document.body});
+        example = Sketch.create({container:document.getElementById("canvasHolder")});
         example.setup = function() {
 
 
@@ -400,8 +402,11 @@
 
           }
 
+          //      TweenLite.to(example, 1, {opacity:1, zIndex:100, delay:1});
+
 
           example.fillStyle = '#ff00ff';
+          example.className = "opacityOne";
           // }
 
 
