@@ -1,0 +1,621 @@
+/*
+ * HTML5 Boilerplate
+ *
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html,
+button,
+input,
+select,
+textarea {
+    color: #222;
+}
+
+
+html, body {
+  width:  100%;
+  height: 100%;
+  margin: 0px;
+  overflow:hidden;
+
+}
+
+
+
+
+a {
+    color: #000000;
+}
+
+a:visited {
+    color: #551a8b;
+}
+
+a:hover {
+    color: #06e;
+}
+
+/*
+ * Remove the gap between images and the bottom of their containers: h5bp.com/i/440
+ */
+
+img {
+    vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+
+/* ==========================================================================
+   Custom styles
+   ========================================================================== */
+
+/*************************************
+Custom styles layout:
+- Generic body styles:
+    - Colours & Fonts
+    - Helper classes
+- Generic structure styles:
+    - column set up
+- Custom page styles:
+    - Homepage
+        - header and headings
+        - social buttons
+        -
+
+- Retina versions
+
+*************************************/
+
+
+
+@font-face {
+    font-family: 'nissanagboldregular';
+    src: url('nissab__-webfont.eot');
+    src: url('nissab__-webfont.eot?#iefix') format('embedded-opentype'),
+         url('nissab__-webfont.woff') format('woff'),
+         url('nissab__-webfont.ttf') format('truetype'),
+         url('nissab__-webfont.svg#nissanagboldregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'nissanagregular';
+    src: url('nissarg_-webfont.eot');
+    src: url('nissarg_-webfont.eot?#iefix') format('embedded-opentype'),
+         url('nissarg_-webfont.woff') format('woff'),
+         url('nissarg_-webfont.ttf') format('truetype'),
+         url('nissarg_-webfont.svg#nissanagregularregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+@font-face {
+    font-family: 'nissanagsuperregular';
+    src: url('nissas__-webfont.eot');
+    src: url('nissas__-webfont.eot?#iefix') format('embedded-opentype'),
+         url('nissas__-webfont.woff') format('woff'),
+         url('nissas__-webfont.ttf') format('truetype'),
+         url('nissas__-webfont.svg#nissanagsuperregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color:transparent;
+    position:relative;
+
+}
+
+
+
+
+
+
+
+}
+#containerWrapper {
+    overflow-x: hidden;
+}
+
+#pageContainer {
+    -webkit-transition: -webkit-transform 1s ease-in-out;
+    -webkit-transform: translate3d(0px, 0px, 0px);
+    -webkit-backface-visibility: hidden;
+
+}
+
+
+
+
+
+#fs {
+
+    width:9.4em;
+    text-decoration:none;
+    padding:.5em .9em;
+    font-family: 'nissanagregular';
+
+    background:#C71744;
+    border:0;
+
+    text-transform:uppercase;
+    color:white;
+    position:absolute;
+    right:15%;
+    bottom:20%;
+    z-index:9999;
+
+
+
+}
+
+.button-wrapper {
+
+  width:auto;
+  height:auto;
+  position:absolute;
+  bottom:7%;
+  right:2%;
+  display:block;
+  z-index:9999 !important;
+
+}
+
+canvas {
+
+z-index:10;
+
+}
+
+video {
+
+  z-index:100000;
+}
+
+
+
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/* Prevent callout */
+
+.nocallout {
+    -webkit-touch-callout: none;
+}
+
+.pressed {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* A hack for HTML5 contenteditable attribute on mobile */
+
+textarea[contenteditable] {
+    -webkit-appearance: none;
+}
+
+/* A workaround for S60 3.x and 5.0 devices which do not animated gif images if
+   they have been set as display: none */
+
+.gifhidden {
+    position: absolute;
+    left: -100%;
+}
+
+/*
+ * Image replacement
+ */
+
+.ir {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: 0;
+    direction: ltr;
+    display: block;
+    overflow: hidden;
+    text-align: left;
+    text-indent: -999em;
+}
+
+.ir br {
+    display: none;
+}
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+/*
+ * Extends the .visuallyhidden class to allow the element to be focusable
+ * when navigated to via the keyboard: h5bp.com/p
+ */
+
+.visuallyhidden.focusable:active,
+.visuallyhidden.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+}
+
+/*
+ * Hide visually and from screenreaders, but maintain layout
+ */
+
+.invisible {
+    visibility: hidden;
+}
+
+/**
+ * Clearfix helper
+ * Used to contain floats: h5bp.com/q
+ */
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/*
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+
+.clearfix {
+    *zoom: 1;
+}
+
+
+
+
+header {
+
+position:absolute;
+right:0;
+
+
+}
+
+#logo {
+
+  width:32%;
+  float:right;
+  margin-right:10%;
+  z-index:99999;
+}
+.hide {
+
+   overflow: hidden;
+  visibility:hidden;
+  opacity: 0;
+  transition: visibility 0s 2s, opacity 2s linear;
+}
+
+.show {
+
+   overflow: hidden;
+   visibility:visible;
+  opacity: 1;
+  transition: opacity 4s linear;
+
+}
+
+@-webkit-keyframes animatebg {
+
+ 0% {
+    background-image: none;
+  }
+
+ 20% {
+    background-image: none;
+  }
+  40% {
+    background-image: none;
+  }
+  60% {
+    background-image: none;
+  }80% {
+    background-image: none;
+  }
+  100% {
+    background-image: none;
+  }
+}
+
+
+.page1, .page2, .page3 {
+
+
+  width:100%;
+  height:100%;
+  background-repeat:no-repeat;
+  background-position:center center;
+ -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  z-index:0;
+  position:relative;
+ /*
+   -webkit-animation-name: animatebg;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: 1;
+
+  -webkit-animation-timing-function: ease-in;*/
+
+
+}
+
+
+
+.page1 {
+
+  background-image: url('../images/img_1.jpg');
+
+
+
+
+
+
+}
+
+
+.page2  {
+    background-image: url('../images/img_2.jpg');
+
+
+
+}
+
+.page3 {
+    background-image: url('../images/img_3.jpg');
+
+}
+
+.terms {
+  
+
+  position:absolute; 
+  bottom:0; 
+  width:95%; 
+  left:0; 
+  right:0; 
+  margin-left:auto;
+  margin-right:auto;
+    z-index:98;
+
+}
+
+.terms P {
+  
+  font-size:55%;
+  text-align:left;
+    font-family: 'nissanagregular',  Arial, sans-serif;
+  color:#818181;
+}
+
+
+
+.text {
+
+
+  position:absolute;
+  z-index:99;
+  right:2%;
+  width:490px;
+  height:150px;
+  top:25%;
+  text-align:right;
+}
+
+
+
+p.desc  {
+
+  margin-top:.6em;
+  font-family: 'nissanagregular',  Arial, sans-serif;
+  color:#818181;
+  font-size:80%;
+}
+
+p.list {
+
+  margin-top:1.1em;
+  color:#818181;
+  font-family: 'nissanagregular',  Arial, sans-serif;
+  font-size:.9em;
+}
+p.small {
+  margin-top:2em;
+  color:#818181;
+  font-family: 'nissanagregular',  Arial, sans-serif;
+  font-size:.8em;
+
+
+}
+
+h1 span{
+
+
+  color:#3c3c3c;
+  font-family: 'nissanagboldregular',  Arial, sans-serif;
+}
+h1 {
+  color:#818181;
+  font-family: 'nissanagregular',  Arial, sans-serif;
+  font-size:1.6em;
+  
+}
+
+
+/* Smartphones (landscape) ----------- */
+@media only screen
+and (min-width : 321px) {
+/* Styles */
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen and (max-width : 320px) {
+
+/* Styles */
+
+.text {
+
+
+    width:290px;
+  height:80px;
+  top:25%;
+  text-align:right;
+
+}
+
+
+
+p.desc  {
+
+  font-size:60%;
+}
+
+p.list {
+
+  margin-top:1.1em;
+
+  font-size:.5em;
+}
+p.small {
+  margin-top:1em;
+
+  font-size:.4em;
+
+
+}
+
+h1 {
+  margin-top:1em;
+  font-size:.6em;
+
+}
+
+
+
+  #logo {
+
+
+  margin-right:2%;
+}
+
+
+
+
+
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen  and (min-device-width : 768px)  and (max-device-width : 1024px) {
+/* Styles */
+
+
+
+.button-wrapper {
+
+  bottom:10%;
+
+
+
+
+
+}
+}
+
+/* iPads (landscape) ----------- */
+@media only screen  and (min-device-width : 768px)  and (max-device-width : 1024px)  and (orientation : landscape) {
+/* Styles */
+
+
+}
+
+/* iPads (portrait) ----------- */
+@media only screen  and (min-device-width : 768px)  and (max-device-width : 1024px) and (orientation : portrait) {
+/* Styles */
+
+.button-wrapper {
+
+top:10%
+}
+
+}
+
+
