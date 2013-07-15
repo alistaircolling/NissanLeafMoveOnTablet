@@ -159,7 +159,7 @@ body {
 
 
 }
-#containerWrapper {
+#container {
     overflow-x: hidden;
 }
 
@@ -384,7 +384,7 @@ z-index:2;
 
 #logo {
   position:absolute;
-  width:23%;
+  width:8%;
   right:1%;
   float:right;
     top:0;
@@ -636,18 +636,14 @@ h1 {
 /* Styles */
 
 
+
 }
 
 /* iPads (landscape) ----------- */
 @media only screen  and (min-device-width : 768px)  and (max-device-width : 1024px)  and (orientation : landscape)  {
 /* Styles */
-.footer {
 
 
-
-
-
-}
 
 
 
@@ -662,6 +658,11 @@ h1 {
 
   position:fixed;
   bottom:10%;
+}
+
+#logo {
+  
+  width:15%;
 }
 
 
