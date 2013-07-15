@@ -10,6 +10,7 @@
     <script src="js/libs/stats.min.js"></script>
     <script src="js/MinimalComps-0.1.min.js"></script> -->
     <script src="js/TweenLite.min.js"></script>
+      <script src="js/TweenMax.min.js"></script>
    <script src="js/libs/stats.min.js"></script>
 <!--    <script src="js/jquery-1.6.4.min.js"></script> -->
 
@@ -58,11 +59,12 @@
 <body onLoad="initialize()">
   <header><img src="images/nissan_logo.png" id="logo"></header>
 
-  <embed id="portraitInstructions" class="hide" src="images/instructions.svg" type="image/svg+xml" style='z-index : 2;'/>
-  <embed id="landscapeInstructions" class="hide" src="images/instructionsL.svg" type="image/svg+xml" style='z-index : 3;'/>
+  <embed id="portraitInstructions" class="opacityZero" src="images/instructions.svg" type="image/svg+xml" style='z-index : 2;'/>
+  <embed id="landscapeInstructions" class="opacityZero" src="images/instructionsL.svg" type="image/svg+xml" style='z-index : 3;'/>
 
   <canvas id="surface" width="100%" height="100%" style='z-index : -1; position: absolute;'></canvas>
-  <div id="container" style='z-index : 1; position: absolute;'></div>
+
+  <div id="container" class="opacityZero">
 
           <div id="page1" class="show">
             <div class="text">
@@ -102,6 +104,7 @@
         <div class="terms"><p>* While driving<br />
 **  Based on (i) overnight electricity costs (British Gas Clear & Simple Economy 7 unit rates for a customer paying by direct debit as at 14 June 2013, assuming 7 hours of charging at the night rate and one hour on the day rate), and (ii) a range of up to 124 miles per full charge (assuming 95% efficiency). Actual consumption/range may vary due to driving style, road condition, air conditioning and other factors outside our control. A daily standard charge of 15.979p also applies. Information correct at time of publishing. ***  Rapid charging capability is optional on Visia grade.</p></div>
       </div>
+  </div>
 
 
 
@@ -199,6 +202,7 @@
       var scaledRatio = 1;
 
      document.body.className += " page1";
+
      function initialize(){
        //      console.log("ON LOAD");
        //         document.body.classList.add = 'page1';
@@ -207,7 +211,7 @@
       }
 
       function setOrientation(){
-        var instructions;
+        var instructions, mainContainer = document.getElementById("container");
         isPortrait = (window.innerHeight>window.innerWidth)?true:false;
 
         if (isPortrait){
@@ -221,6 +225,7 @@
           wheelTargetSize;
           rightMarginPerc = .9;
           instructions = document.getElementById('portraitInstructions');
+
 
 
 
@@ -240,8 +245,10 @@
 
 
         }
+        instructions.className = 'opacityOne';
 
-        instructions.className = "show";
+        TweenLite.to(instructions, 1, {opacity:0, delay:1});
+        TweenLite.to(mainContainer, 1, {opacity:1, delay:2});
 
         canvHeigh = window.innerHeight;
         carY = canvHeigh*carInitY;
@@ -262,7 +269,7 @@
         initPhysics();
         initTouchListeners();
 
-            addStats();
+        //  addStats();
 
         if (show3D){
            init3D();
@@ -663,7 +670,7 @@
 				requestAnimationFrame( animate );
 
 				render();
-        stats.update();
+        //  stats.update();
 
 			}
 
