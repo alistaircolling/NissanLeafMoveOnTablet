@@ -20,11 +20,14 @@ textarea {
 
 
 html, body {
-  width:  100%;
-  height: 100%;
-  margin: 0px;
-  overflow:hidden;
-  position:relative;
+      height:100%;
+  
+
+
+        margin: 0px;
+
+
+  position:fixed;
 
 }
 
@@ -145,10 +148,8 @@ html {
 body {
     width: 100%;
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
     background-color:transparent;
-    position:relative;
+
 
 }
 
@@ -160,7 +161,8 @@ body {
 
 }
 #container {
-    overflow-x: hidden;
+    overflow: hidden;
+    position:relative;
 }
 
 #pageContainer {
@@ -175,7 +177,7 @@ body {
   width:95%;
   margin-left:auto;
   margin-right:auto;
-    z-index:98;
+    z-index:4;
     clear:both;
     display:block;
     padding-top:1em;
@@ -200,7 +202,7 @@ body {
   bottom:2%;
   right:4%;
 
-  z-index:99999;
+  z-index:4;
 
 }
 
@@ -217,19 +219,20 @@ body {
 
     text-transform:uppercase;
     color:white;
-    z-index:9999;
+    z-index:4;
 
 
 
 }
 
 
-#landscapeInstructions, #portraitInstructions  {
+.opacityOne, .opacityZero  {
   width:100%;
   height:100%;
   top:0;
   position:absolute;
   left:0;
+
   }
 .button-wrapper {
 
@@ -238,19 +241,26 @@ body {
   margin-top:1em;
 }
 
-canvas {
+  
 
-z-index:10;
+
+
+canvas{
+
+
+  top:0; 
+  left:0px;
+  z-index:99;
+  overflow-y: scroll;
+
 
 }
 
-video {
 
-  z-index:100000;
+#canvasholder {
+  
+  overflow-y: scroll;
 }
-
-
-
 
 /* ==========================================================================
    Helper classes
@@ -371,17 +381,6 @@ textarea[contenteditable] {
 }
 
 
-
-
-header {
-
-position:absolute;
-right:0;
-z-index:2;
-
-
-}
-
 #logo {
   position:absolute;
   width:8%;
@@ -389,7 +388,7 @@ z-index:2;
   float:right;
     top:0;
 
-  z-index:10;
+  z-index:4;
 
 }
 .hide {
@@ -404,9 +403,11 @@ z-index:2;
 
 .opacityOne{
   opacity:1;
+  z-index:11;
 }
 .opacityZero{
   opacity:0;
+    z-index:-11;
 }
 .show {
 
@@ -417,27 +418,6 @@ z-index:2;
 
 }
 
-@-webkit-keyframes animatebg {
-
- 0% {
-    background-image: none;
-  }
-
- 20% {
-    background-image: none;
-  }
-  40% {
-    background-image: none;
-  }
-  60% {
-    background-image: none;
-  }80% {
-    background-image: none;
-  }
-  100% {
-    background-image: none;
-  }
-}
 
 
 .page1, .page2, .page3 {
@@ -451,14 +431,8 @@ z-index:2;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  z-index:0;
-  position:relative;
+  z-index:2;
 
-   -webkit-animation-name: animatebg;
-  -webkit-animation-duration: 1s;
-  -webkit-animation-iteration-count: 1;
-
-  -webkit-animation-timing-function: ease-in;
 
 
 }
@@ -529,7 +503,7 @@ z-index:2;
 
 
   position:absolute;
-  z-index:99;
+  z-index:4;
   right:2%;
   width:490px;
   height:150px;
