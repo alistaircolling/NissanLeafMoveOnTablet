@@ -59,11 +59,11 @@
 
 
 
-  <embed id="portraitInstructions"  src="images/instructions.svg" type="image/svg+xml" style='width:100%; height:100%; opacity:1; position:absolute; z-index:100;'/>
-  <embed id="landscapeInstructions"  src="images/instructionsL.svg" type="image/svg+xml" style='width:100%; height:100%; opacity:1; position:absolute; z-index:101; '/>
+  <embed id="portraitInstructions"  src="images/instructions.svg" type="image/svg+xml" style='width:100%; height:100%; opacity:0; position:absolute; z-index:100;'/>
+  <embed id="landscapeInstructions"  src="images/instructionsL.svg" type="image/svg+xml" style='width:100%; height:100%; opacity:0; position:absolute; z-index:101; '/>
 
   <div id="canvasHolder" style="position: absolute; width:100%;  height:100%; z-index:2;" ></div>
-  <div id="container"  style='z-index : 12; width:100%; height:100%; top:0; left:0; position:absolute;'>
+  <div id="container"  style='z-index : 12; width:100%; height:100%; top:0; left:0; position:absolute; opacity:0'>
 
           <header><img src="images/nissan_logo.png" id="logo"></header>
           <div id="page1">
@@ -97,7 +97,7 @@
         </div>
         <div class="footer">
 
-        <div class="dots"><ul><li class="dot1">page 1</li><li class="dot2">page 2</li><li class="dot3">page 3</li></ul></div>
+        <div class="dots"><ul><li id="d1" class="dot1">page 1</li><li id="d2" class="dot2">page 2</li><li id="d3" class="dot3">page 3</li></ul></div>
         <div class="button-wrapper">
         <a href="http://www.nissan.co.uk/GB/en/vehicle/electric-vehicles/leaf.html" id="fs">Make the switch</a>
         </div>
@@ -225,6 +225,7 @@
           wheelTargetSize;
           rightMarginPerc = .9;
           TweenLite.to(landscape, 0, {opacity:0});
+          TweenLite.to(portrait, 0, {opacity:1});
           instructions = portrait;
 
         }else{
@@ -239,6 +240,7 @@
           wheelTargetSize;
           rightMarginPerc = .9;
           TweenLite.to(portrait, 0, {opacity:0});
+          TweenLite.to(landscape, 0, {opacity:1});
           instructions = landscape;
         }
 
@@ -255,6 +257,9 @@
         carW = canvWid*carWidthPerc;
         carH = canvHeigh*carHeightPerc;
 
+        var cont = document.getElementById("container");
+        TweenLite.to(cont, 0, {opacity:1});
+
       }
 
 
@@ -268,7 +273,7 @@
         initPhysics();
         initTouchListeners();
 
-            addStats();
+        // addStats();
 
         if (show3D){
            init3D();
@@ -709,8 +714,8 @@
             var currDiv = document.getElementById(ids[lastPage]);
             //  currDiv.classList.remove('show');
             //        currDiv.classList.add('hide');
-            //       document.body.classList.remove(ids[lastPage]);
-            // document.body.classList.add(ids[currentPage]);
+                   document.body.classList.remove(ids[lastPage]);
+             document.body.classList.add(ids[currentPage]);
             var thisD = document.getElementById(ids[currentPage]);
 
             //         console.log("div?:"+thisD);
@@ -722,6 +727,9 @@
           }
 
         }
+
+
+
 
       }
 
