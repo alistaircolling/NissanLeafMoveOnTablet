@@ -195,9 +195,10 @@ body {
 .footer {
   
   position:absolute; 
-  width:100%; 
+  width:95%; 
   height:100px;
   bottom:2%;
+  right:4%;
 
   z-index:99999;
   
@@ -374,7 +375,7 @@ right:0;
 
 #logo {
 
-  width:32%;
+  width:42%;
   float:right;
   margin-right:10%;
   z-index:99999;
@@ -509,10 +510,10 @@ right:0;
 
   position:absolute;
   z-index:99;
-  right:2%;
+  right:4%;
   width:490px;
   height:150px;
-  top:25%;
+  top:28%;
   text-align:right;
 }
 
@@ -534,10 +535,10 @@ p.list {
   font-size:.9em;
 }
 p.small {
-  margin-top:2em;
+  margin-top:1.5em;
   color:#818181;
   font-family: 'nissanagregular',  Arial, sans-serif;
-  font-size:.8em;
+  font-size:.6em;
 
 
 }
@@ -552,6 +553,8 @@ h1 {
   color:#818181;
   font-family: 'nissanagregular',  Arial, sans-serif;
   font-size:1.6em;
+
+
   
 }
 
@@ -610,6 +613,7 @@ h1 {
 
 
   margin-right:2%;
+  width:30%;
 }
 
 
