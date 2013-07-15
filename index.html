@@ -136,7 +136,7 @@
       var carX = 0;
       var currX = 0;
       var carWidthPerc = .7;
-      var carHeightPerc = .5;
+      var carHeightPerc = .1;
       var carInitY = .55;
       var carInitX = -.04;
       var offRightPerc = 1.6;
@@ -208,7 +208,7 @@
           carX = 0;
           currX = 0;
           carWidthPerc = 1;
-          carHeightPerc = .5;
+          carHeightPerc = .3;
           carInitY = .5;
           carInitX = -.04;
           offRightPerc = 1.6;
@@ -220,7 +220,7 @@
           carX = 0;
           currX = 0;
           carWidthPerc = .7;
-          carHeightPerc = .5;
+          carHeightPerc = .3;
           carInitY = .45;
           carInitX = -.04;
           offRightPerc = 1.6;
@@ -907,12 +907,12 @@
           curvePoints.push(pointsObj);
         }
 
-        example.quadraticCurveTo(part1.pos.x, part1.pos.y, part2.pos.x, part2.pos.y);
+        //     example.quadraticCurveTo(part1.pos.x, part1.pos.y, part2.pos.x, part2.pos.y);
         //add the final one
         pointsObj = {x:part1.pos.x, y:part1.pos.y, xc:xc, yc:yc, part2x:part2.pos.x, part2y:part2.pos.y};
         curvePoints.push(pointsObj);
 
-        example.lineTo(0 , window.innerHeight);
+        example.quadraticCurveTo( part2.pos.x, part2.pos.y, 0, window.innerHeight);
         example.lineTo(window.innerWidth, window.innerHeight);
         example.lineTo(window.innerWidth, 0);
         example.lineTo(0, 0);//window.innerHeight);
@@ -1030,9 +1030,9 @@
         heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
-          //   drawPhysics();
+          //  drawPhysics();
            if (physics.particles.length>0){
-             drawCurtain();
+                 drawCurtain();
            }
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
@@ -1058,8 +1058,7 @@
 
         }
 
-        // mesh.rotation.y += 0.06;
-        //  console.log("x:"+mesh.rotation.x);
+        // mesh.rotation.y += 0.06; n.x);
         if (show3D){
           camera.lookAt( scene.position );
           renderer.render( scene, camera );
