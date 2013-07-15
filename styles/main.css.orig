@@ -24,6 +24,7 @@ html, body {
   height: 100%;
   margin: 0px;
   overflow:hidden;
+  position:relative;
 
 }
 
@@ -169,49 +170,78 @@ body {
 
 }
 
+.terms {
+
+  width:95%;
+  margin-left:auto;
+  margin-right:auto;
+    z-index:98;
+    clear:both;
+    display:block;
+    padding-top:1em;
+}
+
+.dots {
+
+  float:left;
+
+  width:100px;
+  height:10px;
+  margin-top:1em;
+
+}
 
 
+.footer {
+<<<<<<< HEAD
+  
+  position:absolute; 
+  width:95%; 
+=======
+
+  position:absolute;
+  width:100%;
+>>>>>>> 1e39e1f7f2b67efa5b88456ad031dbdc5c3a86db
+  height:100px;
+  bottom:2%;
+  right:4%;
+
+  z-index:99999;
+
+}
 
 
 #fs {
 
-<<<<<<< HEAD
-
-    width:11em;
-    height:3em;
-
-    font-family: 'nissanagboldregular';
-=======
     width:9.4em;
     text-decoration:none;
     padding:.5em .9em;
     font-family: 'nissanagregular';
->>>>>>> c433817100ea60f358694d850871728973d4c8ce
 
     background:#C71744;
     border:0;
 
     text-transform:uppercase;
     color:white;
-    position:absolute;
-    right:15%;
-    bottom:10%;
     z-index:9999;
 
 
 
 }
 
+
+#landscapeInstructions, #portraitInstructions  {
+  width:100%;
+  height:100%;
+  top:0;
+  position:absolute;
+  left:0;
+  }
 .button-wrapper {
 
-  width:auto;
-  height:auto;
-  position:absolute;
-  bottom:5%;
-  right:2%;
+  float:right;
   display:block;
-  z-index:9999 !important;
-
+  margin-top:1em;
 }
 
 canvas {
@@ -353,16 +383,25 @@ header {
 
 position:absolute;
 right:0;
+z-index:2;
 
 
 }
 
 #logo {
+<<<<<<< HEAD
 
-  width:32%;
+  width:42%;
+=======
+  position:absolute;
+  width:23%;
+  right:1%;
+>>>>>>> 1e39e1f7f2b67efa5b88456ad031dbdc5c3a86db
   float:right;
-  margin-right:10%;
-  z-index:99999;
+    top:0;
+
+  z-index:10;
+
 }
 .hide {
 
@@ -370,12 +409,20 @@ right:0;
   visibility:hidden;
   opacity: 0;
   transition: visibility 0s 2s, opacity 2s linear;
+
 }
 
+
+.opacityOne{
+  opacity:1;
+}
+.opacityZero{
+  opacity:0;
+}
 .show {
 
-  overflow: hidden;
-  visibility:visible;
+   overflow: hidden;
+   visibility:visible;
   opacity: 1;
   transition: opacity 4s linear;
 
@@ -417,9 +464,9 @@ right:0;
   background-size: cover;
   z-index:0;
   position:relative;
-  
+
    -webkit-animation-name: animatebg;
-  -webkit-animation-duration: 2s;
+  -webkit-animation-duration: 1s;
   -webkit-animation-iteration-count: 1;
 
   -webkit-animation-timing-function: ease-in;
@@ -427,8 +474,37 @@ right:0;
 
 }
 
+.dots UL {
 
+  list-style:none;
+}
+.dots LI {
 
+  float:left;
+  background: #ccc;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  margin: 4px;
+  text-indent:-100000px;
+  height:10px;
+  width:10px;
+}
+
+.page1 .dot1{
+
+ background: #818181;
+}
+
+.page2 .dot2 {
+
+ background: #818181;
+}
+
+.page3 .dot3 {
+
+ background: #818181;
+}
 .page1 {
 
   background-image: url('../images/img_1.jpg');
@@ -450,6 +526,14 @@ right:0;
 
 
 
+.terms P {
+
+  font-size:55%;
+  text-align:left;
+    font-family: 'nissanagregular',  Arial, sans-serif;
+  color:#818181;
+}
+
 
 
 .text {
@@ -457,10 +541,10 @@ right:0;
 
   position:absolute;
   z-index:99;
-  right:2%;
+  right:4%;
   width:490px;
   height:150px;
-  top:25%;
+  top:28%;
   text-align:right;
 }
 
@@ -482,10 +566,10 @@ p.list {
   font-size:.9em;
 }
 p.small {
-  margin-top:2em;
+  margin-top:1.5em;
   color:#818181;
   font-family: 'nissanagregular',  Arial, sans-serif;
-  font-size:.8em;
+  font-size:.6em;
 
 
 }
@@ -500,7 +584,12 @@ h1 {
   color:#818181;
   font-family: 'nissanagregular',  Arial, sans-serif;
   font-size:1.6em;
-  text-transform:uppercase;
+
+<<<<<<< HEAD
+
+  
+=======
+>>>>>>> 1e39e1f7f2b67efa5b88456ad031dbdc5c3a86db
 }
 
 
@@ -554,14 +643,18 @@ h1 {
 
 
 
+<<<<<<< HEAD
   #logo {
 
 
   margin-right:2%;
+  width:30%;
 }
 
 
 
+=======
+>>>>>>> 1e39e1f7f2b67efa5b88456ad031dbdc5c3a86db
 
 
 }
@@ -571,31 +664,33 @@ h1 {
 /* Styles */
 
 
-
-.button-wrapper {
-
-  bottom:15%;
-
-
-
-
-
-}
 }
 
 /* iPads (landscape) ----------- */
-@media only screen  and (min-device-width : 768px)  and (max-device-width : 1024px)  and (orientation : landscape) {
+@media only screen  and (min-device-width : 768px)  and (max-device-width : 1024px)  and (orientation : landscape)  {
 /* Styles */
+.footer {
+
+
+
 
 
 }
 
+
+
+}
+
+
 /* iPads (portrait) ----------- */
-@media only screen  and (min-device-width : 768px)  and (max-device-width : 1024px) and (orientation : portrait) {
+@media only screen  and (min-device-width : 768px)  and (max-device-width : 1024px) and (orientation : portrait)  {
 /* Styles */
 
+.footer {
 
-
+  position:fixed;
+  bottom:10%;
+}
 
 
 }
