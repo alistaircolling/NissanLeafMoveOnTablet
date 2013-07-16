@@ -442,29 +442,28 @@ right:0;
 .dots LI {
 
   float:left;
-  background: #ccc;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
+  color: #ccc;
   margin: 4px;
-  text-indent:-100000px;
+  padding-top:10px;
   height:10px;
-  width:10px;
+  width:5px;
+  font-family: 'nissanagregular',  Arial, sans-serif;
+  font-size:80%;
 }
 
 .page1 .dot1{
 
- background: #818181;
+ color: #C71744;
 }
 
 .page2 .dot2 {
 
- background: #818181;
+ color: #C71744;
 }
 
 .page3 .dot3 {
 
- background: #818181;
+ color: #C71744;
 }
 .page1 {
 
