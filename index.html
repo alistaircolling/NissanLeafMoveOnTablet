@@ -58,7 +58,7 @@
 
 <body onLoad="initialize()">
 
-
+  <div id="whiteCover" style='z-index :9999999 ; width:100%; height:100%; top:0; left:0; position:absolute; opacity:1; background:#ffffff'></div>
   <div id="canvasHolder" style="position: absolute; width:100%;  height:100%; z-index:2;" ></div>
   <div id="container"  style='z-index : 12; width:100%; height:100%; top:0; left:0; position:absolute; opacity:0'>
 
@@ -107,6 +107,7 @@
 
 
     <script>
+      var lastOrientation;
       var totRads = 0;
       var curvePoints = [];//used to store the positions for mask curve
       var halfCarWidth = 0;
@@ -254,12 +255,24 @@
         carH = canvHeigh*carHeightPerc;
 
         var cont = document.getElementById("container");
-        TweenLite.to(cont, 0, {opacity:1});
+        //     TweenLite.to(cont, 0, {opacity:0});
+         TweenLite.to(cont, 1, {opacity:1, delay:2});
+
+          fadeCover();
 
       }
 
 
 
+       function fadeCover(){
+
+
+        var cover = document.getElementById("whiteCover");
+        TweenLite.to(cover, 0, {opacity:1});
+         TweenLite.to(cover, 1, {opacity:0, delay: 2});
+
+
+       }
 
 
       function initCanvas(){
@@ -1048,7 +1061,22 @@
 
 
 
+
+      function checkOrientation(){
+
+         if ( window.orientation !== lastOrientation){
+           //      alert("change");
+            var whiteCov = document.getElementById("whiteCover");
+           TweenLite.to(whiteCov, 0, {opacity:1});
+           lastOrientation = window.orientation;
+
+         }
+
+      }
+
 			function render() {
+
+        checkOrientation();
         //clear canvas
         //    canvas.width = canvas.width;
         physics.step();
@@ -1129,6 +1157,7 @@
       }
 
      function doOnOrientationChange(){
+                 fadeCover();
 
         switch(window.orientation)
         {
