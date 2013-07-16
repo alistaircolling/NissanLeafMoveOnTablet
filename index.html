@@ -10,7 +10,7 @@
     <script src="js/MinimalComps-0.1.min.js"></script> -->
     <script src="js/TweenMax.min.js"></script>
    <script src="js/libs/stats.min.js"></script>
-<!--    <script src="js/jquery-1.6.4.min.js"></script> -->
+   <script src="js/jquery-1.6.4.min.js"></script>
 
 
 
@@ -48,8 +48,11 @@
 
     <link type="text/css" rel="stylesheet" href="styles/reset.css" />
     <link type="text/css" rel="stylesheet" href="styles/main.css" />
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+<!--    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"> -->
     <meta http-equiv="cleartype" content="on">
+
+    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title></title>
 </head>
 
@@ -61,51 +64,51 @@
 
   <embed id="portraitInstructions"  src="images/instructions.svg" type="image/svg+xml" style='width:100%; height:100%; opacity:0; position:absolute; z-index:100;'/>
   <embed id="landscapeInstructions"  src="images/instructionsL.svg" type="image/svg+xml" style='width:100%; height:100%; opacity:0; position:absolute; z-index:101; '/>
+  <div id="mainHolder">
+    <div id="canvasHolder" style="position: absolute; width:100%;  height:100%; z-index:2;" ></div>
+    <div id="container"  style='z-index : 12; width:100%; height:100%; top:0; left:0; position:absolute; opacity:0'>
 
-  <div id="canvasHolder" style="position: absolute; width:100%;  height:100%; z-index:2;" ></div>
-  <div id="container"  style='z-index : 12; width:100%; height:100%; top:0; left:0; position:absolute; opacity:0'>
+            <header><img src="images/nissan_logo.png" id="logo"></header>
+            <div id="page1">
+              <div class="text">
+              <h1>THE 100% ELECTRIC NEW NISSAN LEAF <br /><span>YOU'LL KNOW IT WHEN YOU FEEL IT</span></h1>
+                <p class="list">Zero emissions* | Fuel costs from 2p** | Unique driving experience </p>
+                  <p class="small">While driving</p>
 
-          <header><img src="images/nissan_logo.png" id="logo"></header>
-          <div id="page1">
-            <div class="text">
-            <h1>THE 100% ELECTRIC NEW NISSAN LEAF <br /><span>YOU'LL KNOW IT WHEN YOU FEEL IT</span></h1>
-              <p class="list">Zero emissions* | Fuel costs from 2p** | Unique driving experience </p>
-                <p class="small">While driving</p>
-
+              </div>
             </div>
+          <div  id="page2" class="hide">
+
+            <div class="text">
+            <h1> FUEL COSTS<span> FROM 2p A MILE**</span></h1>
+            <p class="list">Rapid charging*** | Charging network | Home charging</p>
+
+            <p class="desc">The lithium ion battery, it's what makes the Nissan LEAF go. When it comes to charging it, you've got options. Top up at a network of charge points, plug into a growing number of rapid charge points** that will take LEAF from empty to around 80% full in 30 minutes, or charge at home, at night, when tariffs are low - and get from A to B for coppers.
+            </p>
           </div>
-        <div  id="page2" class="hide">
+          </div>
+          <div id="page3" class="hide">
 
-          <div class="text">
-          <h1> FUEL COSTS<span> FROM 2p A MILE**</span></h1>
-          <p class="list">Rapid charging*** | Charging network | Home charging</p>
+            <div class="text">
+            <h1> UNIQUE <span> DRIVING EXPERIENCE</span></h1>
+            <p class="list">Responsive | Dynamic | Quietly impressive</p>
 
-          <p class="desc">The lithium ion battery, it's what makes the Nissan LEAF go. When it comes to charging it, you've got options. Top up at a network of charge points, plug into a growing number of rapid charge points** that will take LEAF from empty to around 80% full in 30 minutes, or charge at home, at night, when tariffs are low - and get from A to B for coppers.
-          </p>
+            <p class="desc">Say goodbye to engine noise and petrol stations and welcome the unique feeling of accelerating in the 100% electric Nissan LEAF. Experience instant torque, smoothly delivered from the moment your foot touches the pedal. With LEAF, you get incredible performance with ultimate quietness levels and zero emissions when you drive.</p>
+
+          </div>
+
+          </div>
+          <div class="footer">
+
+          <div class="dots"><ul><li id="d1" class="dot1">page 1</li><li id="d2" class="dot2">page 2</li><li id="d3" class="dot3">page 3</li></ul></div>
+          <div class="button-wrapper">
+          <a href="http://www.nissan.co.uk/GB/en/vehicle/electric-vehicles/leaf.html" id="fs">Make the switch</a>
+          </div>
+          <div class="terms"><p>* While driving<br />
+  **  Based on (i) overnight electricity costs (British Gas Clear & Simple Economy 7 unit rates for a customer paying by direct debit as at 14 June 2013, assuming 7 hours of charging at the night rate and one hour on the day rate), and (ii) a range of up to 124 miles per full charge (assuming 95% efficiency). Actual consumption/range may vary due to driving style, road condition, air conditioning and other factors outside our control. A daily standard charge of 15.979p also applies. Information correct at time of publishing. ***  Rapid charging capability is optional on Visia grade.</p></div>
         </div>
-        </div>
-        <div id="page3" class="hide">
-
-          <div class="text">
-          <h1> UNIQUE <span> DRIVING EXPERIENCE</span></h1>
-          <p class="list">Responsive | Dynamic | Quietly impressive</p>
-
-          <p class="desc">Say goodbye to engine noise and petrol stations and welcome the unique feeling of accelerating in the 100% electric Nissan LEAF. Experience instant torque, smoothly delivered from the moment your foot touches the pedal. With LEAF, you get incredible performance with ultimate quietness levels and zero emissions when you drive.</p>
-
-        </div>
-
-        </div>
-        <div class="footer">
-
-        <div class="dots"><ul><li id="d1" class="dot1">page 1</li><li id="d2" class="dot2">page 2</li><li id="d3" class="dot3">page 3</li></ul></div>
-        <div class="button-wrapper">
-        <a href="http://www.nissan.co.uk/GB/en/vehicle/electric-vehicles/leaf.html" id="fs">Make the switch</a>
-        </div>
-        <div class="terms"><p>* While driving<br />
-**  Based on (i) overnight electricity costs (British Gas Clear & Simple Economy 7 unit rates for a customer paying by direct debit as at 14 June 2013, assuming 7 hours of charging at the night rate and one hour on the day rate), and (ii) a range of up to 124 miles per full charge (assuming 95% efficiency). Actual consumption/range may vary due to driving style, road condition, air conditioning and other factors outside our control. A daily standard charge of 15.979p also applies. Information correct at time of publishing. ***  Rapid charging capability is optional on Visia grade.</p></div>
       </div>
-    </div>
-
+  </div>
 
 
 
@@ -184,7 +187,7 @@
 
 
 
-      var SNAP_BACK_DURATION = .2;
+      var SNAP_BACK_DURATION = 1.5;
 
       var show3D = false;
 
@@ -249,6 +252,7 @@
           //  document.getElementById("container").className = "show";
 
         }});
+
 
         canvHeigh = window.innerHeight;
         carY = canvHeigh*carInitY;
@@ -354,7 +358,7 @@
 
         ///SETUP
 
-        example = Sketch.create({container:document.getElementById("canvasHolder")});
+        example = Sketch.create({container:document.getElementById("canvasHolder"), id:"test"});
 
         example.setup = function() {
 
@@ -590,7 +594,7 @@
         }
         snapBack();
         movedX = 0;
-        event.preventDefault();
+        //  event.preventDefault();
       }
 
 
@@ -956,7 +960,6 @@
 
       function drawPhysics(){
 
-        //          physics.step();
           var fillStyle = '#00ff00', particles, n;
           //render particles
           for( var i=0, n = physics.particles.length; i<n; i++){
@@ -986,7 +989,6 @@
             example.closePath();
             example.stroke();
           }
-
       }
 
 
@@ -1062,9 +1064,9 @@
         heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
-          //      drawPhysics();
+          //  drawPhysics();
            if (physics.particles.length>0){
-                drawCurtain();
+                 drawCurtain();
            }
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
@@ -1137,18 +1139,97 @@
         {
           case -90:
           case 90:
-            alert('landscape');
+            //   alert('landscape width:'+window.innerWidth);
             break;
           default:
-            alert('portrait');
+            //alert('portrait width:'+window.innerWidth);
             break;
         }
+        //force canvas to resize
+        var canvH = document.getElementById("canvasHolder");
+        canvH.width = window.innerWidth;
+        canvH.height = window.innerHeight;
+        setOrientation();
+
+        /*
+
+        // increase height to get rid off ios address bar
+        $("#mainHolder").height($(window).height() + 60);
+
+        var width = $("#mainHolder").width();
+        var height = $("#mainHolder").height();
+
+
+        var cheight = height - 20; // subtract the fix div height
+        var cwidth = width;
+
+        // set canvas width and height
+        $("#canvasHolder").attr('width', cwidth);
+        $("#canvasHolder").attr('height', cheight);
+*/
+        resetParticlePositions();
       }
 
+      function resetParticlePositions(){
 
+        var spaceX = Math.floor(window.innerWidth/COLUMNS);
+        var spaceY = Math.floor(window.innerHeight/ROWS);
+
+        var clone = physics.particles.slice(0);
+        var cloneSprings = physics.springs.slice(0);
+
+        for ( var i = 0; i < COLUMNS+1; i++ ) {
+            //create a new array at each index
+            cell[i] = [];
+            for( var j = 0; j<ROWS+1; j++){
+
+              var particle = clone.shift();
+              //fix the top ones
+              if (j==0 || j == ROWS || i == COLUMNS){
+                particle.pinned = true;
+                particle.fixed = true;//j === 0;
+              }
+              var position = new Vector( spaceX*i, spaceY*j );
+              particle.moveTo( position );
+              particle.setRadius( PARTICLE_RADIUS );
+
+              if (i>0){
+                var s = cloneSprings.shift();
+                s.restLength = spaceX;
+
+              }
+
+
+              if (j > 0) {
+                var s = cloneSprings.shift();
+                s.restLength = spaceY;
+
+              }
+
+
+
+
+
+
+              // Make it collidable
+              //  collision.pool.push( particle );
+
+              // Apply behaviours
+              //  particle.behaviours.push( avoidMouse, pullToCenter, collision );
+
+              // Add to the simulation
+              //   physics.particles.push( particle );
+              // cell[i][j] = particle;
+
+            }
+
+          }
+
+
+      }
 
       // Initial execution if needed
-      doOnOrientationChange();
+      //   doOnOrientationChange();
 
 
 
