@@ -143,7 +143,14 @@ body {
 
 }
 
-
+.touchCar {
+  
+  position:absolute;
+  width: 398px; 
+  height:520px;
+  left:30%; 
+  top:25%;
+}
 
 
 
@@ -367,6 +374,8 @@ height:auto;
 
 
 }
+
+
 
 #logo {
 
