@@ -65,17 +65,18 @@
           <header><img src="images/nissan_logo.png" id="logo"></header>
 
 
-          <div class="touchCar">
-          <a href="#" id="touchCarButton" >
- 
+          <div class="touchCar" id="touchCarButton">
+
+
           <object data="images/swipe.svg" width="398px" height="520px" type="image/svg+xml">
-           
+
           <img src="logo.png" width="186" height="235" alt="hand" />
-           
+
           </object>
+
           </div>
-           
-          </a>
+
+
           <div id="page1">
             <div class="text">
             <h1>THE 100% ELECTRIC NEW NISSAN LEAF <br /><span>YOU'LL KNOW IT WHEN YOU FEEL IT</span></h1>
@@ -107,7 +108,7 @@
         </div>
         <div class="footer">
 
-        <div class="dots"><ul><li id="d1" class="dot1">1</li><li id="d2" class="dot2">2</li><li id="d3" class="dot23">3</li></ul></div>
+        <div class="dots"><ul><li id="d1" class="dot1">1</li><li id="d2" class="dot2">2</li><li id="d3" class="dot3">3</li></ul></div>
         <div class="button-wrapper">
         <a href="http://m.nissan.co.uk/leaf" id="fs" >Make the switch</a>
         </div>
@@ -141,6 +142,8 @@
       var mouseXOnMouseDown = 0;
       var car;
       var isPortrait;
+
+      var firstTouch;
 
 
       ////CAR VARS
@@ -276,6 +279,8 @@
         TweenLite.to(cont, 0, {opacity:0});
         TweenLite.to(cont, 1, {opacity:1, delay:1});
 
+        fadeCover();
+
 
 
 
@@ -288,7 +293,7 @@
 
         var cover = document.getElementById("whiteCover");
         TweenLite.to(cover, 0, {opacity:1});
-         TweenLite.to(cover, 1, {opacity:0, delay: 2});
+         TweenLite.to(cover, 1, {opacity:0, delay: 1});
 
 
        }
@@ -596,11 +601,18 @@
       function onDocumentTouchStart(event){
         tDown = true;
         lastX = currX;
+         if (!firstTouch){
+
+          var hand = document.getElementById("touchCarButton");
+          TweenLite.to(hand, 2, {opacity:0});
+          firstTouch = true;
+        }
 
       // event.preventDefault();
       }
 
       function onDocumentTouchUp(event){
+
         //   console.log("t up");
         tDown = false;
          var i, particle, top = heldParticles.length;
