@@ -58,7 +58,7 @@
 
 <body onLoad="initialize()">
 
-
+  <div id="whiteCover" style='z-index :9999999 ; width:100%; height:100%; top:0; left:0; position:absolute; opacity:1; background:#ffffff'></div>
   <div id="canvasHolder" style="position: absolute; width:100%;  height:100%; z-index:2;" ></div>
   <div id="container"  style='z-index : 12; width:100%; height:100%; top:0; left:0; position:absolute; opacity:0'>
 
@@ -120,12 +120,13 @@
 
 
     <script>
+      var lastOrientation;
       var totRads = 0;
       var curvePoints = [];//used to store the positions for mask curve
       var halfCarWidth = 0;
       var container, stats;
 
-			var camera, scene, renderer;
+
 
 			var mesh, plane;
 
@@ -211,9 +212,11 @@
       var scaledRatio = 1;
 
      document.body.className += " page1";
+
      function initialize(){
        //      console.log("ON LOAD");
        //         document.body.classList.add = 'page1';
+           fadeCover();
          setOrientation();
          initCanvas();
       }
@@ -266,13 +269,29 @@
         carW = canvWid*carWidthPerc;
         carH = canvHeigh*carHeightPerc;
 
+                var p1 = document.getElementById("page1");
+        p1.style.backgroundImage = "none";
         var cont = document.getElementById("container");
-        TweenLite.to(cont, 0, {opacity:1});
+
+        TweenLite.to(cont, 0, {opacity:0});
+        TweenLite.to(cont, 1, {opacity:1, delay:1});
+
+
+
 
       }
 
 
 
+       function fadeCover(){
+
+
+        var cover = document.getElementById("whiteCover");
+        TweenLite.to(cover, 0, {opacity:1});
+         TweenLite.to(cover, 1, {opacity:0, delay: 2});
+
+
+       }
 
 
       function initCanvas(){
@@ -714,8 +733,9 @@
             var currDiv = document.getElementById(ids[lastPage]);
             //  currDiv.classList.remove('show');
             //        currDiv.classList.add('hide');
-                   document.body.classList.remove(ids[lastPage]);
+             document.body.classList.remove(ids[lastPage]);
              document.body.classList.add(ids[currentPage]);
+
             var thisD = document.getElementById(ids[currentPage]);
 
             //         console.log("div?:"+thisD);
@@ -1049,7 +1069,22 @@
 
 
 
+
+      function checkOrientation(){
+
+         if ( window.orientation !== lastOrientation){
+           //      alert("change");
+            var whiteCov = document.getElementById("whiteCover");
+           TweenLite.to(whiteCov, 0, {opacity:1});
+           lastOrientation = window.orientation;
+
+         }
+
+      }
+
 			function render() {
+
+        //  checkOrientation();
         //clear canvas
         //    canvas.width = canvas.width;
         physics.step();
@@ -1130,6 +1165,7 @@
       }
 
      function doOnOrientationChange(){
+       //   fadeCover();
 
         switch(window.orientation)
         {
