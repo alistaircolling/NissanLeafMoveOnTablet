@@ -362,15 +362,17 @@ header {
 
 position:absolute;
 right:0;
+width:100%;
+height:auto;
 
 
 }
 
 #logo {
 
-  width:42%;
+  width:10%;
   float:right;
-  margin-right:10%;
+  margin-right:4%;
   z-index:99999;
 }
 .hide {
