@@ -213,9 +213,9 @@
 
       function setOrientation(){
         isPortrait = (window.innerHeight>window.innerWidth)?true:false;
-        var portrait = document.getElementById("portraitInstructions");
-        var landscape = document.getElementById("landscapeInstructions");
-        var instructions;
+       // var portrait = document.getElementById("portraitInstructions");
+       // var landscape = document.getElementById("landscapeInstructions");
+       // var instructions;
         if (isPortrait){
           carX = 0;
           currX = 0;
@@ -226,9 +226,9 @@
           offRightPerc = 1.6;
           wheelTargetSize;
           rightMarginPerc = .9;
-          TweenLite.to(landscape, 0, {opacity:0});
-          TweenLite.to(portrait, 0, {opacity:1});
-          instructions = portrait;
+         // TweenLite.to(landscape, 0, {opacity:0});
+         // TweenLite.to(portrait, 0, {opacity:1});
+         // instructions = portrait;
 
         }else{
 
@@ -241,19 +241,18 @@
           offRightPerc = 1.6;
           wheelTargetSize;
           rightMarginPerc = .9;
-          TweenLite.to(portrait, 0, {opacity:0});
-          TweenLite.to(landscape, 0, {opacity:1});
-          instructions = landscape;
+         // TweenLite.to(portrait, 0, {opacity:0});
+          //TweenLite.to(landscape, 0, {opacity:1});
+        //  instructions = landscape;
         }
 
-        TweenLite.to(instructions, 1, {delay:1, opacity:0, onComplete:function(){
+  /*      TweenLite.to(instructions, 1, {delay:1, opacity:0, onComplete:function(){
           TweenLite.to(portrait, 0, {zIndex:-50});
           TweenLite.to(landscape, 0, {zIndex:-51});
           //  document.getElementById("container").className = "show";
 
         }});
-
-
+*/
         canvHeigh = window.innerHeight;
         carY = canvHeigh*carInitY;
         canvWid = window.innerWidth;
@@ -572,7 +571,7 @@
         tDown = true;
         lastX = currX;
 
-        event.preventDefault();
+       event.preventDefault();
       }
 
       function onDocumentTouchUp(event){
@@ -594,7 +593,7 @@
         }
         snapBack();
         movedX = 0;
-        //  event.preventDefault();
+        // event.preventDefault();
       }
 
 
