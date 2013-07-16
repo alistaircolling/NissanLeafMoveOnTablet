@@ -113,7 +113,7 @@
       var halfCarWidth = 0;
       var container, stats;
 
-			var camera, scene, renderer;
+
 
 			var mesh, plane;
 
@@ -199,9 +199,11 @@
       var scaledRatio = 1;
 
      document.body.className += " page1";
+
      function initialize(){
        //      console.log("ON LOAD");
        //         document.body.classList.add = 'page1';
+           fadeCover();
          setOrientation();
          initCanvas();
       }
@@ -254,11 +256,15 @@
         carW = canvWid*carWidthPerc;
         carH = canvHeigh*carHeightPerc;
 
+                var p1 = document.getElementById("page1");
+        p1.style.backgroundImage = "none";
         var cont = document.getElementById("container");
-        //     TweenLite.to(cont, 0, {opacity:0});
-         TweenLite.to(cont, 1, {opacity:1, delay:2});
 
-          fadeCover();
+        TweenLite.to(cont, 0, {opacity:0});
+        TweenLite.to(cont, 1, {opacity:1, delay:1});
+
+
+
 
       }
 
@@ -714,8 +720,9 @@
             var currDiv = document.getElementById(ids[lastPage]);
             //  currDiv.classList.remove('show');
             //        currDiv.classList.add('hide');
-                   document.body.classList.remove(ids[lastPage]);
+             document.body.classList.remove(ids[lastPage]);
              document.body.classList.add(ids[currentPage]);
+
             var thisD = document.getElementById(ids[currentPage]);
 
             //         console.log("div?:"+thisD);
@@ -1064,7 +1071,7 @@
 
 			function render() {
 
-        checkOrientation();
+        //  checkOrientation();
         //clear canvas
         //    canvas.width = canvas.width;
         physics.step();
@@ -1145,7 +1152,7 @@
       }
 
      function doOnOrientationChange(){
-                 fadeCover();
+       //   fadeCover();
 
         switch(window.orientation)
         {
