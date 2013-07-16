@@ -48,8 +48,11 @@
 
     <link type="text/css" rel="stylesheet" href="styles/reset.css" />
     <link type="text/css" rel="stylesheet" href="styles/main.css" />
-    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <meta http-equiv="cleartype" content="on">
+  <meta http-equiv="cleartype" content="on">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+
     <title></title>
 </head>
 
@@ -65,7 +68,7 @@
             <div class="text">
             <h1>THE 100% ELECTRIC NEW NISSAN LEAF <br /><span>YOU'LL KNOW IT WHEN YOU FEEL IT</span></h1>
               <p class="list">Zero emissions* | Fuel costs from 2p** | Unique driving experience </p>
-               
+
 
             </div>
           </div>
@@ -1126,24 +1129,100 @@
         return result;
       }
 
-      function doOnOrientationChange(){
+     function doOnOrientationChange(){
 
         switch(window.orientation)
         {
           case -90:
           case 90:
-            alert('landscape');
+            //   alert('landscape width:'+window.innerWidth);
             break;
           default:
-            alert('portrait');
+            //alert('portrait width:'+window.innerWidth);
             break;
         }
+        //force canvas to resize
+        var canvH = document.getElementById("canvasHolder");
+        canvH.width = window.innerWidth;
+        canvH.height = window.innerHeight;
+        setOrientation();
+
+        /*
+
+        // increase height to get rid off ios address bar
+        $("#mainHolder").height($(window).height() + 60);
+
+        var width = $("#mainHolder").width();
+        var height = $("#mainHolder").height();
+
+
+        var cheight = height - 20; // subtract the fix div height
+        var cwidth = width;
+
+        // set canvas width and height
+        $("#canvasHolder").attr('width', cwidth);
+        $("#canvasHolder").attr('height', cheight);
+*/
+        resetParticlePositions();
       }
 
+      function resetParticlePositions(){
+
+        var spaceX = Math.floor(window.innerWidth/COLUMNS);
+        var spaceY = Math.floor(window.innerHeight/ROWS);
+
+        var clone = physics.particles.slice(0);
+        var cloneSprings = physics.springs.slice(0);
+
+        for ( var i = 0; i < COLUMNS+1; i++ ) {
+            //create a new array at each index
+            cell[i] = [];
+            for( var j = 0; j<ROWS+1; j++){
+
+              var particle = clone.shift();
+              //fix the top ones
+              if (j==0 || j == ROWS || i == COLUMNS){
+                particle.pinned = true;
+                particle.fixed = true;//j === 0;
+              }
+              var position = new Vector( spaceX*i, spaceY*j );
+              particle.moveTo( position );
+              particle.setRadius( PARTICLE_RADIUS );
+
+              if (i>0){
+                var s = cloneSprings.shift();
+                s.restLength = spaceX;
+
+              }
 
 
-      // Initial execution if needed
-      doOnOrientationChange();
+              if (j > 0) {
+                var s = cloneSprings.shift();
+                s.restLength = spaceY;
+
+              }
+
+
+
+
+
+
+              // Make it collidable
+              //  collision.pool.push( particle );
+
+              // Apply behaviours
+              //  particle.behaviours.push( avoidMouse, pullToCenter, collision );
+
+              // Add to the simulation
+              //   physics.particles.push( particle );
+              // cell[i][j] = particle;
+
+            }
+
+          }
+
+
+      }
 
 
 
