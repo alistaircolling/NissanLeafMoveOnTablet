@@ -2,14 +2,13 @@
 <!DOCTYPE html>
 <html>
 
-<html>
 <head>
 
 <!--    <script src="js/ImprovedNoise.js"></script>
     <script src="js/three.min.js"></script>
     <script src="js/libs/stats.min.js"></script>
     <script src="js/MinimalComps-0.1.min.js"></script> -->
-    <script src="js/TweenLite.min.js"></script>
+    <script src="js/TweenMax.min.js"></script>
    <script src="js/libs/stats.min.js"></script>
 <!--    <script src="js/jquery-1.6.4.min.js"></script> -->
 
@@ -56,11 +55,18 @@
 
 
 <body onLoad="initialize()">
-  <header><img src="images/nissan_logo.png" id="logo"></header>
-  <canvas id="surface" width="100%" height="100%" style='z-index : -1; position: absolute;'></canvas>
-  <div id="container" style='z-index : 1; position: absolute;'></div>
 
-          <div id="page1" class="show">
+
+
+
+  <embed id="portraitInstructions"  src="images/instructions.svg" type="image/svg+xml" style='width:100%; height:100%; opacity:0; position:absolute; z-index:100;'/>
+  <embed id="landscapeInstructions"  src="images/instructionsL.svg" type="image/svg+xml" style='width:100%; height:100%; opacity:0; position:absolute; z-index:101; '/>
+
+  <div id="canvasHolder" style="position: absolute; width:100%;  height:100%; z-index:2;" ></div>
+  <div id="container"  style='z-index : 12; width:100%; height:100%; top:0; left:0; position:absolute; opacity:0'>
+
+          <header><img src="images/nissan_logo.png" id="logo"></header>
+          <div id="page1">
             <div class="text">
             <h1>THE 100% ELECTRIC NEW NISSAN LEAF <br /><span>YOU'LL KNOW IT WHEN YOU FEEL IT</span></h1>
               <p class="list">Zero emissions* | Fuel costs from 2p** | Unique driving experience </p>
@@ -91,13 +97,14 @@
         </div>
         <div class="footer">
 
-        <div class="dots"><ul><li class="dot1">page 1</li><li class="dot2">page 2</li><li class="dot3">page 3</li></ul></div>
+        <div class="dots"><ul><li id="d1" class="dot1">page 1</li><li id="d2" class="dot2">page 2</li><li id="d3" class="dot3">page 3</li></ul></div>
         <div class="button-wrapper">
         <a href="http://www.nissan.co.uk/GB/en/vehicle/electric-vehicles/leaf.html" id="fs">Make the switch</a>
         </div>
         <div class="terms"><p>* While driving<br />
 **  Based on (i) overnight electricity costs (British Gas Clear & Simple Economy 7 unit rates for a customer paying by direct debit as at 14 June 2013, assuming 7 hours of charging at the night rate and one hour on the day rate), and (ii) a range of up to 124 miles per full charge (assuming 95% efficiency). Actual consumption/range may vary due to driving style, road condition, air conditioning and other factors outside our control. A daily standard charge of 15.979p also applies. Information correct at time of publishing. ***  Rapid charging capability is optional on Visia grade.</p></div>
       </div>
+    </div>
 
 
 
@@ -203,6 +210,9 @@
 
       function setOrientation(){
         isPortrait = (window.innerHeight>window.innerWidth)?true:false;
+        var portrait = document.getElementById("portraitInstructions");
+        var landscape = document.getElementById("landscapeInstructions");
+        var instructions;
         if (isPortrait){
           carX = 0;
           currX = 0;
@@ -213,6 +223,9 @@
           offRightPerc = 1.6;
           wheelTargetSize;
           rightMarginPerc = .9;
+          TweenLite.to(landscape, 0, {opacity:0});
+          TweenLite.to(portrait, 0, {opacity:1});
+          instructions = portrait;
 
         }else{
 
@@ -225,16 +238,26 @@
           offRightPerc = 1.6;
           wheelTargetSize;
           rightMarginPerc = .9;
-
-
-
+          TweenLite.to(portrait, 0, {opacity:0});
+          TweenLite.to(landscape, 0, {opacity:1});
+          instructions = landscape;
         }
+
+        TweenLite.to(instructions, 1, {delay:1, opacity:0, onComplete:function(){
+          TweenLite.to(portrait, 0, {zIndex:-50});
+          TweenLite.to(landscape, 0, {zIndex:-51});
+          //  document.getElementById("container").className = "show";
+
+        }});
 
         canvHeigh = window.innerHeight;
         carY = canvHeigh*carInitY;
         canvWid = window.innerWidth;
         carW = canvWid*carWidthPerc;
         carH = canvHeigh*carHeightPerc;
+
+        var cont = document.getElementById("container");
+        TweenLite.to(cont, 0, {opacity:1});
 
       }
 
@@ -249,7 +272,7 @@
         initPhysics();
         initTouchListeners();
 
-            addStats();
+        // addStats();
 
         if (show3D){
            init3D();
@@ -328,7 +351,8 @@
 
         ///SETUP
 
-        example = Sketch.create({container:document.body});
+        example = Sketch.create({container:document.getElementById("canvasHolder")});
+
         example.setup = function() {
 
 
@@ -650,7 +674,7 @@
 				requestAnimationFrame( animate );
 
 				render();
-        stats.update();
+        //      stats.update();
 
 			}
 
@@ -687,19 +711,24 @@
               lastPage = totalPages-1;
             }
             var currDiv = document.getElementById(ids[lastPage]);
-            currDiv.classList.remove('show');
-            currDiv.classList.add('hide');
-            document.body.classList.remove(ids[lastPage]);
-            document.body.classList.add(ids[currentPage]);
+            //  currDiv.classList.remove('show');
+            //        currDiv.classList.add('hide');
+                   document.body.classList.remove(ids[lastPage]);
+             document.body.classList.add(ids[currentPage]);
             var thisD = document.getElementById(ids[currentPage]);
 
             //         console.log("div?:"+thisD);
-            thisD.classList.remove('hide');
-            thisD.classList.add('show');
+            //thisD.classList.remove('hide');
+            //thisD.classList.add('show');
+            TweenLite.to(currDiv, .5, {opacity:0});
+            TweenLite.to(thisD, 1, {delay:2, opacity:1});
 
           }
 
         }
+
+
+
 
       }
 
@@ -869,6 +898,7 @@
       function carAtRight(){
         //       console.log("carAtRight");
         carX = 0-(window.innerWidth*carWidthPerc);
+         showDivs(currentPage);
         animateCarIn();
       }
 
@@ -879,7 +909,7 @@
       function carIsHere(){
         //     console.log("car is here");
         currX = carX;
-             showDivs(currentPage);
+        //             showDivs(currentPage);
         animatingToNextPage = false;
       }
 
