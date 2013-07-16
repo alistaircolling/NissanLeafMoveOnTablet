@@ -322,7 +322,10 @@
         document.addEventListener( 'touchstart', onDocumentTouchStart, false );
         document.addEventListener( 'touchmove', onDocumentTouchMove, false );
         document.addEventListener( 'touchend', onDocumentTouchUp, false );
-       }
+        //orientation listener
+        window.addEventListener('orientationchange', doOnOrientationChange);
+
+      }
 
       function updateCarSize(){
         canvHeigh = window.innerHeight;
@@ -1127,6 +1130,27 @@
         }
         return result;
       }
+
+      function doOnOrientationChange(){
+
+        switch(window.orientation)
+        {
+          case -90:
+          case 90:
+            alert('landscape');
+            break;
+          default:
+            alert('portrait');
+            break;
+        }
+      }
+
+
+
+      // Initial execution if needed
+      doOnOrientationChange();
+
+
 
         </script>
 
