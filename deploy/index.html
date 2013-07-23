@@ -1,0 +1,1286 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<!--    <script src="js/ImprovedNoise.js"></script>
+    <script src="js/three.min.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+    <script src="js/MinimalComps-0.1.min.js"></script> -->
+    <script src="js/TweenMax.min.js"></script>
+   <script src="js/libs/stats.min.js"></script>
+<!--    <script src="js/jquery-1.6.4.min.js"></script> -->
+
+
+  <!---  PHYSICS LIBRARIES   --->
+
+<!--     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="http://cdn.iamwebdeveloper.in/js/stats.js/r11/Stats.js"></script> -->
+    <!-- Core -->
+    <script src="js/compiled/base.js"></script>
+    <script src="js/sketch.min.js"></script>
+    <script src="js/compiled/math/Random.js"></script>
+    <script src="js/compiled/math/Vector.js"></script>
+    <!-- Integratjs/ors -->
+    <script src="js/compiled/engine/integrator/Integrator.js"></script>
+    <script src="js/compiled/engine/integrator/Euler.js"></script>
+    <script src="js/compiled/engine/integrator/ImprovedEuler.js"></script>
+    <script src="js/compiled/engine/integrator/Verlet.js"></script>
+    <!-- Engine -js/-->
+    <script src="js/compiled/engine/Particle.js"></script>
+    <script src="js/compiled/engine/Physics.js"></script>
+    <script src="js/compiled/engine/Spring.js"></script>
+    <!-- Behavioujs/rs -->
+    <script src="js/compiled/behaviour/Behaviour.js"></script>
+    <script src="js/compiled/behaviour/Attraction.js"></script>
+    <script src="js/compiled/behaviour/Collision.js"></script>
+    <script src="js/compiled/behaviour/ConstantForce.js"></script>
+    <script src="js/compiled/behaviour/EdgeBounce.js"></script>
+    <script src="js/compiled/behaviour/EdgeWrap.js"></script>
+    <script src="js/compiled/behaviour/Wander.js"></script>
+
+<!--  <script src="js/renderers/SVGRenderer.js"></script> -->
+
+
+  <!-----  MAY NOT NEED THEM ALL !   ------>
+
+    <link type="text/css" rel="stylesheet" href="styles/reset.css" />
+    <link type="text/css" rel="stylesheet" href="styles/main.css" />
+  <meta http-equiv="cleartype" content="on">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+
+    <title></title>
+</head>
+
+
+<body onLoad="initialize()">
+
+  <div id="whiteCover" style='z-index :9999999 ; width:100%; height:100%; top:0; left:0; position:absolute; opacity:1; background:#ffffff'></div>
+  <div id="canvasHolder" style="position: absolute; width:100%;  height:100%; z-index:2;" ></div>
+  <div id="container"  style='z-index : 12; width:100%; height:100%; top:0; left:0; position:absolute; opacity:0'>
+
+          <header><img src="images/nissan_logo.png" id="logo"></header>
+
+
+          <div class="touchCar" id="touchCarButton">
+
+
+          <object data="images/swipe.svg" width="398px" height="520px" type="image/svg+xml">
+
+          <img src="logo.png" width="186" height="235" alt="hand" />
+
+          </object>
+
+          </div>
+
+
+          <div id="page1">
+            <div class="text">
+            <h1>THE 100% ELECTRIC NEW NISSAN LEAF <br /><span>YOU'LL KNOW IT WHEN YOU FEEL IT</span></h1>
+              <p class="list">Zero emissions* | Fuel costs from 2p** | Unique driving experience </p>
+
+
+            </div>
+          </div>
+        <div  id="page2" class="hide">
+
+          <div class="text">
+          <h1> FUEL COSTS<span> FROM 2p A MILE**</span></h1>
+          <p class="list">Rapid charging*** | Charging network | Home charging</p>
+
+          <p class="desc">The lithium ion battery, it's what makes the Nissan LEAF go. When it comes to charging it, you've got options. Top up at a network of charge points, plug into a growing number of rapid charge points*** that will take LEAF from empty to around 80% full in 30 minutes, or charge at home, at night, when tariffs are low - and get from A to B for coppers.
+          </p>
+        </div>
+        </div>
+        <div id="page3" class="hide">
+
+          <div class="text">
+          <h1> UNIQUE <span> DRIVING EXPERIENCE</span></h1>
+          <p class="list">Responsive | Dynamic | Quietly impressive</p>
+
+          <p class="desc">Say goodbye to engine noise and petrol stations and welcome the unique feeling of accelerating in the 100% electric Nissan LEAF. Experience instant torque, smoothly delivered from the moment your foot touches the pedal. With LEAF, you get incredible performance with ultimate quietness levels and zero emissions when you drive.</p>
+
+        </div>
+
+        </div>
+        <div class="footer">
+
+        <div class="dots"><ul><li id="d1" class="dot1">1</li><li id="d2" class="dot2">2</li><li id="d3" class="dot3">3</li></ul></div>
+        <div class="button-wrapper">
+        <a href="http://m.nissan.co.uk/leaf" id="fs" >Make the switch</a>
+        </div>
+        <div class="terms"><p>* While driving<br />
+**  Based on (i) overnight electricity costs (British Gas Clear & Simple Economy 7 unit rates for a customer paying by direct debit as at 14 June 2013, assuming 7 hours of charging at the night rate and one hour on the day rate), and (ii) a range of up to 124 miles per full charge (assuming 95% efficiency). Actual consumption/range may vary due to driving style, road condition, air conditioning and other factors outside our control. A daily standard charge of 15.979p also applies. Information correct at time of publishing. ***  Rapid charging capability is optional on Visia grade.</p></div>
+      </div>
+    </div>
+
+
+
+
+    <script>
+      var lastOrientation;
+      var totRads = 0;
+      var curvePoints = [];//used to store the positions for mask curve
+      var halfCarWidth = 0;
+      var container, stats;
+
+
+
+			var mesh, plane;
+
+			var mouseX = 0, mouseY = 0;
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+      var targetRotation = 0;
+      var targetRotationOnMouseDown = 0;
+
+      var mouseX = 0;
+      var mouseXOnMouseDown = 0;
+      var car;
+      var isPortrait;
+
+      var firstTouch;
+
+
+      ////CAR VARS
+
+
+      var WHEEL_SCALE = 1; //hack used to get the wheels to be the correct size
+      var WHEEL_WIDTH = 169;
+      var CAR_WIDTH = 1454;
+      var shadow;
+      var carX = 0;
+      var currX = 0;
+      var carWidthPerc = .7;
+      var carHeightPerc = .1;
+      var carInitY = .55;
+      var carInitX = -.04;
+      var offRightPerc = 1.6;
+      var wheelTargetSize;
+      var rightMarginPerc = .9;
+
+
+
+
+
+      var canvas ;//= document.getElementById('surface');
+      var context;// = canvas.getContext('2d');
+
+
+      var canvHeigh = window.innerHeight;
+      var carY = canvHeigh*carInitY;
+      var canvWid = window.innerWidth;
+      var carW = canvWid*carWidthPerc;
+      var carH = canvHeigh*carHeightPerc;
+
+      var currentPage = 0;
+      var totalPages = 3;
+      var animatingToNextPage = false;
+
+      var animTarg = false;
+      var carVisible = true;
+
+      var lastX = 0; //the last recorded x position of the car (carX is the current)
+      var movementX; //the amount to move
+
+      var CAR_ANIM_OFF_DURATION = 1;
+      var CAR_ANIM_IN_DURATION = 1;
+
+      //wheel positoins at full res of car image used
+      var R_WHEEL_X = 1237;
+      var WHEEL_Y = 360;
+
+      var L_WHEEL_X = 517;
+
+
+
+      var SNAP_BACK_DURATION = .5;
+
+      var show3D = false;
+
+      var lWheel, rWheel;
+
+      ////PHYSICS
+
+      var physics, avoidMouse, pullToCenter, collision, example, cell;
+      //TODO- use a quality variable that sets the number of squares so the number of rows and columns are calculated for the orientation
+      var COLUMNS = 6;
+      var ROWS = 8;
+      var PARTICLE_RADIUS = 20;
+      var heldParticles;
+      var scaledRatio = 1;
+
+     document.body.className += " page1";
+
+     function initialize(){
+       //      console.log("ON LOAD");
+       //         document.body.classList.add = 'page1';
+           fadeCover();
+         setOrientation();
+         initCanvas();
+      }
+
+      function setOrientation(){
+        isPortrait = (window.innerHeight>window.innerWidth)?true:false;
+       // var portrait = document.getElementById("portraitInstructions");
+       // var landscape = document.getElementById("landscapeInstructions");
+       // var instructions;
+        if (isPortrait){
+          carX = 0;
+          currX = 0;
+          carWidthPerc = 1;
+          carHeightPerc = .3;
+          carInitY = .5;
+          carInitX = -.04;
+          offRightPerc = 1.6;
+          wheelTargetSize;
+          rightMarginPerc = .9;
+         // TweenLite.to(landscape, 0, {opacity:0});
+         // TweenLite.to(portrait, 0, {opacity:1});
+         // instructions = portrait;
+
+        }else{
+
+          carX = 0;
+          currX = 0;
+          carWidthPerc = .7;
+          carHeightPerc = .3;
+          carInitY = .45;
+          carInitX = -.04;
+          offRightPerc = 1.6;
+          wheelTargetSize;
+          rightMarginPerc = .9;
+         // TweenLite.to(portrait, 0, {opacity:0});
+          //TweenLite.to(landscape, 0, {opacity:1});
+        //  instructions = landscape;
+        }
+
+  /*      TweenLite.to(instructions, 1, {delay:1, opacity:0, onComplete:function(){
+          TweenLite.to(portrait, 0, {zIndex:-50});
+          TweenLite.to(landscape, 0, {zIndex:-51});
+          //  document.getElementById("container").className = "show";
+
+        }});
+*/
+        canvHeigh = window.innerHeight;
+        carY = canvHeigh*carInitY;
+        canvWid = window.innerWidth;
+        carW = canvWid*carWidthPerc;
+        carH = canvHeigh*carHeightPerc;
+
+                var p1 = document.getElementById("page1");
+        p1.style.backgroundImage = "none";
+        var cont = document.getElementById("container");
+
+        TweenLite.to(cont, 0, {opacity:0});
+        TweenLite.to(cont, 1, {opacity:1, delay:1});
+
+        fadeCover();
+
+
+
+
+      }
+
+
+
+       function fadeCover(){
+
+
+        var cover = document.getElementById("whiteCover");
+        TweenLite.to(cover, 0, {opacity:1, zIndex:999999999});
+         TweenLite.to(cover, 1, {opacity:0, delay: 1, zIndex:-100, onComplete:function(){
+		cover.style.display  = "none";
+}});
+
+
+       }
+
+
+      function initCanvas(){
+        initGraphics();
+
+        //  initTouch();
+        initPhysics();
+        initTouchListeners();
+
+        // addStats();
+
+        if (show3D){
+           init3D();
+        }
+
+
+          animate();
+
+        //   addControls();
+      }
+
+      function initGraphics(){
+        car = new Image();
+        car.src = "images/car.png";
+
+        shadow = new Image();
+        shadow.src = "images/shadow.png";
+
+        lWheel = new Image();
+        lWheel.src = "images/wheelz.png";
+        rWheel = new Image();
+        rWheel.src = "images/wheelz.png";
+      }
+
+      function addStats(){
+        container = document.getElementById( 'container' );
+        stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );
+
+      }
+
+       function initTouch(){
+
+        canvas = document.getElementById('surface');
+        context = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+         // document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+         //   document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+
+       }
+
+       function initTouchListeners(){
+        document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+        document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+        document.addEventListener( 'touchend', onDocumentTouchUp, false );
+        //orientation listener
+        window.addEventListener('orientationchange', doOnOrientationChange);
+
+      }
+
+      function updateCarSize(){
+        canvHeigh = window.innerHeight;
+        carY = canvHeigh*carInitY;
+        canvWid = window.innerWidth;
+        carW = canvWid*carWidthPerc;
+        carH = canvHeigh*carHeightPerc;
+
+      }
+
+
+      function initPhysics(){
+
+        //    document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+
+        physics = new Physics();
+        physics.integrator = new Verlet();
+        avoidMouse = new Attraction();
+        pullToCenter = new Attraction();
+        collision = new Collision();
+        heldParticles = [];
+        setupExample();
+      }
+
+      function setupExample(){
+
+        ///SETUP
+
+        example = Sketch.create({container:document.getElementById("canvasHolder")});
+
+        example.setup = function() {
+
+
+          var spaceX = Math.floor(window.innerWidth/COLUMNS);
+          var spaceY = Math.floor(window.innerHeight/ROWS);
+          var s, stiffness, size;
+          size = 1;
+          stiffness = .2;
+          cell = [];
+          for ( var i = 0; i < COLUMNS+1; i++ ) {
+            //create a new array at each index
+            cell[i] = [];
+            for( var j = 0; j<ROWS+1; j++){
+
+              var particle = new Particle( 10 );
+              //fix the top ones
+              if (j==0 || j == ROWS || i == COLUMNS){
+                particle.pinned = true;
+                particle.fixed = true;//j === 0;
+              }
+              var position = new Vector( spaceX*i, spaceY*j );
+              particle.moveTo( position );
+              particle.setRadius( PARTICLE_RADIUS );
+
+              if (i>0){
+                s = new Spring(particle, cell[i-1][j], spaceX, stiffness );
+                physics.springs.push(s);
+              }
+
+
+              if (j > 0) {
+                s = new Spring(particle, cell[i][j - 1], spaceY, stiffness);
+                physics.springs.push(s);
+              }
+
+
+
+              // Make it collidable
+              //  collision.pool.push( particle );
+
+              // Apply behaviours
+              //  particle.behaviours.push( avoidMouse, pullToCenter, collision );
+
+              // Add to the simulation
+              physics.particles.push( particle );
+              cell[i][j] = particle;
+
+            }
+
+          }
+
+
+          example.fillStyle = '#ff00ff';
+          // }
+
+
+
+        }
+
+
+
+      }
+
+			function init3D() {
+
+
+				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = -1320;
+
+				scene = new THREE.Scene();
+        var material = new THREE.MeshBasicMaterial({ color: 0xffffff, doubleSided: true});
+
+        material.doubleSided = true;
+        material.side = THREE.DoubleSide;
+				var quality = 8, step = 1024 / quality;
+				plane = new THREE.PlaneGeometry( 768, 1024, COLUMNS , ROWS  );
+        //  plane.applyMatrix( new THREE.Matrix4().makeRotationX( - Math.PI / 2 ) );
+        //   console.log(plane);
+				for ( var i = 0, l = plane.vertices.length; i < l; i ++ ) {
+
+					var x = i % COLUMNS, y = ~~ ( i / COLUMNS );
+          plane.vertices[ i ].y = y* (window.innerHeight/ROWS);
+          plane.vertices[ i ].x = x* (window.innerWidth/COLUMNS);
+          plane.vertices[ i ].z = 0;
+
+
+				}
+				plane.computeVertexNormals();
+        plane.doubleSided = true;
+        plane.computeFaceNormals();
+        //        plane.computeCentroids();
+        plane.__dirtyNormals = true;
+
+
+				mesh = new THREE.Mesh( plane, material );
+        mesh.doubleSided = true;
+				scene.add( mesh );
+
+        //				renderer = new THREE.CanvasRenderer();
+        renderer = new THREE.SVGRenderer();
+          renderer.setSize( window.innerWidth, window.innerHeight );//TODO - reset size of renderer on rotate?
+				container.appendChild( renderer.domElement );
+        container.setAttribute('style', 'z-index: -10; position:absolute');
+
+
+        mesh.rotation.y = Math.PI;//  *.5;
+			}
+
+      var cameraXSlider;
+      var meshYRotSlider;
+      var meshXRotSlider;
+      var meshZRotSlider;
+
+      var containerControls;
+
+      function addControls(){
+        containerControls = document.getElementById( 'containerControls' );
+        cameraZSlider = new mc.HSlider(containerControls, 10, 80, onCamZSliderChange)
+        .bindLabel(new mc.Label(containerControls, 15, 100).setAlign("center"), 0);
+        cameraZSlider.setMinimum( -6000 );
+    		cameraZSlider.setMaximum( 6000 );
+
+        meshYRotSlider = new mc.HSlider(containerControls, 10, 100, onMeshRotYChange)
+        .bindLabel(new mc.Label(containerControls, 15, 140).setAlign("center"), 0);
+        meshYRotSlider.setMinimum( -Math.PI*2 );
+    		meshYRotSlider.setMaximum(Math.PI*2);
+
+        meshXRotSlider = new mc.HSlider(containerControls, 10, 140, onMeshRotXChange)
+        .bindLabel(new mc.Label(containerControls, 15, 140).setAlign("center"), 0);
+        meshXRotSlider.setMinimum( -Math.PI*2 );
+    		meshXRotSlider.setMaximum(Math.PI*2);
+
+        meshZRotSlider = new mc.HSlider(containerControls, 10, 180, onMeshRotZChange)
+        .bindLabel(new mc.Label(containerControls, 15, 140).setAlign("center"), 0);
+        meshZRotSlider.setMinimum( -Math.PI*2 );
+    		meshZRotSlider.setMaximum(Math.PI*2);
+
+
+      }
+
+      function onCamZSliderChange( e ){
+
+        camera.position.z = cameraZSlider.getValue();
+        //       console.log("Camera z change:"+camera.position.z);
+    	}
+
+      function onMeshRotYChange( e ){
+
+        mesh.rotation.y = meshYRotSlider.getValue();
+        //    console.log("mesh rot Y:"+ mesh.rotation.y);
+    	}
+
+       function onMeshRotXChange( e ){
+
+        mesh.rotation.x = meshXRotSlider.getValue();
+         //   console.log("mesh rot x:"+ mesh.rotation.x);
+    	}
+
+       function onMeshRotZChange( e ){
+
+        mesh.rotation.z = meshZRotSlider.getValue();
+         //        console.log("mesh rot z:"+ mesh.rotation.z);
+    	}
+
+
+
+
+
+      ///////   MOUSE LISTENERS   //////////////
+
+      function onDocumentMouseDown(){
+        //      console.log("m down");
+        event.preventDefault();
+        mouseXOnMouseDown = event.clientX - windowHalfX;
+        targetRotationOnMouseDown = targetRotation;
+
+      }
+
+
+      function onDocumentMouseMove( e ) {
+        //          console.log("mmove");
+          mouseX = event.clientX - windowHalfX;
+          targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
+        //   console.log(targetRotation);
+      }
+
+      function onDocumentMouseUp( event ) {
+
+          document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+          document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+          document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+
+      }
+
+
+     function onDocumentMouseOut( event ) {
+
+          document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+          document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+          document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+
+      }
+
+    var tDown = false;
+
+      //////////  TOUCH LISTENERS //////////////////
+
+
+      function onDocumentTouchStart(event){
+        tDown = true;
+        lastX = currX;
+         if (!firstTouch){
+
+          var hand = document.getElementById("touchCarButton");
+          TweenLite.to(hand, 2, {opacity:0});
+          firstTouch = true;
+        }
+//
+  //     event.preventDefault();
+      }
+
+      function onDocumentTouchUp(event){
+
+        //   console.log("t up");
+        tDown = false;
+         var i, particle, top = heldParticles.length;
+        /*        for(var i=0; i<top; i++){
+          particle  = heldParticles[i];
+          particle.fixed = false;
+
+        }*/
+        //clean up any particles that may have been missed
+        var topPart = physics.particles.length;
+        for(i=0; i<topPart; i++){
+          if (!physics.particles[i].pinned){
+             physics.particles[i].fixed = false;
+          }
+
+        }
+        snapBack();
+        movedX = 0;
+       event.preventDefault();
+      }
+
+
+      var currX = 0;
+      var movedX = 0;
+
+      function onDocumentTouchMove(event){
+
+        var x = event.targetTouches[0].pageX ,
+        y = event.targetTouches[0].pageY+100;
+
+        if (!animTarg){
+          currX = x;
+          movedX = currX - lastX;
+          lastX = x;
+        }
+        //move particles
+//         var i, particle, top = heldParticles.length;
+//         for(var i=0; i<top; i++){
+//           particle  = heldParticles[i];
+//           particle.pos.x += movedX;
+
+//         }
+        var i, part, top = physics.particles.length;
+        for(var i=0; i<top; i++){
+          part = physics.particles[i];
+          if (part.underCar){
+            part.fixed = true;
+              part.pos.x += movedX;
+          }else{
+             if (!part.pinned){
+                 part.fixed = false;
+             }
+          }
+
+        }
+
+        event.preventDefault();
+
+      }
+
+      function snapBack(){
+        //go through the particles at the left hand side and animate back to their pos...
+        var i, part, targPosY;
+        for(i=0; i<ROWS; i++){
+            part = physics.particles[i];
+            part.snapper = true;
+            targPosY = (window.innerHeight/ROWS)*i;
+            part.fixed = true;
+          TweenLite.to(part.pos, SNAP_BACK_DURATION, {x:0, y:targPosY});
+        }
+
+      }
+
+      //////////////////////////////////////
+
+      function drawCircle(x, y, radius, color){
+        canvas.width  =canvas.width;
+        context.beginPath();
+        context.fillStyle = color;
+        context.arc(x,y,radius,0,Math.PI*2);
+        context.fill();
+      }
+
+
+
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+        //      stats.update();
+
+			}
+
+      //THIS FUNCTION WILL BE CALLED WHEN THE CAR HAS REACHED THE RIGHT MARGIN
+
+      function showNextPage(){
+        //increment or reset the page number
+        if (currentPage<totalPages-1){
+          currentPage++;
+          //        console.log("display  " + currentPage);
+        }else{
+          currentPage = 0;
+        }
+
+
+        //     showDivs(currentPage);//add code to show correct content here:
+
+
+
+      }
+
+
+
+
+     function showDivs() {
+       var ids = ["page1", "page2", "page3"];
+       // console.log(ids);
+        for(var i = 0; i < ids.length; i++) {
+
+
+          if(i == currentPage){
+            var lastPage = currentPage-1;
+            if (lastPage<0){
+              lastPage = totalPages-1;
+            }
+            var currDiv = document.getElementById(ids[lastPage]);
+            //  currDiv.classList.remove('show');
+            //        currDiv.classList.add('hide');
+             document.body.classList.remove(ids[lastPage]);
+             document.body.classList.add(ids[currentPage]);
+
+            var thisD = document.getElementById(ids[currentPage]);
+
+            //         console.log("div?:"+thisD);
+            //thisD.classList.remove('hide');
+            //thisD.classList.add('show');
+            TweenLite.to(currDiv, .5, {opacity:0});
+            TweenLite.to(thisD, 1, {delay:2, opacity:1});
+
+          }
+
+        }
+
+
+
+
+      }
+
+
+      function drawMargin(){
+
+        context.beginPath();
+        context.fillStyle = "rgba(104, 255, 109, 0.5)";
+        context.fillRect(window.innerWidth*rightMarginPerc, 0, window.innerWidth*(1-rightMarginPerc), window.innerHeight);
+        context.fill();
+
+      }
+
+      function drawShadow(x, y, ratio){
+        var i, part, top, part1, part2;
+        //clone the array
+        var myA = this.curvePoints.slice(0);
+        top = myA.length;
+
+
+        //example.strokeStyle = '#ff00ff';
+        //example.fillStyle = '#0000ff';
+        //example.lineWidth = 5;
+        example.save();
+        example.beginPath();
+        example.moveTo(0,0);
+
+        for(i = 0; i < top-1; i ++){
+
+          example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].y, curvePoints[i].xc, curvePoints[i].yc);
+        }
+
+        //  example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].x, curvePoints[i].part2x, curvePoints[i].part2y);
+
+        //       example.quadraticCurveTo(curvePoints[i].x, curvePoints[i].y, curvePoints[i].part2x, curvePoints[i].part2y);
+
+        if (top>0){
+          var obj = curvePoints[i];
+          example.quadraticCurveTo(obj.x, obj.y, obj.part2x, obj.part2y);
+        }
+
+
+        example.lineTo(0 , window.innerHeight);
+        example.lineTo(window.innerWidth, window.innerHeight);
+        example.lineTo(window.innerWidth, 0);
+        example.lineTo(0, 0);//window.innerHeight);
+        //    example.closePath();
+        //example.stroke();
+         example.clip();
+        example.drawImage(shadow, x, y, ratio*shadow.width, ratio*shadow.height);
+        example.restore();
+      }
+
+      //width dictates height
+      function drawCar(x, y, width, height){
+
+
+        var targH, wHRatio, setX = x-(width*.5);
+
+        scaledRatio = width/CAR_WIDTH;
+        wHRatio = CAR_WIDTH/car.height;
+        targH = width/wHRatio;
+
+        //draw shadow before car
+         drawShadow(setX, y, scaledRatio);
+
+        example.drawImage( car, x-(width*.5), y, width, targH);
+        drawWheels(x-(width*.5),y, scaledRatio);
+        //used when drawing wheels when aniamating
+        halfCarWidth = width*.5;
+
+        /*
+        example.fillStyle = color;
+        example.beginPath();
+        example.fillRect(x,y,width,height);
+        example.fill();*/
+      }
+
+
+
+
+      function drawWheels(x,y,scale){
+        //console.log("dw:"+counter);
+        //rotation in radiams
+        var  rotRads, wheelDiam, wheelCirc;
+
+        //this is a hack as wheels are not scaling correctly for some reason
+        wheelTargetSize = WHEEL_WIDTH*scale;
+        //   console.log("scale:"+scale+" targ size:"+wheelTargetSize);
+
+        if (movedX>-2&& movedX<2){
+            movedX = 0;
+        }
+
+        wheelDiam = wheelTargetSize;
+        wheelCirc = Math.PI*wheelDiam*.5;
+        rotRads = movedX/wheelCirc;
+
+        if (!isNaN(rotRads)){
+          totRads += rotRads;
+          //  console.log(totRads);
+        }else{
+
+          // rotRads = 0;
+          //totRads = 0;
+        }
+
+
+
+        example.save();
+        example.translate(x+(L_WHEEL_X*scale),y+(WHEEL_Y*scale));
+        example.rotate(totRads);
+        example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
+        example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
+        example.restore();
+
+
+        example.save();
+        example.translate(x+(R_WHEEL_X*scale),y+(WHEEL_Y*scale));
+        example.rotate(totRads);
+        example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
+        example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
+        example.restore();
+
+      }
+
+      function resetCarPos(){
+        //        console.log("reset");
+        animatingToNextPage = true;
+        animateCarOffRight();
+        showNextPage(); // TODO move to when car is off the pagew
+      }
+
+
+      function animateCarOffRight(){
+        var targOff = window.innerWidth*offRightPerc;
+        //       console.log("anim offright:"+targOff);
+        TweenLite.to(this, CAR_ANIM_OFF_DURATION, {carX:targOff, onComplete:carAtRight, onUpdate:forceWheels});
+
+      }
+
+      function forceWheels(){
+        var x = carX-halfCarWidth;
+        var y = carY;
+        var scale = scaledRatio;
+        totRads += .05;
+
+
+        example.save();
+        example.translate(x+(L_WHEEL_X*scale),y+(WHEEL_Y*scale));
+        example.rotate(totRads);
+        example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
+        example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
+        example.restore();
+
+
+        example.save();
+        example.translate(x+(R_WHEEL_X*scale),y+(WHEEL_Y*scale));
+        example.rotate(totRads);
+        example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
+        example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
+        example.restore();
+
+
+      }
+
+      function carAtRight(){
+        //       console.log("carAtRight");
+        carX = 0-(window.innerWidth*carWidthPerc);
+         showDivs(currentPage);
+        animateCarIn();
+      }
+
+      function animateCarIn(){
+        TweenLite.to(this, CAR_ANIM_IN_DURATION, {carX:window.innerWidth*carInitX, onComplete:carIsHere, onUpdate:forceWheels});
+      }
+
+      function carIsHere(){
+        //     console.log("car is here");
+        currX = carX;
+        //             showDivs(currentPage);
+        animatingToNextPage = false;
+      }
+
+      function drawCurtain(){
+        var i, part, top = ROWS-1,
+          part1, part2, xc, xy, pointsObj;
+
+        curvePoints = [];
+
+        example.strokeStyle = '#ffffff';
+        example.fillStyle = '#ffffff';
+        example.lineWidth = 5;
+        example.beginPath();
+        example.moveTo(0,0);
+
+        for(i = 0; i < top; i ++){
+          part1 = physics.particles[i];
+          part2 = physics.particles[i+1];
+          //      example.lineTo(part.pos.x, part.pos.y);
+          xc = (part1.pos.x + part2.pos.x) / 2;
+          yc = (part1.pos.y + part2.pos.y) / 2;
+          example.quadraticCurveTo(part1.pos.x, part1.pos.y, xc, yc);
+          pointsObj = {x:part1.pos.x, y:part1.pos.y, xc:xc, yc:yc, part2x:part2.pos.x, part2y:part2.pos.y};
+          curvePoints.push(pointsObj);
+        }
+
+        //     example.quadraticCurveTo(part1.pos.x, part1.pos.y, part2.pos.x, part2.pos.y);
+        //add the final one
+        pointsObj = {x:part1.pos.x, y:part1.pos.y, xc:xc, yc:yc, part2x:part2.pos.x, part2y:part2.pos.y};
+        curvePoints.push(pointsObj);
+
+        example.quadraticCurveTo( part2.pos.x, part2.pos.y, 0, window.innerHeight);
+        example.lineTo(window.innerWidth, window.innerHeight);
+        example.lineTo(window.innerWidth, 0);
+        example.lineTo(0, 0);//window.innerHeight);
+        example.fill();
+        example.stroke();
+
+      }
+
+
+      function drawPhysics(){
+
+        //          physics.step();
+          var fillStyle = '#00ff00', particles, n;
+          //render particles
+          for( var i=0, n = physics.particles.length; i<n; i++){
+
+            var particle = physics.particles[i];
+            example.beginPath();
+            if (particle.underCar){
+             example.fillStyle = fillStyle;
+            }else if (particle.snapper){
+             example.fillStyle = '00f7ff';
+            }else{
+              example.fillStyle = 'ff00ff';
+            }
+            example.arc( particle.pos.x, particle.pos.y, particle.radius, 0, Math.PI * 2 );
+            example.fill();
+            example.closePath();
+
+          }
+          var spring;
+          //render springs
+          for (i=0; i<physics.springs.length; i++){
+            example.strokeStyle = '#ffff00';
+            spring = physics.springs[i];
+            example.beginPath();
+            example.moveTo(spring.p1.pos.x, spring.p1.pos.y);
+            example.lineTo(spring.p2.pos.x, spring.p2.pos.y);
+            example.closePath();
+            example.stroke();
+          }
+
+      }
+
+
+
+
+
+      function checkPointsInsideCar(){
+        var part,i, retA = [];
+        for( i= 0; i<physics.particles.length; i++){
+          part = physics.particles[i];
+          //I HAVE SUBTRACED HALF CAR WIDTH AS THE CAR IS DRAWN HALF WDITH TO THE RIGHT
+          //only add if the mouse is down and particle isn't pinned
+          if (point_in_rectangle(part.pos.x, part.pos.y-(carH*.5), carX-(carW*.5), carY-(carH*.5), carX+(carW*.5), carY+(carH*.5)) && !part.pinned){
+            //          if (point_in_rectangle(part.pos.x, part.pos.y-(carH*.5), carX, carY-(carH*.5), carX+carW, carY+(carH*.5)) && !part.pinned){
+            if (tDown){
+              part.underCar = true;
+
+              retA.push(part);
+            }
+          }else{
+            part.underCar = false;
+          }
+        }
+        return retA;
+      }
+
+
+      function updateVertices(){
+        // console.log("u");
+        var i, particle, vertex, pos, theX, theY,
+            ratioX = 1.8,
+            ratioY = 1.8;
+
+        for(i = 0; i<physics.particles.length; i++){
+          vertex = mesh.geometry.vertices[i];
+          particle = physics.particles[i];
+          pos = particle.pos;
+          //TODO figure out how to make the offsets dynamic
+          theX = pos.x;//-650;
+          theY = pos.y-768;
+
+          theX *= ratioX;
+          theY *= ratioY;
+
+
+          //   theX = pos.x;
+          // theY = pos.y;
+          vertex.x = theX-700;
+          vertex.y = theY+500;
+
+          //          part = physics.particles[i];
+          //console.log(physics.particles[i]);
+        //  vertex.x = physics.particles[i].pos.x;
+          //          plane.vertices[i] = vertex;
+        }
+        plane.computeVertexNormals();
+        plane.computeFaceNormals();
+        //        plane.computeCentroids();
+        plane.__dirtyNormals = true;
+
+      }
+
+
+
+
+      function checkOrientation(){
+
+         if ( window.orientation !== lastOrientation){
+           //      alert("change");
+            var whiteCov = document.getElementById("whiteCover");
+           TweenLite.to(whiteCov, 0, {opacity:1});
+           lastOrientation = window.orientation;
+
+         }
+
+      }
+
+			function render() {
+
+        //  checkOrientation();
+        //clear canvas
+        //    canvas.width = canvas.width;
+        physics.step();
+        if (show3D) {
+          updateVertices();
+        }
+
+        heldParticles = checkPointsInsideCar();
+        //       drawMargin();
+        if (!show3D){
+          //      drawPhysics();
+           if (physics.particles.length>0){
+                drawCurtain();
+           }
+        }
+        updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
+
+        if (!animatingToNextPage){
+          //calculate new car pos
+
+          var targX = currX-((currX-carX)*.5);
+          movementX = currX - targX;
+          currX = targX;
+          carX = targX;
+
+          if (targX>(rightMarginPerc*canvWid)){
+            tarX = carX;
+            resetCarPos();
+          }
+
+              drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
+
+        }else{
+
+             drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
+
+        }
+
+        // mesh.rotation.y += 0.06; n.x);
+        if (show3D){
+          camera.lookAt( scene.position );
+          renderer.render( scene, camera );
+        }
+			}
+
+
+      //////////////// UTILITY FUNCTIONS
+
+      function between(min, p, max){
+        result = false;
+
+        if ( min < max ){
+          if ( p > min && p < max ){
+            result = true;
+          }
+        }
+
+        if ( min > max ){
+          if ( p > max && p < min){
+            result = true
+          }
+        }
+
+        if ( p == min || p == max ){
+          result = true;
+        }
+
+        return result;
+      }
+
+      function point_in_rectangle( x, y, left, top, right, bottom){
+        result = false;
+
+        if ( between(left,x,right) && between(top,y,bottom ) ){
+          result = true;
+        }
+        return result;
+      }
+
+     function doOnOrientationChange(){
+       //   fadeCover();
+
+        switch(window.orientation)
+        {
+          case -90:
+          case 90:
+            //   alert('landscape width:'+window.innerWidth);
+            break;
+          default:
+            //alert('portrait width:'+window.innerWidth);
+            break;
+        }
+        //force canvas to resize
+        var canvH = document.getElementById("canvasHolder");
+        canvH.width = window.innerWidth;
+        canvH.height = window.innerHeight;
+        setOrientation();
+
+        /*
+
+        // increase height to get rid off ios address bar
+        $("#mainHolder").height($(window).height() + 60);
+
+        var width = $("#mainHolder").width();
+        var height = $("#mainHolder").height();
+
+
+        var cheight = height - 20; // subtract the fix div height
+        var cwidth = width;
+
+        // set canvas width and height
+        $("#canvasHolder").attr('width', cwidth);
+        $("#canvasHolder").attr('height', cheight);
+*/
+        resetParticlePositions();
+      }
+
+      function resetParticlePositions(){
+
+        var spaceX = Math.floor(window.innerWidth/COLUMNS);
+        var spaceY = Math.floor(window.innerHeight/ROWS);
+
+        var clone = physics.particles.slice(0);
+        var cloneSprings = physics.springs.slice(0);
+
+        for ( var i = 0; i < COLUMNS+1; i++ ) {
+            //create a new array at each index
+            cell[i] = [];
+            for( var j = 0; j<ROWS+1; j++){
+
+              var particle = clone.shift();
+              //fix the top ones
+              if (j==0 || j == ROWS || i == COLUMNS){
+                particle.pinned = true;
+                particle.fixed = true;//j === 0;
+              }
+              var position = new Vector( spaceX*i, spaceY*j );
+              particle.moveTo( position );
+              particle.setRadius( PARTICLE_RADIUS );
+
+              if (i>0){
+                var s = cloneSprings.shift();
+                s.restLength = spaceX;
+
+              }
+
+
+              if (j > 0) {
+                var s = cloneSprings.shift();
+                s.restLength = spaceY;
+
+              }
+
+
+
+
+
+
+              // Make it collidable
+              //  collision.pool.push( particle );
+
+              // Apply behaviours
+              //  particle.behaviours.push( avoidMouse, pullToCenter, collision );
+
+              // Add to the simulation
+              //   physics.particles.push( particle );
+              // cell[i][j] = particle;
+
+            }
+
+          }
+
+
+      }
+
+
+
+        </script>
+
+
+
+
+
+</body>
+</html>
