@@ -292,10 +292,8 @@
 
 
         var cover = document.getElementById("whiteCover");
-        TweenLite.to(cover, 0, {opacity:1, zIndex:999999999});
-         TweenLite.to(cover, 1, {opacity:0, delay: 1, zIndex:-100, onComplete:function(){
-		cover.style.display  = "none";
-}});
+        TweenLite.to(cover, 0, {opacity:1});
+         TweenLite.to(cover, 1, {opacity:0, delay: 1});
 
 
        }
@@ -609,8 +607,8 @@
           TweenLite.to(hand, 2, {opacity:0});
           firstTouch = true;
         }
-//
-  //     event.preventDefault();
+
+      // event.preventDefault();
       }
 
       function onDocumentTouchUp(event){
@@ -633,7 +631,7 @@
         }
         snapBack();
         movedX = 0;
-       event.preventDefault();
+        //  event.preventDefault();
       }
 
 
