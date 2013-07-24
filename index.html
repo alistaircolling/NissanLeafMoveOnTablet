@@ -68,13 +68,16 @@
           <div class="touchCar" id="touchCarButton">
 
 
-          <object data="images/swipe.svg" width="398px" height="520px" type="image/svg+xml">
+            <!--          <object data="images/swipe.svg" width="398px" height="520px" type="image/svg+xml"> -->
+            <object data="images/hand.svg" width="398px" height="520px" type="image/svg+xml" id="handMove" ></object>
+            <object id="handArrow" data="images/arrow.svg" width="398px" height="520px" type="image/svg+xml">     </object>
 
-          <img src="logo.png" width="186" height="235" alt="hand" />
+    <!--      <img src="logo.png" width="186" height="235" alt="hand" /> -->
 
-          </object>
+
 
           </div>
+
 
 
           <div id="page1">
@@ -214,6 +217,7 @@
       var PARTICLE_RADIUS = 20;
       var heldParticles;
       var scaledRatio = 1;
+      var animHand = true;
 
      document.body.className += " page1";
 
@@ -223,6 +227,35 @@
            fadeCover();
          setOrientation();
          initCanvas();
+       moveHand();
+      }
+
+      function moveHand(){
+        if (animHand){
+        var hand = document.getElementById("handMove");
+        TweenLite.to(hand, 2, {x:200, delay:2, onComplete:fadeHand});
+        }
+
+
+      }
+
+      function fadeHand(){
+        console.log("FH");
+        if (animHand){
+        var hand = document.getElementById("handMove");
+        TweenLite.to(hand, 1, {opacity:0, onComplete:showHand});
+        }
+
+      }
+
+       function showHand(){
+        if (animHand){
+        console.log("SH");
+        var hand = document.getElementById("handMove");
+       TweenLite.to(hand, 0, {x:0});
+        TweenLite.to(hand, 1, {opacity:1, onComplete:moveHand});
+        }
+
       }
 
       function setOrientation(){
@@ -581,9 +614,10 @@
 
          if (!firstTouch){
 
-          var hand = document.getElementById("touchCarButton");
+          var hand = document.getElementById("handMove");
           TweenLite.to(hand, 2, {opacity:0});
           firstTouch = true;
+           animHand = false;
         }
 
 

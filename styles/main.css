@@ -144,14 +144,17 @@ body {
 }
 
 .touchCar {
-  
-  position:absolute;
-  width: 398px; 
-  height:520px;
-  left:30%; 
-  top:25%;
-}
 
+  position:absolute;
+  width: 398px;
+  height:520px;
+  left:35%;
+  top:35%;
+}
+#handArrow {
+  position:absolute;
+    top:-10%;
+}
 
 
 
@@ -645,6 +648,17 @@ h1 {
 /* iPads (portrait) ----------- */
 @media only screen  and (min-device-width : 768px)  and (max-device-width : 1024px) and (orientation : portrait)  {
 /* Styles */
+
+
+.touchCar {
+
+  position:absolute;
+  width: 398px;
+  height:520px;
+  left:30%;
+  top:25%;
+}
+
 
 
 #logo {
