@@ -110,7 +110,7 @@
 
         <div class="dots"><ul><li id="d1" class="dot1">1</li><li id="d2" class="dot2">2</li><li id="d3" class="dot3">3</li></ul></div>
         <div class="button-wrapper">
-        <a href="http://m.nissan.co.uk/leaf" id="fs" >Make the switch</a>
+        <a href="http://bs.serving-sys.com/BurstingPipe/adServer.bs?cn=tf&c=20&mc=click&pli=7473449&PluID=0&ord=[timestamp]&mb=1&ck=1" id="fs" >Make the switch</a>
         </div>
         <div class="terms"><p>* While driving<br />
 **  Based on (i) overnight electricity costs (British Gas Clear & Simple Economy 7 unit rates for a customer paying by direct debit as at 14 June 2013, assuming 7 hours of charging at the night rate and one hour on the day rate), and (ii) a range of up to 124 miles per full charge (assuming 95% efficiency). Actual consumption/range may vary due to driving style, road condition, air conditioning and other factors outside our control. A daily standard charge of 15.979p also applies. Information correct at time of publishing. ***  Rapid charging capability is optional on Visia grade.</p></div>
@@ -196,6 +196,7 @@
 
       var L_WHEEL_X = 517;
 
+      var allowMove = false;
 
 
       var SNAP_BACK_DURATION = .5;
@@ -558,40 +559,6 @@
 
 
 
-      ///////   MOUSE LISTENERS   //////////////
-
-      function onDocumentMouseDown(){
-        //      console.log("m down");
-        event.preventDefault();
-        mouseXOnMouseDown = event.clientX - windowHalfX;
-        targetRotationOnMouseDown = targetRotation;
-
-      }
-
-
-      function onDocumentMouseMove( e ) {
-        //          console.log("mmove");
-          mouseX = event.clientX - windowHalfX;
-          targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
-        //   console.log(targetRotation);
-      }
-
-      function onDocumentMouseUp( event ) {
-
-          document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-          document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-          document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-
-      }
-
-
-     function onDocumentMouseOut( event ) {
-
-          document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-          document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-          document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-
-      }
 
     var tDown = false;
 
@@ -599,8 +566,19 @@
 
 
       function onDocumentTouchStart(event){
+
         tDown = true;
         lastX = currX;
+         var x = event.targetTouches[0].pageX ,
+        y = event.targetTouches[0].pageY;
+        if(y>carY-100){
+          allowMove = true;
+                event.preventDefault();
+
+        }else{
+          allowMove = false;
+        }
+
          if (!firstTouch){
 
           var hand = document.getElementById("touchCarButton");
@@ -608,10 +586,12 @@
           firstTouch = true;
         }
 
-      // event.preventDefault();
+
+
       }
 
       function onDocumentTouchUp(event){
+        allowMove = false;
 
         //   console.log("t up");
         tDown = false;
@@ -640,6 +620,7 @@
 
       function onDocumentTouchMove(event){
 
+        if (allowMove){
         var x = event.targetTouches[0].pageX ,
         y = event.targetTouches[0].pageY+100;
 
@@ -648,13 +629,7 @@
           movedX = currX - lastX;
           lastX = x;
         }
-        //move particles
-//         var i, particle, top = heldParticles.length;
-//         for(var i=0; i<top; i++){
-//           particle  = heldParticles[i];
-//           particle.pos.x += movedX;
 
-//         }
         var i, part, top = physics.particles.length;
         for(var i=0; i<top; i++){
           part = physics.particles[i];
@@ -668,8 +643,17 @@
           }
 
         }
+        //only stop the event if over the car....
+        //        console.log(carY, carH);
+        //    if (y>(carY+carH)){
 
-        event.preventDefault();
+           event.preventDefault();
+        }else{
+          console.log("not allowed to move");
+        }
+        /*}else{
+         console.log("no!");
+        }*/
 
       }
 
