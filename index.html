@@ -606,7 +606,7 @@
         y = event.targetTouches[0].pageY;
         if(y>carY-100){
           allowMove = true;
-                event.preventDefault();
+           event.preventDefault();
 
         }else{
           allowMove = false;
@@ -614,7 +614,7 @@
 
          if (!firstTouch){
 
-          var hand = document.getElementById("handMove");
+          var hand = document.getElementById("touchCarButton");
           TweenLite.to(hand, 2, {opacity:0});
           firstTouch = true;
            animHand = false;
@@ -681,7 +681,7 @@
         //        console.log(carY, carH);
         //    if (y>(carY+carH)){
 
-           event.preventDefault();
+                 event.preventDefault();
         }else{
           console.log("not allowed to move");
         }

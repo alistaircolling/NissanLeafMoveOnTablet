@@ -221,9 +221,6 @@ body {
     text-transform:uppercase;
     color:white;
 
-
-
-
 }
 
 .button-wrapper {
@@ -231,6 +228,7 @@ body {
   float:right;
   display:block;
   margin-top:1em;
+
 }
 
 canvas {
