@@ -9,7 +9,8 @@
     <script src="js/libs/stats.min.js"></script>
     <script src="js/MinimalComps-0.1.min.js"></script> -->
     <script src="js/TweenMax.min.js"></script>
-   <script src="js/libs/stats.min.js"></script>
+  <script src="js/plugins/ThrowPropsPlugin.js"></script>
+    <script src="js/libs/stats.min.js"></script>
 <!--    <script src="js/jquery-1.6.4.min.js"></script> -->
 
 
@@ -230,6 +231,7 @@
         if (animHand){
           var hand = document.getElementById("handMove");
           TweenLite.to(hand, 2, {x:200, delay:2, onComplete:fadeHand});
+
         }
 
 
@@ -238,8 +240,8 @@
       function fadeHand(){
         console.log("FH");
         if (animHand){
-        var hand = document.getElementById("handMove");
-        TweenLite.to(hand, 1, {opacity:0, onComplete:showHand});
+          var hand = document.getElementById("handMove");
+          TweenLite.to(hand, 1, {opacity:0, onComplete:showHand});
         }
 
       }
@@ -1137,6 +1139,7 @@
           movementX = currX - targX;
           currX = targX;
           carX = targX;
+
 
           if (targX>(rightMarginPerc*canvWid)){
             tarX = carX;
