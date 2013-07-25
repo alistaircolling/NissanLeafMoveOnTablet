@@ -42,7 +42,6 @@
 
 <!--  <script src="js/renderers/SVGRenderer.js"></script> -->
 
-
   <!-----  MAY NOT NEED THEM ALL !   ------>
 
     <link type="text/css" rel="stylesheet" href="styles/reset.css" />
@@ -66,16 +65,8 @@
 
 
           <div class="touchCar" id="touchCarButton">
-
-
-            <!--          <object data="images/swipe.svg" width="398px" height="520px" type="image/svg+xml"> -->
             <object data="images/hand.svg" width="398px" height="520px" type="image/svg+xml" id="handMove" ></object>
             <object id="handArrow" data="images/arrow.svg" width="398px" height="520px" type="image/svg+xml">     </object>
-
-    <!--      <img src="logo.png" width="186" height="235" alt="hand" /> -->
-
-
-
           </div>
 
 
@@ -113,9 +104,9 @@
         <div class="footer">
 
         <div class="dots"><ul><li id="d1" class="dot1">1</li><li id="d2" class="dot2">2</li><li id="d3" class="dot3">3</li></ul></div>
-        <div class="button-wrapper">
+  <!--      <div class="button-wrapper">
         <a href="http://bs.serving-sys.com/BurstingPipe/adServer.bs?cn=tf&c=20&mc=click&pli=7473449&PluID=0&ord=[timestamp]&mb=1&ck=1" id="fs" >Make the switch</a>
-        </div>
+        </div> -->
         <div class="terms"><p>* While driving<br />
 **  Based on (i) overnight electricity costs (British Gas Clear & Simple Economy 7 unit rates for a customer paying by direct debit as at 14 June 2013, assuming 7 hours of charging at the night rate and one hour on the day rate), and (ii) a range of up to 124 miles per full charge (assuming 95% efficiency). Actual consumption/range may vary due to driving style, road condition, air conditioning and other factors outside our control. A daily standard charge of 15.979p also applies. Information correct at time of publishing. ***  Rapid charging capability is optional on Visia grade.</p></div>
       </div>
@@ -608,7 +599,7 @@
         y = event.targetTouches[0].pageY;
         if(y>carY-100){
           allowMove = true;
-          //   event.preventDefault();
+          event.preventDefault();
 
         }else{
           allowMove = false;
@@ -683,7 +674,7 @@
         //        console.log(carY, carH);
         //    if (y>(carY+carH)){
 
-          //       event.preventDefault();
+          event.preventDefault();
         }else{
           console.log("not allowed to move");
         }
