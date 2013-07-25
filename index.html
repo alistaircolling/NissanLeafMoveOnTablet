@@ -58,7 +58,7 @@
 
 <body onLoad="initialize()">
 
-  <div id="whiteCover" style='z-index :9999999 ; width:100%; height:100%; top:0; left:0; position:absolute; opacity:1; background:#ffffff'></div>
+  <div id="whiteCover" style='z-index :0 ; width:100%; height:100%; top:0; left:0; position:absolute; opacity:1; background:#ffffff'></div>
   <div id="canvasHolder" style="position: absolute; width:100%;  height:100%; z-index:2;" ></div>
   <div id="container"  style='z-index : 12; width:100%; height:100%; top:0; left:0; position:absolute; opacity:0'>
 
@@ -224,16 +224,16 @@
      function initialize(){
        //      console.log("ON LOAD");
        //         document.body.classList.add = 'page1';
-           fadeCover();
-         setOrientation();
-         initCanvas();
-       moveHand();
+        fadeCover();
+        setOrientation();
+        initCanvas();
+        moveHand();
       }
 
       function moveHand(){
         if (animHand){
-        var hand = document.getElementById("handMove");
-        TweenLite.to(hand, 2, {x:200, delay:2, onComplete:fadeHand});
+          var hand = document.getElementById("handMove");
+          TweenLite.to(hand, 2, {x:200, delay:2, onComplete:fadeHand});
         }
 
 
@@ -322,15 +322,11 @@
 
 
 
-       function fadeCover(){
-
-
-        var cover = document.getElementById("whiteCover");
-        TweenLite.to(cover, 0, {opacity:1});
-         TweenLite.to(cover, 1, {opacity:0, delay: 1});
-
-
-       }
+      function fadeCover(){
+          var cover = document.getElementById("whiteCover");
+          TweenLite.to(cover, 0, {opacity:1});
+          TweenLite.to(cover, 1, {opacity:0, delay: 1});
+      }
 
 
       function initCanvas(){
@@ -387,6 +383,7 @@
        }
 
        function initTouchListeners(){
+
         document.addEventListener( 'touchstart', onDocumentTouchStart, false );
         document.addEventListener( 'touchmove', onDocumentTouchMove, false );
         document.addEventListener( 'touchend', onDocumentTouchUp, false );
@@ -606,18 +603,23 @@
         y = event.targetTouches[0].pageY;
         if(y>carY-100){
           allowMove = true;
-                event.preventDefault();
+          //      event.preventDefault();
 
         }else{
           allowMove = false;
         }
 
          if (!firstTouch){
+          var containerz = document.getElementById("container");
 
-          var hand = document.getElementById("handMove");
-          TweenLite.to(hand, 2, {opacity:0});
+          var hand = document.getElementById("touchCarButton");
+
+           TweenLite.to(hand, .5, {opacity:0, onComplete:function(){
+
+                containerz.removeChild(hand);
+           }});
           firstTouch = true;
-           animHand = false;
+          animHand = false;
         }
 
 
@@ -681,7 +683,7 @@
         //        console.log(carY, carH);
         //    if (y>(carY+carH)){
 
-           event.preventDefault();
+                event.preventDefault();
         }else{
           console.log("not allowed to move");
         }

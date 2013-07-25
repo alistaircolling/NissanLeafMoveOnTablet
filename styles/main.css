@@ -231,6 +231,7 @@ body {
   float:right;
   display:block;
   margin-top:1em;
+  //z-index:1000000000000000000;
 }
 
 canvas {
