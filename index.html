@@ -232,6 +232,7 @@
           var hand = document.getElementById("handMove");
           TweenLite.to(hand, 2, {x:200, delay:2, onComplete:fadeHand});
 
+
         }
 
 
@@ -304,7 +305,7 @@
         carW = canvWid*carWidthPerc;
         carH = canvHeigh*carHeightPerc;
 
-                var p1 = document.getElementById("page1");
+        var p1 = document.getElementById("page1");
         p1.style.backgroundImage = "none";
         var cont = document.getElementById("container");
 
@@ -584,24 +585,34 @@
     	}
 
 
+                                                                  //touch listeners
 
+      var currX = 0;
+      var movedX = 0;
+      var t1, t2, x1, x2, xOverlap, xOffset;
+      var tDown = false;
+      var thisScope = this;
 
-
-
-    var tDown = false;
-
-      //////////  TOUCH LISTENERS //////////////////
-
-
+                                                                  //touch listeners
       function onDocumentTouchStart(event){
 
         tDown = true;
         lastX = currX;
-         var x = event.targetTouches[0].pageX ,
+        var x = event.targetTouches[0].pageX ,
         y = event.targetTouches[0].pageY;
+
+                                                                  //velocity tracking
+        var ms;
+        Today = new Date();
+        ms = Today.getMilliseconds();
+        x1 = x2 = carX;
+        xOffset = x = carX;
+        xOverlap = 0;//Math.max(0, )
+        t1 = t2 = ms;
+
+//
         if(y>carY-100){
           allowMove = true;
-          //      event.preventDefault();
 
         }else{
           allowMove = false;
@@ -619,24 +630,84 @@
           firstTouch = true;
           animHand = false;
         }
-
-
-
       }
+
+
+      function onDocumentTouchMove(event){
+
+        if (allowMove){
+          var x = event.targetTouches[0].pageX ,
+          y = event.targetTouches[0].pageY+100, theX, winWidth = window.innerWidth, t, ms;
+
+          if (!animTarg){
+            currX = x;
+            movedX = currX - lastX;
+            lastX = x;
+
+
+//velocity tracking
+
+            theX = x - xOffset;
+
+            /*  if (theX > winWidth) {
+                carX = (theX + winWidth) * 0.5;
+              } else*/ if (theX < winWidth - xOverlap) {
+                carX = (theX + winWidth - xOverlap) * 0.5;
+              } else {
+                carX = theX;
+              }
+
+            Today = new Date();
+            ms = Today.getMilliseconds();
+
+
+	//if the frame rate is too high, we won't be able to track the velocity as well, so only update the values 20 times per second
+
+            if (ms - t2 > 50) {
+              x2 = x1;
+              t2 = t1;
+              x1 = carX;
+              t1 = ms;
+            }
+          }
+
+          var i, part, top = physics.particles.length;
+          for(var i=0; i<top; i++){
+            part = physics.particles[i];
+            if (part.underCar){
+              part.fixed = true;
+                part.pos.x += movedX;
+            }else{
+               if (!part.pinned){
+                   part.fixed = false;
+               }
+            }
+
+          }
+            event.preventDefault();
+          }else{
+            console.log("not allowed to move");
+        }
+      }
+
 
       function onDocumentTouchUp(event){
         allowMove = false;
+        var ms, time, xVelocity;
 
-        //   console.log("t up");
+        Today = new Date();
+        ms = Today.getMilliseconds();
+
+
+        //velocity tracking
+        time = (ms - t2) / 1000;
+        xVelocity = (carX - x2) / time;
+        console.log(xVelocity);
+        ThrowPropsPlugin.to(thisScope, {throwProps:{ velocity:xVelocity, carX:{velocity:xVelocity, max:window.innerWidth*3, min:0- window.innerWidth , resistance:30}},
+        ease:Strong.easeOut}, 10, 0.3, 1);
+
         tDown = false;
-         var i, particle, top = heldParticles.length;
-        /*        for(var i=0; i<top; i++){
-          particle  = heldParticles[i];
-          particle.fixed = false;
-
-        }*/
-        //clean up any particles that may have been missed
-        var topPart = physics.particles.length;
+         var i, particle, top = heldParticles.length, topPart = physics.particles.length;
         for(i=0; i<topPart; i++){
           if (!physics.particles[i].pinned){
              physics.particles[i].fixed = false;
@@ -645,51 +716,10 @@
         }
         snapBack();
         movedX = 0;
-        //  event.preventDefault();
       }
 
 
-      var currX = 0;
-      var movedX = 0;
 
-      function onDocumentTouchMove(event){
-
-        if (allowMove){
-        var x = event.targetTouches[0].pageX ,
-        y = event.targetTouches[0].pageY+100;
-
-        if (!animTarg){
-          currX = x;
-          movedX = currX - lastX;
-          lastX = x;
-        }
-
-        var i, part, top = physics.particles.length;
-        for(var i=0; i<top; i++){
-          part = physics.particles[i];
-          if (part.underCar){
-            part.fixed = true;
-              part.pos.x += movedX;
-          }else{
-             if (!part.pinned){
-                 part.fixed = false;
-             }
-          }
-
-        }
-        //only stop the event if over the car....
-        //        console.log(carY, carH);
-        //    if (y>(carY+carH)){
-
-                event.preventDefault();
-        }else{
-          console.log("not allowed to move");
-        }
-        /*}else{
-         console.log("no!");
-        }*/
-
-      }
 
       function snapBack(){
         //go through the particles at the left hand side and animate back to their pos...
@@ -847,7 +877,7 @@
          drawShadow(setX, y, scaledRatio);
 
         example.drawImage( car, x-(width*.5), y, width, targH);
-        drawWheels(x-(width*.5),y, scaledRatio);
+        //   drawWheels(x-(width*.5),y, scaledRatio);
         //used when drawing wheels when aniamating
         halfCarWidth = width*.5;
 
@@ -1112,6 +1142,8 @@
 
       }
 
+
+
 			function render() {
 
         //  checkOrientation();
@@ -1122,12 +1154,12 @@
           updateVertices();
         }
 
-        heldParticles = checkPointsInsideCar();
+        //      heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
-          //      drawPhysics();
+                drawPhysics();
            if (physics.particles.length>0){
-                drawCurtain();
+             //      drawCurtain();
            }
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
@@ -1138,7 +1170,10 @@
           var targX = currX-((currX-carX)*.5);
           movementX = currX - targX;
           currX = targX;
-          carX = targX;
+
+
+
+          //          carX = targX;
 
 
           if (targX>(rightMarginPerc*canvWid)){
