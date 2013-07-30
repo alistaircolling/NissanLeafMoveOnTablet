@@ -207,6 +207,10 @@
 
       ////PHYSICS
 
+      var touchParticle;//used to track user touch
+      var carParticle;//used for carPosition
+      var touchSpring;
+
       var physics, avoidMouse, pullToCenter, collision, example, cell;
       //TODO- use a quality variable that sets the number of squares so the number of rows and columns are calculated for the orientation
       var COLUMNS = 6;
@@ -630,7 +634,51 @@
           firstTouch = true;
           animHand = false;
         }
+
+        if (!touchParticle){
+           createTouchParticle(x, y);
+        }
+
+        if (! touchSpring){
+          connectTouch();
+        }
       }
+
+      function connectTouch(){
+        var dist = 150;
+        touchSpring = new Spring(touchParticle, carParticle, dist , .1);
+        physics.springs.push(touchSpring);
+
+
+      }
+
+      function createTouchParticle(x, y){
+
+        touchParticle = new Particle( 50 );
+        var position = new Vector( x, carInitY);
+        touchParticle.moveTo( position );
+        touchParticle.setRadius( 50 );
+        physics.particles.push( touchParticle );
+
+        carParticle = new Particle(50);
+        carParticle.setRadius(50);
+        position = new Vector( 100, carInitY*window.innerHeight);
+        carParticle.moveTo(position);
+
+        physics.particles.push( carParticle );
+
+
+
+
+//add bounds
+
+        var minBounce = new Vector(0, (carInitY*window.innerHeight)-(carH*.5));
+        var maxBounce = new Vector(window.innerWidth, (carInitY*window.innerHeight)+(carH*.5));
+        var edgeBounce = new EdgeBounce(minBounce, maxBounce);
+        carParticle.behaviours.push(edgeBounce);
+        touchParticle.behaviours.push(edgeBounce);
+      }
+
 
 
       function onDocumentTouchMove(event){
@@ -638,7 +686,9 @@
         if (allowMove){
           var x = event.targetTouches[0].pageX ,
           y = event.targetTouches[0].pageY+100, theX, winWidth = window.innerWidth, t, ms;
-
+          var position = new Vector( x, carInitY*window.innerHeight);
+          touchParticle.moveTo( position );
+          touchParticle.fixed = true;//can only be updated by mouse pos
           if (!animTarg){
             currX = x;
             movedX = currX - lastX;
@@ -692,6 +742,11 @@
 
 
       function onDocumentTouchUp(event){
+        // physics.particles.pop();
+        //         touchParticle = null;
+
+        physics.springs.pop();
+        touchSpring = null;
         allowMove = false;
         var ms, time, xVelocity;
 
@@ -703,9 +758,10 @@
         time = (ms - t2) / 1000;
         xVelocity = (carX - x2) / time;
         console.log(xVelocity);
-        ThrowPropsPlugin.to(thisScope, {throwProps:{ velocity:xVelocity, carX:{velocity:xVelocity, max:window.innerWidth*3, min:0- window.innerWidth , resistance:30}},
-        ease:Strong.easeOut}, 10, 0.3, 1);
-
+        //  ThrowPropsPlugin.to(thisScope, {throwProps:{ velocity:xVelocity, carX:{velocity:xVelocity, max:window.innerWidth*3, min:0- window.innerWidth , resistance:30}},
+        // ease:Strong.easeOut}, 10, 0.3, 1);
+        //       ThrowPropsPlugin.to(thisScope, {throwProps:{ velocity:xVelocity, carX:{velocity:xVelocity, resistance:30}},
+        // ease:Strong.easeOut}, 10, 0.3, 1);
         tDown = false;
          var i, particle, top = heldParticles.length, topPart = physics.particles.length;
         for(i=0; i<topPart; i++){
@@ -1181,11 +1237,11 @@
             resetCarPos();
           }
 
-              drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
+          //              drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }else{
 
-             drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
+          // drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }
 
