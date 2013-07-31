@@ -638,17 +638,21 @@
         if (!touchParticle){
            createTouchParticle(x, y);
         }
+       var position = new Vector( x, carInitY);
+       touchParticle.moveTo( position );
 
         if (! touchSpring){
           connectTouch();
         }
+
+        touchParticle.fixed = true;
+            carParticle.fixed = true;
       }
 
       function connectTouch(){
-        var dist = 150;
-        touchSpring = new Spring(touchParticle, carParticle, dist , .1);
+        var dist = Math.abs(carParticle.pos.x - touchParticle.pos.x);
+        touchSpring = new Spring(touchParticle, carParticle, dist , .7);
         physics.springs.push(touchSpring);
-
 
       }
 
@@ -657,11 +661,12 @@
         touchParticle = new Particle( 50 );
         var position = new Vector( x, carInitY);
         touchParticle.moveTo( position );
-        touchParticle.setRadius( 50 );
+        touchParticle.setRadius(10);// carH *.5);
         physics.particles.push( touchParticle );
 
         carParticle = new Particle(50);
-        carParticle.setRadius(50);
+        carParticle.setRadius(carH*.25);
+        carParticle.car = true;
         position = new Vector( 100, carInitY*window.innerHeight);
         carParticle.moveTo(position);
 
@@ -689,6 +694,7 @@
           var position = new Vector( x, carInitY*window.innerHeight);
           touchParticle.moveTo( position );
           touchParticle.fixed = true;//can only be updated by mouse pos
+          carParticle.fixed = false;
           if (!animTarg){
             currX = x;
             movedX = currX - lastX;
@@ -742,9 +748,10 @@
 
 
       function onDocumentTouchUp(event){
-        // physics.particles.pop();
-        //         touchParticle = null;
+        //physics.particles.pop();
+        //touchParticle = null;
 
+        carParticle.fixed = false;
         physics.springs.pop();
         touchSpring = null;
         allowMove = false;
@@ -929,19 +936,22 @@
         wHRatio = CAR_WIDTH/car.height;
         targH = width/wHRatio;
 
-        //draw shadow before car
-         drawShadow(setX, y, scaledRatio);
 
-        example.drawImage( car, x-(width*.5), y, width, targH);
+
+// TODO- UNCOMMENT AFTER DEBUGGING!!!!!!!!!!
+
+        //draw shadow before car
+//          drawShadow(setX, y, scaledRatio);
+        //   example.drawImage( car, x-(width*.5), y, width, targH);
         //   drawWheels(x-(width*.5),y, scaledRatio);
         //used when drawing wheels when aniamating
         halfCarWidth = width*.5;
 
-        /*
-        example.fillStyle = color;
+
+        example.fillStyle = 'rgba(255,242,255, .6)';
         example.beginPath();
-        example.fillRect(x,y,width,height);
-        example.fill();*/
+        example.fillRect(x-(width*.5), y, width,targH);
+        example.fill();
       }
 
 
@@ -1101,6 +1111,8 @@
              example.fillStyle = fillStyle;
             }else if (particle.snapper){
              example.fillStyle = '00f7ff';
+            }else if (particle.car){
+             example.fillStyle = 'ffff00';
             }else{
               example.fillStyle = 'ff00ff';
             }
@@ -1237,11 +1249,11 @@
             resetCarPos();
           }
 
-          //              drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
+            drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }else{
 
-          // drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
+            drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }
 
