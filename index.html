@@ -686,7 +686,7 @@
 
 //add bounds
 
-        var minBounce = new Vector(0-(carW)+200, (carInitY*window.innerHeight)-(carH*.5));
+        var minBounce = new Vector(0-200, (carInitY*window.innerHeight)-(carH*.5));
         var maxBounce = new Vector(window.innerWidth+(carW*2), (carInitY*window.innerHeight)+(carH*.5));
         var edgeBounce = new EdgeBounce(minBounce, maxBounce);
         carParticle.behaviours.push(edgeBounce);
@@ -969,7 +969,7 @@
         }*/
 
         //   if (movedX == 0){
-        console.log("MOVED X IS:"+movedX);
+
         // }
 
         wheelDiam = wheelTargetSize;
@@ -1279,9 +1279,9 @@
               heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
-          //   drawPhysics();
+          // drawPhysics();
            if (physics.particles.length>0){
-                drawCurtain();
+                   drawCurtain();
            }
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
