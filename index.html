@@ -829,6 +829,7 @@
       //THIS FUNCTION WILL BE CALLED WHEN THE CAR HAS REACHED THE RIGHT MARGIN
 
       function showNextPage(){
+      console.log("showNextPage");
         //increment or reset the page number
         if (currentPage<totalPages-1){
           currentPage++;
@@ -1008,9 +1009,11 @@
       }
 
       function resetCarPos(){
+        console.log("reset car pos");
         //        console.log("reset");
         animatingToNextPage = true;
         animateCarOffRight();
+
         showNextPage(); // TODO move to when car is off the pagew
       }
 
@@ -1048,19 +1051,26 @@
       }
 
       function carAtRight(){
-        //       console.log("carAtRight");
+        //
+        console.log("carAtRight");
         carX = 0-(window.innerWidth*carWidthPerc);
-         showDivs(currentPage);
+        showDivs(currentPage);
         animateCarIn();
       }
 
       function animateCarIn(){
+        console.log("animateCarIn");
         TweenLite.to(this, CAR_ANIM_IN_DURATION, {carX:window.innerWidth*carInitX, onComplete:carIsHere, onUpdate:forceWheels});
       }
 
       function carIsHere(){
-        //     console.log("car is here");
+        console.log("car is here, carX:"+carX);
         currX = carX;
+        //set the car PArticle to the left as well
+        var position = new Vector( carX, carInitY);
+        carParticle.moveTo( position );
+
+
         //             showDivs(currentPage);
         animatingToNextPage = false;
       }
@@ -1265,9 +1275,12 @@
 
         }else{*/
 
-          if (carX>(rightMarginPerc*canvWid) && !animatingToNextPage){
+          if (carX>(rightMarginPerc*canvWid)){
             console.log("is off right!");
-            resetCarPos();
+            if (!animatingToNextPage){
+              console.log("and is not animating");
+                  resetCarPos();
+            }
           }
 
             drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
