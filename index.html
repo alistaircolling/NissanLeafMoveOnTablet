@@ -686,7 +686,7 @@
 
 //add bounds
 
-        var minBounce = new Vector(0-(carW)+100, (carInitY*window.innerHeight)-(carH*.5));
+        var minBounce = new Vector(0-(carW)+200, (carInitY*window.innerHeight)-(carH*.5));
         var maxBounce = new Vector(window.innerWidth+(carW*2), (carInitY*window.innerHeight)+(carH*.5));
         var edgeBounce = new EdgeBounce(minBounce, maxBounce);
         carParticle.behaviours.push(edgeBounce);
@@ -705,37 +705,13 @@
           touchParticle.moveTo( position );
            touchParticle.fixed = false;//can only be updated by mouse pos
            carParticle.fixed = false;
-          if (!animTarg){
-            currX = carX;
-            movedX = currX - lastX;
-            lastX = carX;
+          //         if (!animTarg){
+          //            currX = carX;
 
 
-//velocity tracking
-
-            theX = x - xOffset;
-
-            /*  if (theX > winWidth) {
-                carX = (theX + winWidth) * 0.5;
-              } else*/ if (theX < winWidth - xOverlap) {
-                carX = (theX + winWidth - xOverlap) * 0.5;
-              } else {
-                carX = theX;
-              }
-
-            Today = new Date();
-            ms = Today.getMilliseconds();
 
 
-	//if the frame rate is too high, we won't be able to track the velocity as well, so only update the values 20 times per second
-
-            if (ms - t2 > 50) {
-              x2 = x1;
-              t2 = t1;
-              x1 = carX;
-              t1 = ms;
-            }
-          }
+          //}
 
           var i, part, top = physics.particles.length;
           for(var i=0; i<top; i++){
@@ -794,7 +770,7 @@
 
         }
         snapBack();
-        movedX = 0;
+        //    movedX = 0;
 
 
 
@@ -988,13 +964,13 @@
         wheelTargetSize = WHEEL_WIDTH*scale;
         //   console.log("scale:"+scale+" targ size:"+wheelTargetSize);
 
-        if (movedX>-2&& movedX<2){
+        /*     if (movedX>-2&& movedX<2){
                movedX = 0;
-        }
+        }*/
 
-        if (movedX == 0){
-          console.log("MOVED X IS 000000000");
-        }
+        //   if (movedX == 0){
+        console.log("MOVED X IS:"+movedX);
+        // }
 
         wheelDiam = wheelTargetSize;
         wheelCirc = Math.PI*wheelDiam*.5;
@@ -1279,6 +1255,11 @@
 
 			function render() {
 
+        //for the wheels
+            movedX = carX - lastX;
+            lastX = carX;
+
+
         //  checkOrientation();
         //clear canvas
         //    canvas.width = canvas.width;
@@ -1298,9 +1279,9 @@
               heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
-          //        drawPhysics();
+          //   drawPhysics();
            if (physics.particles.length>0){
-                     drawCurtain();
+                drawCurtain();
            }
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
