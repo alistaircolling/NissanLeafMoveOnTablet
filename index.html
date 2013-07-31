@@ -636,7 +636,7 @@
           firstTouch = true;
           animHand = false;
         }
-
+ if( point_in_rectangle(x, y, carX, carY, carX+carW, carY+carH)){
         if (!touchParticle){
            createTouchParticle(x, y);
         }
@@ -649,6 +649,7 @@
 
         touchParticle.fixed = true;
             carParticle.fixed = true;
+ }
       }
 
       function connectTouch(){
@@ -669,7 +670,7 @@
         carParticle = new Particle(50);
         carParticle.setRadius(carH*.25);
         carParticle.car = true;
-        position = new Vector( 100, carInitY*window.innerHeight);
+        position = new Vector( carX, carInitY*window.innerHeight);
         carParticle.moveTo(position);
 
         physics.particles.push( carParticle );
@@ -679,8 +680,8 @@
 
 //add bounds
 
-        var minBounce = new Vector(0, (carInitY*window.innerHeight)-(carH*.5));
-        var maxBounce = new Vector(window.innerWidth, (carInitY*window.innerHeight)+(carH*.5));
+        var minBounce = new Vector(0-(carW*2), (carInitY*window.innerHeight)-(carH*.5));
+        var maxBounce = new Vector(window.innerWidth+(carW*2), (carInitY*window.innerHeight)+(carH*.5));
         var edgeBounce = new EdgeBounce(minBounce, maxBounce);
         carParticle.behaviours.push(edgeBounce);
         touchParticle.behaviours.push(edgeBounce);
@@ -693,8 +694,6 @@
         if (allowMove){
           var x = event.targetTouches[0].pageX ,
           y = event.targetTouches[0].pageY+100, theX, winWidth = window.innerWidth, t, ms;
-
-          console.log("x:"+x);
 
           var position = new Vector( x, carInitY*window.innerHeight);
           touchParticle.moveTo( position );
@@ -755,8 +754,9 @@
       function onDocumentTouchUp(event){
         //physics.particles.pop();
         //touchParticle = null;
-
-        carParticle.fixed = false;
+        if (carParticle){
+                carParticle.fixed = false;
+        }
         physics.springs.pop();
         touchSpring = null;
         allowMove = false;
@@ -1224,8 +1224,8 @@
         //    canvas.width = canvas.width;
 
 
-        //set carx to the ball position
-        if (carParticle){
+        //set carx to the ball position- if not animating...
+        if (carParticle && !animatingToNextPage){
           carX = carParticle.pos.x;
         }
 
@@ -1264,6 +1264,11 @@
             drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
         }else{*/
+
+          if (carX>(rightMarginPerc*canvWid) && !animatingToNextPage){
+            console.log("is off right!");
+            resetCarPos();
+          }
 
             drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
