@@ -411,16 +411,20 @@
 
         physics = new Physics();
         physics.integrator = new Verlet();
-        avoidMouse = new Attraction();
+
+        touchPhysics = new Physics();
+        touchPhysics.integrator = new Verlet();
+        /*    avoidMouse = new Attraction();
         pullToCenter = new Attraction();
-        collision = new Collision();
+        collision = new Collision();*/
         heldParticles = [];
         setupExample();
       }
 
+      //   var touchExample;
+
       function setupExample(){
 
-        ///SETUP
 
         example = Sketch.create({container:document.getElementById("canvasHolder")});
 
@@ -636,26 +640,26 @@
           firstTouch = true;
           animHand = false;
         }
- if( point_in_rectangle(x, y, carX, carY, carX+carW, carY+carH)){
+     if( point_in_rectangle(x, y, carX, carY, carX+carW, carY+carH)){
         if (!touchParticle){
            createTouchParticle(x, y);
         }
-       var position = new Vector( x, carInitY);
-       touchParticle.moveTo( position );
+        var position = new Vector( x, carInitY);
+        touchParticle.moveTo( position );
 
         if (! touchSpring){
           connectTouch();
         }
 
         touchParticle.fixed = true;
-            carParticle.fixed = true;
- }
+          carParticle.fixed = true;
+        }
       }
 
       function connectTouch(){
         var dist = Math.abs(carParticle.pos.x - touchParticle.pos.x);
         touchSpring = new Spring(touchParticle, carParticle, dist , .7);
-        physics.springs.push(touchSpring);
+        touchPhysics.springs.push(touchSpring);
 
       }
 
@@ -665,15 +669,17 @@
         var position = new Vector( x, carInitY);
         touchParticle.moveTo( position );
         touchParticle.setRadius(10);// carH *.5);
-        physics.particles.push( touchParticle );
+        touchParticle.ignore = true;
+        touchPhysics.particles.push( touchParticle );
 
         carParticle = new Particle(50);
         carParticle.setRadius(carH*.25);
         carParticle.car = true;
+        carParticle.ignore = true;
         position = new Vector( carX, carInitY*window.innerHeight);
         carParticle.moveTo(position);
 
-        physics.particles.push( carParticle );
+        touchPhysics.particles.push( carParticle );
 
 
 
@@ -697,12 +703,12 @@
 
           var position = new Vector( x, carInitY*window.innerHeight);
           touchParticle.moveTo( position );
-          touchParticle.fixed = true;//can only be updated by mouse pos
-          carParticle.fixed = false;
+           touchParticle.fixed = false;//can only be updated by mouse pos
+           carParticle.fixed = false;
           if (!animTarg){
-            currX = x;
+            currX = carX;
             movedX = currX - lastX;
-            lastX = x;
+            lastX = carX;
 
 
 //velocity tracking
@@ -754,10 +760,13 @@
       function onDocumentTouchUp(event){
         //physics.particles.pop();
         //touchParticle = null;
+        //fix the particles---- then release later to stop curtain interacting
         if (carParticle){
                 carParticle.fixed = false;
+                touchParticle.fixed = false;
+
         }
-        physics.springs.pop();
+         touchPhysics.springs.pop();
         touchSpring = null;
         allowMove = false;
         var ms, time, xVelocity;
@@ -777,15 +786,19 @@
         tDown = false;
          var i, particle, top = heldParticles.length, topPart = physics.particles.length;
         for(i=0; i<topPart; i++){
-          if (!physics.particles[i].pinned){
-             physics.particles[i].fixed = false;
+          if (!physics.particles[i].ignore){
+            if (!physics.particles[i].pinned){
+               physics.particles[i].fixed = false;
+            }
           }
 
         }
         snapBack();
         movedX = 0;
-      }
 
+
+
+      }
 
 
 
@@ -947,17 +960,20 @@
 // TODO- UNCOMMENT AFTER DEBUGGING!!!!!!!!!!
 
         //draw shadow before car
-//          drawShadow(setX, y, scaledRatio);
-        //   example.drawImage( car, x-(width*.5), y, width, targH);
-        //   drawWheels(x,y, scaledRatio);
+          drawShadow(setX, y, scaledRatio);
+        //
+      example.drawImage( car, x-(width*.5), y, width, targH);
+           drawWheels(x,y, scaledRatio);
         //used when drawing wheels when aniamating
         halfCarWidth = width*.5;
 
-
+        /*
         example.fillStyle = 'rgba(255,242,255, .6)';
         example.beginPath();
         example.fillRect(x, y, width,targH);
         example.fill();
+
+        */
       }
 
 
@@ -973,7 +989,11 @@
         //   console.log("scale:"+scale+" targ size:"+wheelTargetSize);
 
         if (movedX>-2&& movedX<2){
-            movedX = 0;
+               movedX = 0;
+        }
+
+        if (movedX == 0){
+          console.log("MOVED X IS 000000000");
         }
 
         wheelDiam = wheelTargetSize;
@@ -992,7 +1012,8 @@
 
 
         example.save();
-        example.translate(x+(L_WHEEL_X*scale),y+(WHEEL_Y*scale));
+        //     example.translate(x+(L_WHEEL_X*scale),y+(WHEEL_Y*scale));
+        example.translate(x+(L_WHEEL_X*scale-halfCarWidth),y+(WHEEL_Y*scale));
         example.rotate(totRads);
         example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
         example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
@@ -1000,7 +1021,7 @@
 
 
         example.save();
-        example.translate(x+(R_WHEEL_X*scale),y+(WHEEL_Y*scale));
+        example.translate(x+(R_WHEEL_X*scale-halfCarWidth),y+(WHEEL_Y*scale));
         example.rotate(totRads);
         example.translate(0-(wheelTargetSize*.5), 0-(wheelTargetSize*.5));
         example.drawImage(lWheel, 0, 0, wheelTargetSize, wheelTargetSize);
@@ -1148,6 +1169,35 @@
             example.stroke();
           }
 
+           for( var i=0, n = touchPhysics.particles.length; i<n; i++){
+
+              var particle = touchPhysics.particles[i];
+            example.beginPath();
+            if (particle.underCar){
+             example.fillStyle = fillStyle;
+            }else if (particle.snapper){
+             example.fillStyle = '000000';
+            }else if (particle.car){
+             example.fillStyle = 'ff0000';
+            }else{
+              example.fillStyle = '000000';
+            }
+            example.arc( particle.pos.x, particle.pos.y, 60, 0, Math.PI * 2 );
+            example.fill();
+            example.closePath();
+
+           }
+
+            for (i=0; i<touchPhysics.springs.length; i++){
+            example.strokeStyle = '#00ffcc';
+            spring = touchPhysics.springs[i];
+            example.beginPath();
+            example.moveTo(spring.p1.pos.x, spring.p1.pos.y);
+            example.lineTo(spring.p2.pos.x, spring.p2.pos.y);
+            example.closePath();
+            example.stroke();
+          }
+
       }
 
 
@@ -1240,6 +1290,7 @@
         }
 
         physics.step();
+        touchPhysics.step();
         if (show3D) {
           updateVertices();
         }
@@ -1247,9 +1298,9 @@
               heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
-                drawPhysics();
+          //        drawPhysics();
            if (physics.particles.length>0){
-             //      drawCurtain();
+                     drawCurtain();
            }
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
