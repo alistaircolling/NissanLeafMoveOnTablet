@@ -680,7 +680,7 @@
 
 //add bounds
 
-        var minBounce = new Vector(0-(carW*2), (carInitY*window.innerHeight)-(carH*.5));
+        var minBounce = new Vector(0-(carW)+100, (carInitY*window.innerHeight)-(carH*.5));
         var maxBounce = new Vector(window.innerWidth+(carW*2), (carInitY*window.innerHeight)+(carH*.5));
         var edgeBounce = new EdgeBounce(minBounce, maxBounce);
         carParticle.behaviours.push(edgeBounce);
@@ -1244,7 +1244,7 @@
           updateVertices();
         }
 
-        //      heldParticles = checkPointsInsideCar();
+              heldParticles = checkPointsInsideCar();
         //       drawMargin();
         if (!show3D){
                 drawPhysics();
