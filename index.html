@@ -589,7 +589,7 @@
     	}
 
 
-                                                                  //touch listeners
+
 
       var currX = 0;
       var movedX = 0;
@@ -605,22 +605,24 @@
         var x = event.targetTouches[0].pageX ,
         y = event.targetTouches[0].pageY;
 
+        console.log("X:"+x);
+
                                                                   //velocity tracking
         var ms;
         Today = new Date();
         ms = Today.getMilliseconds();
         x1 = x2 = carX;
-        xOffset = x = carX;
+        //    xOffset = x = carX;  TRYING TO USE PHYSICS ENGINE..........
         xOverlap = 0;//Math.max(0, )
         t1 = t2 = ms;
-
-//
-        if(y>carY-100){
+                                                                  //check if mouse is over car
+        console.log(x, y, carX, carY, (carX+carW), (carY+carH));
+        if( point_in_rectangle(x, y, carX, carY, carX+carW, carY+carH)){
           allowMove = true;
-
         }else{
           allowMove = false;
         }
+        console.log("In the car?:"+allowMove);
 
          if (!firstTouch){
           var containerz = document.getElementById("container");
@@ -691,6 +693,9 @@
         if (allowMove){
           var x = event.targetTouches[0].pageX ,
           y = event.targetTouches[0].pageY+100, theX, winWidth = window.innerWidth, t, ms;
+
+          console.log("x:"+x);
+
           var position = new Vector( x, carInitY*window.innerHeight);
           touchParticle.moveTo( position );
           touchParticle.fixed = true;//can only be updated by mouse pos
@@ -943,14 +948,14 @@
         //draw shadow before car
 //          drawShadow(setX, y, scaledRatio);
         //   example.drawImage( car, x-(width*.5), y, width, targH);
-        //   drawWheels(x-(width*.5),y, scaledRatio);
+        //   drawWheels(x,y, scaledRatio);
         //used when drawing wheels when aniamating
         halfCarWidth = width*.5;
 
 
         example.fillStyle = 'rgba(255,242,255, .6)';
         example.beginPath();
-        example.fillRect(x-(width*.5), y, width,targH);
+        example.fillRect(x, y, width,targH);
         example.fill();
       }
 
@@ -1217,6 +1222,13 @@
         //  checkOrientation();
         //clear canvas
         //    canvas.width = canvas.width;
+
+
+        //set carx to the ball position
+        if (carParticle){
+          carX = carParticle.pos.x;
+        }
+
         physics.step();
         if (show3D) {
           updateVertices();
@@ -1231,7 +1243,7 @@
            }
         }
         updateCarSize();//TODO ONLY NEEDS TO BE FIRED ON RESIZE?
-
+        /*
         if (!animatingToNextPage){
           //calculate new car pos
 
@@ -1245,17 +1257,17 @@
 
 
           if (targX>(rightMarginPerc*canvWid)){
-            tarX = carX;
+            targX = carX;//just fixed a bug here? was 'tarX'
             resetCarPos();
           }
 
             drawCar(targX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
-        }else{
+        }else{*/
 
             drawCar(carX, carY, carW, carH, 'rgba(255,0,255,.5)');
 
-        }
+        //  }
 
         // mesh.rotation.y += 0.06; n.x);
         if (show3D){
@@ -1289,14 +1301,16 @@
         return result;
       }
 
-      function point_in_rectangle( x, y, left, top, right, bottom){
+
+     function point_in_rectangle(x, y, left, top, right, bottom){
         result = false;
 
         if ( between(left,x,right) && between(top,y,bottom ) ){
           result = true;
         }
         return result;
-      }
+     }
+
 
      function doOnOrientationChange(){
        //   fadeCover();
